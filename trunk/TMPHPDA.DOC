@@ -1,0 +1,20 @@
+Allow LOADSYM With Small HPDA
+
+Previously, when LOADSYM was used, it told MAX to provide a full HPDA
+(6800 bytes or so) although it wasn't needed under all circumstances.
+In particular, the full HPDA is needed only if file browser or other
+DPMI translation services are used in SWAT.  This change flips the
+default behavior to use a small HPDA and implements a switch on the
+LOADSYM command (/H) to tell MAX to provide the full HPDA.
+
+The following modules are changed and why:
+
+386SWAT 	 Document new flag for LOADSYM.
+
+SWAT_AR2.INC	 Define new flag bit.
+
+SWAT_FCN.ASM	 Document and parse new syntax.
+
+SWAT_INI.ASM	 Test new flag bit.
+
+

@@ -1,0 +1,25 @@
+
+
+ROMSKIP.MDA
+
+* Allows single skipping in ROMs
+
+If our INT 03 does not stick (presumably because we are in ROM), we
+scan the four debug registers DR0 -> DR3.  If one of these registers
+is not acitve, we save the linear address and the LEN and R/W bits of
+DR7.  Then we place the linear addres of the ROM instruction in the
+DR(0-3) register, modfiy the Len and R/W bits of DR7 for executable code,
+and finally we activate it by setting the Gn and Ln bits in DR7.
+
+At the beginning of SWATTER, we look to see if we are expecting entry
+from a single-skip ROM.  If so, we restore the Gn and Ln bits of DR7,
+restore the LEN and R/W bits of DR7, and then restore the appropriate
+DRn linear address.  We also check to see (by inspecting dr6) if we
+were the reason that SWAT was called.  If so, we clear the
+appropriate bits in dr6 and continue.
+
+* Check dr6 and dr7 before printing a reason message.
+
+This is because the 386 will set dr6 bits if they match any drn
+value, even if the breakpoint is not enabled.
+

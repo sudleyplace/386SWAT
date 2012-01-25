@@ -1,0 +1,27 @@
+SWAT\TEXTSRCH.MDA
+
+* Add text searching capability
+
+The search engine of SWAT now accpets variable length search strings, of
+the format
+
+S addr l length "search_string"
+
+Using the double quote chacter to delimit the search string.
+
+
+Here's what's changed:
+
+386SWAT.DOC	- Added instructions for new search operation
+
+SWAT_SRC.ASM	- Add new variables to hold the search string and its
+		  length.
+		- When pasing the search value, treat the quote character
+		  specail
+		- Correct comment for PSRCHDSP variable
+		- Place text string into buffer
+		- Fill search variables
+		- Create SRCH0CMP routine, for amtching variable length
+		  text strings.
+
+

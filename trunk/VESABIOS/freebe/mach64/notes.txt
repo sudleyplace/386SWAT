@@ -1,0 +1,78 @@
+
+	     ______             ____  ______     _____  ______ 
+	    |  ____|           |  _ \|  ____|   / / _ \|  ____|
+	    | |__ _ __ ___  ___| |_) | |__     / / |_| | |__ 
+	    |  __| '__/ _ \/ _ \  _ <|  __|   / /|  _  |  __|
+	    | |  | | |  __/  __/ |_) | |____ / / | | | | |
+	    |_|  |_|  \___|\___|____/|______/_/  |_| |_|_|
+
+
+		    ATI mach64 driver implementation notes.
+
+
+
+   This driver is currently a limited implementation of VBE/AF for mach64.
+   It is not very well tested and may not work for you (if it doesn't,
+   give me your system description and a description of the problems).
+   It has a built-in table of known VESA modes, as well as all non-VESA
+   modes that the mach64 BIOS supports, but currently the non-VESA mode
+   setting doesn't work properly, so only VESA modes are enabled. However,
+   it is able to take advantage of extra VESA modes provided by tools like
+   Scitech Display Doctor.
+
+   It supports 8, 15, 16, 24, and 32 bits per pixel, if available. It
+   currently provides acceleration for these primitives:
+
+      DrawScan()
+      DrawPattScan()
+      DrawRect()
+      DrawPattRect()
+      BitBlt()
+      SrcTransBlt() (not in 24bpp)
+      DrawLine()    (not in 24bpp)
+
+   These accelerated functions are planned and may be provided in the
+   future:
+
+      DrawTrap()  (actually the mach64 seems to be able to draw entire
+                   polygons, too bad there isn't a DrawPoly() in VBE/AF;
+                   DrawTri() and DrawQuad() may be possible, but since
+                   they are not widely used, who cares about them)
+      PutMonoImage()   (using HOST transfer, perhaps)
+      BitBltSys()      (using HOST transfer)
+      SrcTransBltSys() (same here)
+      SetCursor()
+      SetCursorPos()
+      SetCursorColor()
+      ShowCursor()
+
+   This driver is not portable to anything but DOS+DPMI, since it uses
+   DPMI to communicate with the mach64 BIOS.
+
+   Both linear and banked modes are supported, but SetBank32 is in the
+   current (sloppy) implementation not fully relocatable, but this should
+   rarely be a problem since linear modes are much more fun anyway.
+
+   If you want to have 32bpp and 1600x1200 modes without having to
+   install Scitech Display Doctor, define REFUSE_VESA and try to find out
+   why the mach64 mode settings doesn't work properly, then uncomment the
+   appropriate extra modes, and report to me.
+
+   Virtual heights above screen height (for hardware scrolling) may not
+   work properly above 8bpp, I'm not sure why yet, but it looks like it
+   could be a bug in Allegro.
+
+   DrawLine does not seem to be rounded exactly like Allegro's, which
+   becomes evident when clipping.
+
+   I'm not sure how to do patterns. It is possible to load an 8x8 mono
+   pattern into the mach64 registers and use it, but I'm not sure how,
+   but I made a guess and implemented that, and it seems to work, but
+   I'm not totally sure. As for color patterns, I have just disabled
+   them since I haven't figured out how to do those yet. It would be
+   possible to use Shawn's technique; to bitblt them from offscreen VRAM,
+   but use TILE_X enabled for automatic tiling, but it doesn't seem
+   worthwhile at present, if there is a better way.
+
+      Ove Kaaven <ovek@arcticnet.no>
+

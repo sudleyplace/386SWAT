@@ -1,0 +1,57 @@
+Miscellaneous VCPI-related Changes
+
+* Fix a bug when debugging VCPI apps when loading as a device
+  driver (we're either a RM, VCPI (MM w/o INTRUDE), or PL0 (MM
+  w/INTRUDE) debugger).  Because SWAT's PTEs are not necessarily in
+  the VCPI page tables (they are by construction with 386MAX, but not
+  with other MMs), we need to take special action to ensure that this
+  is the case, otherwise we can't debug VCPI apps.  In particular, we
+  intercept VCPI DE01 calls, pass it on to the MM and fill in our own
+  PTEs when the MM has filled in its own.
+
+* When SWAT is called during INIT_VIRT, if the variable SWATDATA has
+  not been filled in, the overlay data is not copied to the correct
+  place.  In general, we need to call SETUP on any entry to SWAT which
+  doesn't go to SWATTER as we might be depending upon variables first
+  initialized in SETUP.  A new flag is defined to indicate whether or
+  not SETUP has been run.
+
+* To make the VCPI fill PTE call easier to use, the meaning of the
+  return value in ECX is changed from the # PTEs actually filled in
+  (possibly fewer than than the number specified) to the # PTEs which
+  remain to be filled in.  This way, a program can inquire as to how
+  many PTEs are required by SWAT by calling it with ECX=0.
+
+* The INT 67h handler in SWAT_VCP.ASM has been cleaned up
+  considerably.  Because so many subfunctions to INT 67h setup the
+  stack to address FORW_STR as well as set DS to DGROUP, we do this on
+  entry for all subfunctions.  Also, because we can't trust the
+  caller's stack selector (particularly when we're intruding), some of
+  (but not all) the dependencies on the high-order word of ESP being
+  valid are removed.
+
+
+MAKEFILE	 Note dependency of SWAT_VCP.ASM on SWAT_LC4.INC.
+
+SWAT_DRV.INC	 Define VCPI fill PTE flag.
+
+SWAT_LC4.INC	 Define SETUP has been run flag.
+
+VCPI.INC	 Change meaning of @VCPI_FILLPTE value.
+
+SWAT_DRV.ASM	 When loading as device driver, mark as needing to
+		   append our PTEs to the end of a VCPI DE01 call.
+		 Change comment on meaning of return value from
+		   @VCPI_FILLPTE.
+
+SWAT_INI.ASM	 In REST_PROT, mark as SETUP has not been run.
+		 In SETUP, mark as having been run.
+
+SWAT_VCP.ASM	 In LCL_INT67, setup SS:EBP ==> FORW_STR on entry.
+		 In LCL_INT67, if SETUP hasn't been run before, do so.
+		 In LCL_INT67, handle trailing DE01 fill in of SWAT's
+		   PTEs.
+		 In fill PTE call, change meaning of return value.
+		 Put fill PTE code into subroutine for multiple calls.
+
+

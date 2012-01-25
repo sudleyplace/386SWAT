@@ -1,0 +1,46 @@
+Display MAC Entries
+
+After many years of wading through MAC entries, I decided to implement
+a separate display screen for them (actually, Win95 pushed me over the
+edge -- this is a variant of "The devil made me do it").
+
+The keyboard combination of Ctl-M brings up this screen.
+
+There's also a separate command MACBASE which allows you to set the
+base address of the MAC chain in case it's different from .DMAC.  This
+is handy when displaying the DOS subsegment chain.
+
+At the same time, I collapsed the multiple screen scrolling entries in
+SWAT.ASM into a single macro.
+
+386SWAT.GRM	 Document new command line syntax.
+
+MAKEFILE	 Introduce a new module and its dependencies.
+
+SWAT_COM.INC	 Define a new screen display type.
+
+SWAT.ASM	 Define MAC index.
+		 Collapse multiple screen scrolling entries into a
+		   single macro.
+		 Change @DSP_INSTR to @DSP_IREGS for consistency.
+
+SWAT_BLK.ASM	 Change @DSP_INSTR to @DSP_IREGS for consistency.
+
+SWAT_CMD.ASM	 Include new command in parse table.
+
+SWAT_FBR.ASM	 Change @DSP_INSTR to @DSP_IREGS for consistency.
+
+SWAT_HTX.ASM	 Document new command line and keyboard commands.
+
+SWAT_INI.ASM	 In INIT_REAL, save initial MACBASE (i.e., the
+		   equivalent of an initial MACBASE .DMAC).
+
+SWAT_MAC.ASM	 Define new module containing MAC display code.
+
+SWAT_REG.ASM	 Change @DSP_INSTR to @DSP_IREGS for consistency.
+
+SWAT_SIG.ASM	 Change @DSP_INSTR to @DSP_IREGS for consistency.
+
+SWAT_UNA.ASM	 Change @DSP_INSTR to @DSP_IREGS for consistency.
+
+

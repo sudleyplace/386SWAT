@@ -1,0 +1,9 @@
+Fix Bug With High-Order Word Of ECX
+
+When I put in the USE32 code, I introduced a bug in the string scan
+which checks each incoming keystroke.  The fix is to set ECX for this
+instruction, not just CX.
+
+SWAT.ASM	 Set ECX instead of CX.
+
+

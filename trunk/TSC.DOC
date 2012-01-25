@@ -1,0 +1,28 @@
+Implement Time Stamp Counter Display
+
+On CPUs which support it (TSC bit set in CR4), display the # clocks
+executed since the last time SWAT was entered.	There is a certain
+amount of overhead in each entry to SWAT, so the numbers displayed
+will never be at the level of single instruction clock counts, but it
+is a good measure of time over a longer set of instructions.
+
+Also, in SWATTER, the DRn tests are made table driven.
+
+
+SWAT.ASM	Make DRn tests table driven.
+		Save old TSC value before exiting from SWATTER.
+
+SWAT_BLK.ASM	Re-organize data to be better aligned.
+		Define display message for TSC.
+		Save/restore register around use in DISP_BLK1.
+		Displat TSC after BLK1.
+
+SWAT_INI.ASM	Initialize TSC in INIT_PROT.
+
+SWAT_INT.ASM	Save new TSC on entry to each interrupt handler.
+		In INT 01h and 03h handlers, clear high-order word of
+		  ESP and EBP before use if 16-bit stack.
+
+SWAT_TSC.INC	Define macro for TSC use.
+
+

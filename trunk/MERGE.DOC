@@ -1,0 +1,153 @@
+Numerous Changes Accumulated Over The Years
+
+386SWAT 	Document additional profile options.
+
+386SWAT.DOC	Documetn additional features.
+
+386SWAT.GRM	Document DTE command.
+		Document IPF command.
+		Document MBD command.
+		Document QS command.
+		Document SGH command.
+		Document TBD command.
+		Document WKD command.
+
+FILELIST.TXT	Document additional files.
+
+MAKEFILE	Include SWAT_I41.ASM.
+		Include SWAT_I68.ASM.
+		Include SWAT_WGH.ASM.
+		Breakout SWAT_HTX.ASM targets.
+		Breakout .SSF file as separate target.
+
+PDTGRP.INC	Change location of PDE when using our own CR3.
+
+SWAT.ASM	Handle WGH display.
+		Handle MDB display.
+		Handle TDB display.
+		Define Shift-F10 to append the current screen to the
+		  screen buffer.
+		Define Ctl-K for WKD display.
+		Define WKD CB entry point.
+
+SWAT.WSG	Change selector numbers to reflect 386MAX TSS changes.
+
+SWAT_A20.ASM	If running with XMS manager, use it to enable/disable
+		  A20 line.
+
+SWAT_ARG.ASM	Define NOWINK argument.
+		Define WKDLS argument.
+		Define DEBUG=TRIP argument.
+
+SWAT_BLK.ASM	In DISP_IREGS, push dword instead of word to maintain
+		  stack alignment.
+
+SWAT_CMD.ASM	Define DTE command.
+		Define IPF command.
+		Define MDB command.
+		Define QS  command.
+		Define SGH command.
+		Define TDB command.
+		Define W   command.
+		Define WKD command.
+		Define MDB dot command.
+		Define TDB dot command.
+		Pass unknown dot commands to Win386.
+
+SWAT_COM.INC	Define WKD-specific flags and equates.
+
+SWAT_DBG.INC	Define DEBUG=TRIP flag.
+
+SWAT_DRV.ASM	Make sensitive to WKD interrupts and entry points.
+
+SWAT_DRV.INC	Define WKD-specific bits.
+
+SWAT_DTE.ASM	Define DTE command.
+
+SWAT_FCN.ASM	Define DEBUG=TRIP handler.
+		Define NOWINK handler.
+		Define WKDLS handler.
+
+SWAT_FLT.INC	Define strucs and equates for IPFs.
+
+SWAT_HLP.ASM	Define variables for WKD help.
+
+SWAT_HST.ASM	History buffer functions.
+
+SWAT_HTX.ASM	Document DTE command.
+		Document IPF commands.
+		Document MDB command.
+		Document QS command.
+		Document SGH commands.
+		Document TDB command.
+		Document WKD commands.
+
+SWAT_I41.ASM	New module to handle INT 41h functions.
+
+SWAT_I68.ASM	New module to handle INT 68h functions.
+
+SWAT_INI.ASM	Handle nested calls to INIT_PROT and REST_PROT.
+		Install and uninstall INTs 41h & 68h.
+		Disallow WKD support if no mono adapter present.
+
+SWAT_INT.ASM	Define variables for INT 41h & 68h handlers.
+		Handle different incoming stack widths in INT
+		  handlers.
+		Handle running under Windows when initialized as a
+		  RM device driver.
+		Handle trapping PL0 INTs 1 and 3 (WKD flag).
+		Define routine to get BDA address.
+
+SWAT_KEY.ASM	Call common routine to return BDA address.
+		Use triple fault method of rebooting if requested.
+
+SWAT_LC2.INC	Delete TSS flag bit (replaced by count).
+
+SWAT_LC4.INC	Define new flag bits.
+
+SWAT_MEM.ASM	Change width for dword display to 8.
+
+SWAT_MSC.ASM	Define routine to return LA of DTE.
+
+SWAT_PTE.ASM	Display PDE and PTE flag bits.
+
+SWAT_REG.ASM	Replace flag test for TSS with count test.
+
+SWAT_REM.ASM	In LDISP_TXT, handle CR and BEL.
+		In DISP_ERRLOG, handle tabs.
+
+SWAT_SCR.ASM	Replace flag test for TSS with count test.
+
+SWAT_SYM.ASM	Define QS command to display symbol nearest (and
+		  below) a given address.
+
+SWAT_SYM.INC	Label previously unlabeled fields in SYMC_STR.
+
+SWAT_TOG.ASM	In ACT_TOGINT, if we came from RM and we're in
+		  Windows, toggle IDT entries, too.
+
+SWAT_VCP.ASM	Refine the INSERT command to allow tr and ldtr to be
+		  specified.
+		Allow separate interrupt intercept tables for INSERT
+		  and non-INSERT contexts.
+		For INT 67h AX=DEF7 (Set Hosts Features), define BX=-1
+		  as ignoring the value.
+		Define RHYS2LIN to translate phys to lin with paging
+		  disabled.
+		In PHYS2LIN, if $PG=0, call RHYS2LIN.
+
+SWAT_WGH.ASM	Windows Global Heap and other commands.
+
+SWAT_WKD.INC	Define equates for WKD_FLAG.
+
+VERSBETA.ASM	Reset beta version number.
+
+VERSION.ASM	Bump version # to 6.00.
+
+WHATSNEW	Summary of changes.
+
+WINKDBG.DOC	External documentation for WKD.
+
+WINKDBG.TXT	Sequence of events with WKD calls by Windows.
+
+

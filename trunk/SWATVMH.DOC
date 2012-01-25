@@ -1,0 +1,45 @@
+
+P:\TWT\SWAT\SWATVMH.WRL 			06 November 1992
+
+The implementation of the SuperVM feature of Cannonball involve much switching
+between VMs via schedule events in WIN386.  The changes in this TWT are
+intended to make SWAT more useful to debug these situations, by displaying
+the current VM handle in the F9 register screen.
+
+The display of certain VMM INT 20h services has been fixed.
+
+The SWATINFO structure has been changes to support the third SWAT selector.
+
+
+Shortly after INIT_PROT is called, SWATVXD issues two new INT 67h calls to
+SWAT.LOD to pass the addresses of the Sys_VM_Handle and Cur_VM_Handle global
+variables within WIN386.  When SWAT pops up under Windows, the register display
+includes the current VM handle as an 8-digit hex value just above the stack
+display.
+
+===============================================================================
+
+What's changed...
+
+VCPI.INC		Add equates for new @VCPI_DBGWINVARS services.
+
+INT1\INT1_WIN.ASM	Correct VMM services that changed position during the
+			  Windows 3.1 beta.
+
+SWAT_INF.INC		Bump the SWATINFO structure version # to 5.
+			Add the SWTINF_PG2BASE and SWTINF_PG2LEN fields to
+			  hold the offset and size of PGROUP2 for the VxD.
+
+SWAT.ASM		Remember Cur_VM_Handle for the next invocation of
+			  SWATTER.
+
+SWAT_BLK.ASM		Display Cur_VM_Handle on F9 screen.
+
+SWAT_SCR.ASM		Define globals to hold Sys_VM_Handle and Cur_VM_Handle.
+			Add DISPVMHANDLE procedure to display Cur_VM_Handle
+			  just above the stack display.
+
+SWAT_VCP.ASM		Add new @VCPI_DBGWINVARS service.  Initially this
+			  supports @DBGWINVARS_CURVM and @DBGWINVARS_SYSVM.
+
+

@@ -1,0 +1,1601 @@
+<html>
+<head>
+<title>FreeBE/AF driver for TGUI9440AGi</title>
+</head>
+<body>
+<H1>FreeBE/AF driver for TGUI9440AGi</H1>
+
+This document describes the functions implemented in the
+TGUI9440AGi's FreeBE/AF driver.
+
+<p>
+
+This document applies to version 1.0 of the driver.
+
+<p>
+
+
+<Menu>
+<li><a href="#Alphabetical List">Alphabetical list of functions</a>
+<li><a href="#Files">List by files</a>
+</Menu>
+
+
+
+<p><hr></p>
+<a name="Alphabetical List"></a>
+<H1>Alphabetical List</H1>
+
+<Menu>
+<li><a href="#BitBlt">BitBlt</a>
+<li><a href="#BitBltSys">BitBltSys</a>
+<li><a href="#DisableDirectAccess">DisableDirectAccess</a>
+<li><a href="#DrawColorPattRect">DrawColorPattRect</a>
+<li><a href="#DrawColorPattScan">DrawColorPattScan</a>
+<li><a href="#DrawPattRect">DrawPattRect</a>
+<li><a href="#DrawPattScan">DrawPattScan</a>
+<li><a href="#DrawRect">DrawRect</a>
+<li><a href="#DrawScan">DrawScan</a>
+<li><a href="#DrawStippleLine">DrawStippleLine</a>
+<li><a href="#DrawTrap">DrawTrap</a>
+<li><a href="#DumpValues">DumpValues</a>
+<li><a href="#EnableDirectAccess">EnableDirectAccess</a>
+<li><a href="#ExtStub">ExtStub</a>
+<li><a href="#FindClosestVClk">FindClosestVClk</a>
+<li><a href="#GetClosestPixelClock">GetClosestPixelClock</a>
+<li><a href="#GetDisplayStartStatus">GetDisplayStartStatus</a>
+<li><a href="#GetVideoModeInfo">GetVideoModeInfo</a>
+<li><a href="#InitDriver">InitDriver</a>
+<li><a href="#PutMonoImage">PutMonoImage</a>
+<li><a href="#ReadVSync">ReadVSync</a>
+<li><a href="#RestoreTextMode">RestoreTextMode</a>
+<li><a href="#Set8x8ColorPattern">Set8x8ColorPattern</a>
+<li><a href="#Set8x8MonoPattern">Set8x8MonoPattern</a>
+<li><a href="#SetActiveBuffer">SetActiveBuffer</a>
+<li><a href="#SetBank">SetBank</a>
+<li><a href="#SetCursor">SetCursor</a>
+<li><a href="#SetCursorColor">SetCursorColor</a>
+<li><a href="#SetCursorPos">SetCursorPos</a>
+<li><a href="#SetDisplayStart">SetDisplayStart</a>
+<li><a href="#SetLineStipple">SetLineStipple</a>
+<li><a href="#SetLineStippleCount">SetLineStippleCount</a>
+<li><a href="#SetPaletteData">SetPaletteData</a>
+<li><a href="#SetupDriver">SetupDriver</a>
+<li><a href="#SetVideoMode">SetVideoMode</a>
+<li><a href="#SetVisibleBuffer">SetVisibleBuffer</a>
+<li><a href="#SetVSync">SetVSync</a>
+<li><a href="#ShowCursor">ShowCursor</a>
+<li><a href="#SrcTransBlt">SrcTransBlt</a>
+<li><a href="#SrcTransBltSys">SrcTransBltSys</a>
+<li><a href="#TestMemory">TestMemory</a>
+<li><a href="#TGUI9440LoadRegs">TGUI9440LoadRegs</a>
+<li><a href="#TGUI9440SaveRegs">TGUI9440SaveRegs</a>
+<li><a href="#Use8x8ColorPattern">Use8x8ColorPattern</a>
+<li><a href="#VGALoadRegs">VGALoadRegs</a>
+<li><a href="#VGASaveRegs">VGASaveRegs</a>
+<li><a href="#WaitTillIdle">WaitTillIdle</a>
+</Menu>
+
+
+
+<p><hr></p>
+<a name="Files"></a>
+<H1>Files</H1>
+
+<Menu>
+<li><a href="#driver.c">driver.c</a>
+<li><a href="#dumpreg.c">dumpreg.c</a>
+<li><a href="#rw_regs.c">rw_regs.c</a>
+</Menu>
+
+
+<p><hr></p>
+<a name="driver.c"></a>
+<H1>driver.c</H1>
+
+
+
+<Menu>
+<li><a href="#BitBlt">BitBlt</a>
+<li><a href="#BitBltSys">BitBltSys</a>
+<li><a href="#DisableDirectAccess">DisableDirectAccess</a>
+<li><a href="#DrawColorPattRect">DrawColorPattRect</a>
+<li><a href="#DrawColorPattScan">DrawColorPattScan</a>
+<li><a href="#DrawPattRect">DrawPattRect</a>
+<li><a href="#DrawPattScan">DrawPattScan</a>
+<li><a href="#DrawRect">DrawRect</a>
+<li><a href="#DrawScan">DrawScan</a>
+<li><a href="#DrawStippleLine">DrawStippleLine</a>
+<li><a href="#DrawTrap">DrawTrap</a>
+<li><a href="#EnableDirectAccess">EnableDirectAccess</a>
+<li><a href="#ExtStub">ExtStub</a>
+<li><a href="#FindClosestVClk">FindClosestVClk</a>
+<li><a href="#GetClosestPixelClock">GetClosestPixelClock</a>
+<li><a href="#GetDisplayStartStatus">GetDisplayStartStatus</a>
+<li><a href="#GetVideoModeInfo">GetVideoModeInfo</a>
+<li><a href="#InitDriver">InitDriver</a>
+<li><a href="#PutMonoImage">PutMonoImage</a>
+<li><a href="#RestoreTextMode">RestoreTextMode</a>
+<li><a href="#Set8x8ColorPattern">Set8x8ColorPattern</a>
+<li><a href="#Set8x8MonoPattern">Set8x8MonoPattern</a>
+<li><a href="#SetActiveBuffer">SetActiveBuffer</a>
+<li><a href="#SetBank">SetBank</a>
+<li><a href="#SetCursor">SetCursor</a>
+<li><a href="#SetCursorColor">SetCursorColor</a>
+<li><a href="#SetCursorPos">SetCursorPos</a>
+<li><a href="#SetDisplayStart">SetDisplayStart</a>
+<li><a href="#SetLineStipple">SetLineStipple</a>
+<li><a href="#SetLineStippleCount">SetLineStippleCount</a>
+<li><a href="#SetPaletteData">SetPaletteData</a>
+<li><a href="#SetupDriver">SetupDriver</a>
+<li><a href="#SetVideoMode">SetVideoMode</a>
+<li><a href="#SetVisibleBuffer">SetVisibleBuffer</a>
+<li><a href="#ShowCursor">ShowCursor</a>
+<li><a href="#SrcTransBlt">SrcTransBlt</a>
+<li><a href="#SrcTransBltSys">SrcTransBltSys</a>
+<li><a href="#TestMemory">TestMemory</a>
+<li><a href="#Use8x8ColorPattern">Use8x8ColorPattern</a>
+<li><a href="#WaitTillIdle">WaitTillIdle</a>
+</Menu>
+
+
+
+<p><hr></p>
+<a name="dumpreg.c"></a>
+<H1>dumpreg.c</H1>
+
+
+
+<Menu>
+<li><a href="#DumpValues">DumpValues</a>
+</Menu>
+
+
+
+<p><hr></p>
+<a name="rw_regs.c"></a>
+<H1>rw_regs.c</H1>
+
+
+
+<Menu>
+<li><a href="#ReadVSync">ReadVSync</a>
+<li><a href="#SetVSync">SetVSync</a>
+<li><a href="#TGUI9440LoadRegs">TGUI9440LoadRegs</a>
+<li><a href="#TGUI9440SaveRegs">TGUI9440SaveRegs</a>
+<li><a href="#VGALoadRegs">VGALoadRegs</a>
+<li><a href="#VGASaveRegs">VGASaveRegs</a>
+</Menu>
+
+
+
+
+
+<p><hr></p>
+<a name="TestMemory"></a>
+<center><Font Size=+2>TestMemory</Font> (driver.c 239)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ TestMemory();
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+This function tests the video memory. I use 256Kb steps because I think
+less than it is impossible. In fact I think all the 9440 boards have 1Mb
+or 2Mb of memory. Some time ago I tried to install 1.5Mb in one board and
+the BIOS reported just 1Mb. I also tried removing 0.5Mb and the BIOS
+detected it OK. I think Trident's BIOS detects 256, 512, 1024 and 2048.
+  The first time I tested this function writing outside the memory didn't
+write, but when I tested it in my machine it made a write at the 0 position.
+The stranger thing is that it doesn't happend with unoptimized code.
+  Oh! if you wander about why such a complex test, beleive me if you don't
+check all you could detect any crazy value.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="Set8x8MonoPattern"></a>
+<center><Font Size=+2>Set8x8MonoPattern</Font> (driver.c 383)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ Set8x8MonoPattern(AF_DRIVER *af, unsigned char *pattern);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Downloads a monochrome (packed bit) pattern, for use by the DrawPattScan()
+and DrawPattRect() functions. This is always sized 8x8, and aligned with the
+top left corner of video memory: if other alignments are desired, the pattern
+will be prerotated before it is passed to this routine. <a href="#DrawPattScan">DrawPattScan</a>.
+<a href="#DrawPattRect">DrawPattRect</a>.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="Set8x8ColorPattern"></a>
+<center><Font Size=+2>Set8x8ColorPattern</Font> (driver.c 410)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ Set8x8ColorPattern(AF_DRIVER *af, int index, unsigned long *pattern);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Downloads a color pattern, for use by the DrawColorPattScan() and
+DrawColorPattRect() functions. This is always sized 8x8, and aligned with
+the top left corner of video memory: if other alignments are desired, the
+pattern will be prerotated before it is passed to this routine. The color
+values are presented in the native format for the current video mode, but
+padded to 32 bits (so the pattern is always an 8x8 array of longs).
+<a href="#DrawColorPattScan">DrawColorPattScan</a>. <a href="#DrawColorPattRect">DrawColorPattRect</a>.
+
+// ToDo: Make 2 versions
+<p>
+
+
+
+
+<p><hr></p>
+<a name="Use8x8ColorPattern"></a>
+<center><Font Size=+2>Use8x8ColorPattern</Font> (driver.c 441)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ Use8x8ColorPattern(AF_DRIVER *af, int index);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Selects one of the patterns previously downloaded by Set8x8ColorPattern().
+<a href="#Set8x8ColorPattern">Set8x8ColorPattern</a>.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="SetLineStipple"></a>
+<center><Font Size=+2>SetLineStipple</Font> (driver.c 523)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ SetLineStipple(AF_DRIVER *af, unsigned short stipple);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Sets the mask used for stipple lines. <a href="#DrawStippleLine">DrawStippleLine</a>.
+<p>
+
+  I'm not sure about it so here is my guess: TGUI9440 have a 16 bits
+register (GER44,GER45) to set the mask used for patterned lines so I guess
+that's this function is to setup this value.
+<p>
+
+<p>
+
+
+
+
+<p><hr></p>
+<a name="SetLineStippleCount"></a>
+<center><Font Size=+2>SetLineStippleCount</Font> (driver.c 542)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ SetLineStippleCount(AF_DRIVER *af, unsigned long count);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Sets the repeat counter for the mask used in stipple lines.
+<a href="#DrawStippleLine">DrawStippleLine</a>.
+<p>
+
+  I'm not sure about it so here is my guess: TGUI9440 have an 8 bits
+register (GER47) to set the scale of the pattern for patterned lines. A value
+of 0 means that each bit in the pattern is 1 dot, a value of 1 expands
+each pixel to 2 dots and so on.
+<p>
+
+<p>
+
+
+
+
+<p><hr></p>
+<a name="DrawStippleLine"></a>
+<center><Font Size=+2>DrawStippleLine</Font> (driver.c 561)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ DrawStippleLine(AF_DRIVER *af, unsigned long foreColor, unsigned long backColor, fixed x1, fixed y1, fixed x2, fixed y2);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Draws a stipple line (patterned, dotted). SetLineStipple sets the pattern
+used and SetLineStippleCount the scale. <a href="#SetLineStipple">SetLineStipple</a>.
+<a href="#SetLineStippleCount">SetLineStippleCount</a>.
+<p>
+
+  Note: This function doesn't call drawline, it is almost the same code
+repeated. That's to increase speed because in this way I can make the
+Bresenham parameters calculation in parallel with the GE.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="DrawRect"></a>
+<center><Font Size=+2>DrawRect</Font> (driver.c 647)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ DrawRect(AF_DRIVER *af, unsigned long color, long left, long top, long width, long height);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Fills a rectangle in the current foreground mix mode.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="DrawScan"></a>
+<center><Font Size=+2>DrawScan</Font> (driver.c 691)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ DrawScan(AF_DRIVER *af, long color, long y, long x1, long x2);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Fills a scanline in the current foreground mix mode. Draws up to but
+not including the second x coordinate. If the second coord is less than the
+first, they are swapped. If they are equal, nothing is drawn.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="DrawPattRect"></a>
+<center><Font Size=+2>DrawPattRect</Font> (driver.c 782)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ DrawPattRect(AF_DRIVER *af, unsigned long foreColor, unsigned long backColor, long left, long top, long width, long height);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Fills a rectangle using the current mono pattern. Set pattern bits are
+drawn using the specified foreground color and the foreground mix mode, and
+clear bits use the background color and background mix mode.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="DrawPattScan"></a>
+<center><Font Size=+2>DrawPattScan</Font> (driver.c 842)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ DrawPattScan(AF_DRIVER *af, long foreColor, long backColor, long y, long x1, long x2);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Fills a scanline using the current mono pattern. Set pattern bits are
+drawn using the specified foreground color and the foreground mix mode, and
+clear bits use the background color and background mix mode.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="DrawColorPattRect"></a>
+<center><Font Size=+2>DrawColorPattRect</Font> (driver.c 957)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ DrawColorPattRect(AF_DRIVER *af, long left, long top, long width, long height);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Fills a rectangle using the current color pattern and mix mode.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="DrawColorPattScan"></a>
+<center><Font Size=+2>DrawColorPattScan</Font> (driver.c 982)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ DrawColorPattScan(AF_DRIVER *af, long y, long x1, long x2);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Fills a scanline using the current mono pattern. Set pattern bits are
+drawn using the specified foreground color and the foreground mix mode, and
+clear bits use the background color and background mix mode.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="BitBlt"></a>
+<center><Font Size=+2>BitBlt</Font> (driver.c 1069)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ BitBlt(AF_DRIVER *af, long left, long top, long width, long height, long dstLeft, long dstTop, long op);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Blits from one part of video memory to another, using the specified
+mix operation. This must correctly handle the case where the two regions
+overlap.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="SrcTransBlt"></a>
+<center><Font Size=+2>SrcTransBlt</Font> (driver.c 1111)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ SrcTransBlt(AF_DRIVER *af, long left, long top, long width, long height, long dstLeft, long dstTop, long op, unsigned long transparent);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Blits from one part of video memory to another, using the specified
+mix operation and skipping any source pixels which match the specified
+transparent color. Results are undefined if the two regions overlap.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="BitBltSys"></a>
+<center><Font Size=+2>BitBltSys</Font> (driver.c 1136)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ BitBltSys(AF_DRIVER *af, void *srcAddr, long srcPitch, long srcLeft, long srcTop, long width, long height, long dstLeft, long dstTop, long op);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Copies from system memory to the screen.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="SrcTransBltSys"></a>
+<center><Font Size=+2>SrcTransBltSys</Font> (driver.c 1196)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ SrcTransBltSys(AF_DRIVER *af, void *srcAddr, long srcPitch, long srcLeft, long srcTop, long width, long height, long dstLeft, long dstTop, long op, unsigned long transparent);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Copies from system memory to the screen, skipping any source pixels that
+match the specified transparent color.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="PutMonoImage"></a>
+<center><Font Size=+2>PutMonoImage</Font> (driver.c 1256)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ PutMonoImage(AF_DRIVER *af, long foreColor, long backColor, long dstX, long dstY, long byteWidth, long srcX, long srcY, long width, long height, unsigned char *image);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Expands a monochrome bitmap from system memory onto the screen.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="DrawTrap"></a>
+<center><Font Size=+2>DrawTrap</Font> (driver.c 1320)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ DrawTrap(AF_DRIVER *af, unsigned long color, AF_TRAP *trap);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Draws a filled trapezoid, using the current foreground mix mode.
+<p>
+
+  TGUI9440 doesn't have trapezoids, I think it was introduced in 96xx chips.
+I implemented it using scan lines, I think that's faster than a software
+trapezoid.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="SetCursor"></a>
+<center><Font Size=+2>SetCursor</Font> (driver.c 1374)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ SetCursor(AF_DRIVER *af, AF_CURSOR *cursor);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Sets the hardware cursor shape.
+
+// ToDo split it in various
+<p>
+
+
+
+
+<p><hr></p>
+<a name="SetCursorPos"></a>
+<center><Font Size=+2>SetCursorPos</Font> (driver.c 1437)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ SetCursorPos(AF_DRIVER *af, long x, long y);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Sets the hardware cursor position.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="SetCursorColor"></a>
+<center><Font Size=+2>SetCursorColor</Font> (driver.c 1476)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ SetCursorColor(AF_DRIVER *af, unsigned char red, unsigned char green, unsigned char blue);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Sets the hardware cursor color.
+<p>
+
+  Not supported by TGUI9440, I think 968x adds some registers for it.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="ShowCursor"></a>
+<center><Font Size=+2>ShowCursor</Font> (driver.c 1498)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ ShowCursor(AF_DRIVER *af, long visible);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Turns the hardware cursor on or off.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="SetBank"></a>
+<center><Font Size=+2>SetBank</Font> (driver.c 1513)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ SetBank(AF_DRIVER *af, long bank);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+C-callable bank switch function.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="SetPaletteData"></a>
+<center><Font Size=+2>SetPaletteData</Font> (driver.c 1554)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ SetPaletteData(AF_DRIVER *af, AF_PALETTE *pal, long num, long index, long waitVRT);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Palette setting routine. Palette values are in 8 bits format because some
+boards support 8 bits DAC and not only 6 bits.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="GetDisplayStartStatus"></a>
+<center><Font Size=+2>GetDisplayStartStatus</Font> (driver.c 1584)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ GetDisplayStartStatus(AF_DRIVER *af);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Status poll for triple buffering. Not possible on the majority of
+present cards: this function is just a placeholder.
+<p>
+
+  This must report if the Vertical Retrace Interval taked effect and the
+Display Start were transfered.
+<p>
+
+   Lamentably TGUI9440 doesn't set 3C2.b7, that's a clear violation to the
+VGA standard, Trident people must do it, like CHIPS does.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="SetDisplayStart"></a>
+<center><Font Size=+2>SetDisplayStart</Font> (driver.c 1601)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ SetDisplayStart(AF_DRIVER *af, long x, long y, long waitVRT);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Hardware scrolling function. The waitVRT value may be one of:
+<p>
+
+
+  -1 = don't set hardware, just store values for next page flip to use<br>
+   0 = set values and return immediately<br>
+   1 = set values and wait for retrace<br>
+<p>
+
+
+
+
+<p><hr></p>
+<a name="SetActiveBuffer"></a>
+<center><Font Size=+2>SetActiveBuffer</Font> (driver.c 1657)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ SetActiveBuffer(AF_DRIVER *af, long index);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Sets which buffer is being drawn onto, for use in multi buffering
+systems (not used by Allegro).
+<p>
+
+  I took it from the prototype driver and seems to be totally independent
+of the board.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="SetVisibleBuffer"></a>
+<center><Font Size=+2>SetVisibleBuffer</Font> (driver.c 1687)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ SetVisibleBuffer(AF_DRIVER *af, long index, long waitVRT);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Sets which buffer is displayed on the screen, for use in multi buffering
+systems (not used by Allegro).
+<p>
+
+  Copied from the prototype driver.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="GetVideoModeInfo"></a>
+<center><Font Size=+2>GetVideoModeInfo</Font> (driver.c 1704)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ GetVideoModeInfo(AF_DRIVER *af, unsigned Mode, AF_MODE_INFO *modeInfo);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Retrieves information about this video mode, returning zero on success
+or -1 if the mode is invalid.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="FindClosestVClk"></a>
+<center><Font Size=+2>FindClosestVClk</Font> (driver.c 1904)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ FindClosestVClk(unsigned fx, unsigned *VClkReg, unsigned *Divider);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+This routine calculates the closest frecuency to fx that we can achieve
+with the 9440 PLL. The values to program the chip are stored in VClkReg and
+Divider.
+<p>
+
+
+<Font Size=+1><u>Return Value</u></Font><p>
+
+The closest available frecuency or (unsigned)-1 if the value is outside
+the range.
+<p>
+
+
+
+<p><hr></p>
+<a name="GetClosestPixelClock"></a>
+<center><Font Size=+2>GetClosestPixelClock</Font> (driver.c 2001)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ GetClosestPixelClock(AF_DRIVER *af, unsigned mode, unsigned long pixelClock);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+
+<p>
+
+
+<Font Size=+1><u>Return Value</u></Font><p>
+
+:
+  The closest value available for the board or (unsigned)-1 if the value is
+outside the range.
+<p>
+
+
+
+<p><hr></p>
+<a name="SetVideoMode"></a>
+<center><Font Size=+2>SetVideoMode</Font> (driver.c 2153)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ SetVideoMode(AF_DRIVER *af, unsigned mode, long virtualX, long virtualY, long *bytesPerLine, int numBuffers, AF_CRTCInfo *crtc);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Sets the video mode. This function have various features, be careful.
+<p>
+
+  Mode is a 32 bits value, and not 16 bits as the first drafts propposed.
+Because a some nasty reasons isn't just a mode number but some sort of flags
+plus mode number. The lower 10 bits are the video mode number the rest of
+the bits have the following meaning:
+<p>
+
+
+ 0x8000 = don't clear video memory.<br>
+ 0x4000 = enable linear framebuffer.<br>
+ 0x2000 = enable multi buffering.<br>
+ 0x1000 = enable virtual scrolling.<br>
+ 0x0800 = use refresh rate control.<br>
+ 0x0400 = use hardware stereo.
+<p>
+
+
+Most of them are self-explanatory, and others aren't very clear yet.
+<p>
+
+The virtual screen size is requested by the virtualX/Y pair the driver will
+set a screen of at least this size, if isn't posible will return error. Note
+that the actual size could be greater. For this reason bytesPerLine is filled
+with the actual X virtual size (stride?).
+<p>
+
+You can request more than one buffer indicating it in numBuffers, if the RAM
+isn't enough the driver will return error.
+<p>
+
+Perhaps the hardest parameter to understand is crtc. This parameter provides
+a mechanism to allow setting the refresh rate and centering the screen. The
+mechanism is incomplet and SciTech people complements it with OEM extentions,
+I asked to make these extentions official and Kendall said he will consider
+it for Nucleus. Anyways, this pointer will be used by the driver if you use
+the 0x0800 flag, the members of the structure are:
+<p>
+
+
+unsigned short HorizontalTotal: Total pixels, visible and not visible.<br>
+unsigned short HorizontalSyncStart: Pixel where the horizontal sync pulse
+starts.<br>
+unsigned short HorizontalSyncEnd: End of the pulse.<br>
+unsigned short VerticalTotal: Total lines, visible and not.<br>
+unsigned short VerticalSyncStart: Vertical sync pulse start.<br>
+unsigned short VerticalSyncEnd: End of the pulse.<br>
+unsigned char  Flags: Various flags see below.<br>
+unsigned int   PixelClock: Desired pixel clock, the driver will use the
+closest available so you must check it with GetClosestPixelClock.
+<a href="#GetClosestPixelClock">GetClosestPixelClock</a>.<br>
+unsigned short RefreshRate: Just ignore it is for very old controllers that
+have some specific crtc register values for each mode.<br>
+unsigned short NumBuffers: That's here only for compatibility issues related
+to VBE/AF 1.0.
+<p>
+
+
+The possible flags are:
+<p>
+
+
+afDoubleScan (0x0001)  Enable double scanned mode.<br>
+afInterlaced (0x0002)  Enable interlaced mode.<br>
+afHSyncNeg   (0x0004)  Horizontal sync is negative.<br>
+afVSyncNeg   (0x0008)  Vertical sync is negative.
+<p>
+
+
+As you can see only the X/Y resolution is set by the driver and you control
+all the rest.
+<p>
+
+To use it you must first find information about the monitor (asking the user
+or using DDC?), then calculate the total and sync positions with the VESA
+GTF formula and the aid of GetClosestPixelClock and finally pass these values
+to the driver.
+<p>
+
+
+Important:
+<p>
+
+1) I don't care about LFB that's on all the time.<br>
+2) I expanded the short mode to unsigned mode because MGL 4.05 does it.<br>
+3) I added a propietary flag: 0x80000000: Don't set the palette. I think it
+will be replaced by some OEM extention, avoid using it.
+<p>
+
+<p>
+
+
+
+
+<p><hr></p>
+<a name="RestoreTextMode"></a>
+<center><Font Size=+2>RestoreTextMode</Font> (driver.c 2390)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ RestoreTextMode(AF_DRIVER *af);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+
+<p>
+
+
+<Font Size=+1><u>Return Value</u></Font><p>
+
+to text mode, shutting down the accelerator hardware.
+<p>
+
+
+
+<p><hr></p>
+<a name="EnableDirectAccess"></a>
+<center><Font Size=+2>EnableDirectAccess</Font> (driver.c 2413)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ EnableDirectAccess(AF_DRIVER *af);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Provides direct access to the video RAM. That's needed for boards where
+the accelerator blocks the use of the video RAM.
+<p>
+
+  TGUI9440 does it only during the Blit operations so in my case I simply
+do a wait until de Graphics Engine finished your job. Note that this routine
+is here just for testing because isn't needed and isn't reported.
+<p>
+
+
+
+<Font Size=+1><u>Example</u></Font><p>
+
+EnableDirectAccess(af);
+  .... Draw to the screen ....
+  DisableDirectAccess(af);
+<p>
+
+
+<p><hr></p>
+<a name="DisableDirectAccess"></a>
+<center><Font Size=+2>DisableDirectAccess</Font> (driver.c 2430)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ DisableDirectAccess(AF_DRIVER *af);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Disables the direct access to the video RAM. That's needed for boards
+where the accelerator blocks the use of the video RAM.
+<p>
+
+  TGUI9440 does it only during the Blit operations so in my case this
+function does nothing. Note that this routine is here just for testing
+because isn't needed and isn't reported.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="WaitTillIdle"></a>
+<center><Font Size=+2>WaitTillIdle</Font> (driver.c 2449)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ WaitTillIdle(AF_DRIVER *af);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Waits until the accelerator finished your job. That's a very important
+function. Suppose you want to draw over a rectangle made with DrawRect, how
+can you be sure you won't draw under it? Waiting until the accelerator
+finished your job.
+<p>
+
+  What I don't fully understand is the need of both:
+Enable/DisableDirectAccess and WaitTillIdle. I saw an e-mail by Kendall
+tallking about it.
+<p>
+
+  The TGUI9440 waits until the Graphic Engine finished all the jobs.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="ExtStub"></a>
+<center><Font Size=+2>ExtStub</Font> (driver.c 2462)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ ExtStub();
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Vendor-specific extension hook: we don't provide any.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="SetupDriver"></a>
+<center><Font Size=+2>SetupDriver</Font> (driver.c 2478)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ SetupDriver(AF_DRIVER *af);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+The first thing ever to be called after our code has been relocated.
+This is in charge of filling in the driver header with all the required
+information and function pointers. We do not yet have access to the
+video memory, so we can't talk directly to the card.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="InitDriver"></a>
+<center><Font Size=+2>InitDriver</Font> (driver.c 2577)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ InitDriver(AF_DRIVER *af);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+The second thing to be called during the init process, after the
+application has mapped all the memory and I/O resources we need. This is in
+charge of finding the card, returning 0 on success or -1 to abort.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="InitDriver"></a>
+<center><Font Size=+2>InitDriver</Font> (driver.c 2669)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ InitDriver(AF_DRIVER *af);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+
+<p>
+
+
+<Font Size=+1><u>Return Value</u></Font><p>
+
+to text mode, shutting down the accelerator hardware.
+<p>
+
+
+
+<p><hr></p>
+<a name="InitDriver"></a>
+<center><Font Size=+2>InitDriver</Font> (driver.c 2692)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ InitDriver(AF_DRIVER *af);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Provides direct access to the video RAM. That's needed for boards where
+the accelerator blocks the use of the video RAM.
+<p>
+
+  TGUI9440 does it only during the Blit operations so in my case I simply
+do a wait until de Graphics Engine finished your job. Note that this routine
+is here just for testing because isn't needed and isn't reported.
+<p>
+
+
+
+<Font Size=+1><u>Example</u></Font><p>
+
+EnableDirectAccess(af);
+  .... Draw to the screen ....
+  DisableDirectAccess(af);
+<p>
+
+
+<p><hr></p>
+<a name="InitDriver"></a>
+<center><Font Size=+2>InitDriver</Font> (driver.c 2709)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ InitDriver(AF_DRIVER *af);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Disables the direct access to the video RAM. That's needed for boards
+where the accelerator blocks the use of the video RAM.
+<p>
+
+  TGUI9440 does it only during the Blit operations so in my case this
+function does nothing. Note that this routine is here just for testing
+because isn't needed and isn't reported.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="DumpValues"></a>
+<center><Font Size=+2>DumpValues</Font> (dumpreg.c 10)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ DumpValues(uchar *regs, int base, int cant, int last);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Dumps the values from the arrays to the screen.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="TGUI9440SaveRegs"></a>
+<center><Font Size=+2>TGUI9440SaveRegs</Font> (rw_regs.c 25)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ TGUI9440SaveRegs(uchar *regs);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+This routines captures the TGUI registers in an array. Not all are stored
+because isn't needed by now. In fact I'm storing a lot of registers that
+are not needed to store.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="VGASaveRegs"></a>
+<center><Font Size=+2>VGASaveRegs</Font> (rw_regs.c 126)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ VGASaveRegs(uchar *regs, uchar *Sregs);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+This function stores ALL the VGA registers in an array. Additionally it
+calls to the routine that stores the TGUI registers around 120 registers
+are stored.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="TGUI9440LoadRegs"></a>
+<center><Font Size=+2>TGUI9440LoadRegs</Font> (rw_regs.c 174)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ TGUI9440LoadRegs(const uchar *regs);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Restores the TGUI registers from an array.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="VGALoadRegs"></a>
+<center><Font Size=+2>VGALoadRegs</Font> (rw_regs.c 272)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ VGALoadRegs(const uchar *regs, const uchar *Sregs);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Restores the VGA registers from an array.
+<p>
+
+
+
+
+<p><hr></p>
+<a name="ReadVSync"></a>
+<center><Font Size=+2>ReadVSync</Font> (rw_regs.c 334)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ ReadVSync(int *start, int *end);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+
+<p>
+
+
+<Font Size=+1><u>Return Value</u></Font><p>
+
+the vertical sync start and end values. Not optimized because I
+think that's a very strange stuff.
+<p>
+
+
+
+<p><hr></p>
+<a name="SetVSync"></a>
+<center><Font Size=+2>SetVSync</Font> (rw_regs.c 361)</center>
+
+<Font Size=+1><u>Syntax</u></Font><p>
+
+
+
+<pre>
+ SetVSync(int start, int end);
+</pre>
+
+
+
+
+<Font Size=+1><u>Description</u></Font><p>
+
+Sets the vertical sync start and end values. Not optimized because I
+think that's a very strange stuff.
+<p>
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,89 @@
+Implement INSERT Command
+
+To debug Windows at the lowest level, we need to be able to insert
+ourselves into Windows startup shortly after it enters PM.  To this
+end, the INSERT command is available.  It is used from the SWAT
+command line at the point just before Windows enters PM.  The syntax
+of the command is as follows:
+
+INSERT gdtr idtr cr3 lapde [tr ldtr]
+INSERT *    idtr
+
+where gdtr = linear address of fword describing the GDT
+      idtr = ...				    IDT
+      cr3  = incoming CR3 (optional)
+      lapde= linear address of 4MB block where SWAT PDE(s) should be copied
+      tr   = task register
+      ldtr = LDT register
+
+At the moment, the TR and LDTR fields are not used.
+
+To use this command, find the point at which Windows is just about to 
+enter PM.  At startup, there's a message which reads
+
+....The Windows callback address is xxxx:xxxx.
+
+Then follow these steps:
+
+1.  Bring up SWAT and set a breakpoint on the Windows callback 
+address.
+
+2.  Start Windows.
+
+3.  After a short pause as Windows loads various RM drivers, the above 
+breakpoint trips.
+
+4.  Type U .RETF to disassemble instructions at the return address 
+which is in Windows code.
+
+5.  Page down a few screens until you get to code which enters PM by 
+setting the the PE bit in CR0.
+
+6.  Along the way, you should also note from where the new values for 
+CR3, GDTR, and IDTR are loaded.  For example, in the initial release 
+of Win98, CR3 comes from DS:000D, GDTR from DS:0480, and IDTR from 
+DS:0486.
+
+7.  Type on the SWAT command line
+
+	insert ds:480 ds:486 {ds:d ff000000
+	
+This command line is interpreted as the fword which contains the GDTR 
+is at ds:480, the fword for the IDTR is at ds:486, just beyond the 
+GDTR, the incoming CR3 is the dword at ds:d (the left brace extracts a 
+dword from the address to its right), and SWAT should use the linear 
+address FF000000 (must be multiple of 4MB) for its code.  SWAT uses 
+TSSs for its interrupts, grabbing entries from the end of the GDT.
+
+8.  Find an instruction after Windows enters PM at which SWAT can 
+safely stop.  This means that at least SS:ESP has been specified, and 
+preferably the othe segment registers as well.
+
+9.  Place a breakpoint on this instruction (I usually just put this 
+instruction at the top of the screen and press PadStar).
+
+10.  If it all works, SWAT should come up in PM under Windows!
+
+11.  Of course, it can't be all that easy.  At this point you've
+successfully intruded into the Windows startup code's GDT and IDT, but
+there's another IDT into which SWAT needs to intrude.  Continue
+single-stepping until the first CALL occurs, and step into this call.
+You'll notice a LOOPD followed by an LIDT instruction.  Step over the
+LOOPD and to the LIDT.	At the LIDT instruction, type on the SWAT
+command line
+
+	insert * .ea
+
+which tells SWAT to intrude into this IDT as well.  That is, the 
+asterisk is a placeholder for the GDTR (into which we've already 
+intruded), and the new IDTR is the effective address of the data 
+referenced by the current instruction (LIDT), which is what .ea 
+returns.
+
+12.  From this point on you can wade through Windows startup code 
+including some VxDs.  The point at which you can have trouble is VPICD 
+which rebases the Master PIC (Programmable Interrupt Controller), from 
+08h to 50h.
+
+
+

@@ -1,0 +1,90 @@
+Add Go Monitor command and .CSIP to 386SWAT
+
+To implement this was a bit trickier than expected, mostly because
+it was a sonofabitch to debug and there were a number of conditions
+that needed to be satisfied to run through the SWATTER code without
+displaying anything.
+
+However, having gotten this working, it should be a short hop to
+adding boolean expressions to other types of breakpoints (such as
+bc and bd).
+
+There are some limitations:
+
+ 1. Currently, GM does not single-step across mode switches via INT
+    (but will handle any mode switch handled by Pad Plus).
+ 2. It is slow as molasses.
+ 3. With the addition of boolean operators like && and || precedence
+    becomes more of something one would reasonably expect.
+ 4. GM will not work in TSS mode currently (non-critical, failure mode
+    is the expression doesn't trigger).
+
+
+Files affected:
+
+386SWAT.DOC
+	Document GM command and .CSIP.
+
+386SWAT.GRM
+	Document GM syntax and define expression (which, conveniently,
+	are expressions).
+
+	Document .CSIP.
+
+	Define additional dyadic functions.
+
+MAKEFILE
+	Add LINK option (defaulting to QLINK).	For some reason this doesn't
+	work on my laptop.
+
+	Add SWAT_LC4.INC dependency for SWAT.ASM.
+
+SWAT.ASM
+	Check near the top of SWATTER for monitor expression TRUE, and
+	if not, keep on stepping.
+
+	Note that we have to take some pains to have everything set up
+	properly so we can take advantage of the common code at SWATTER_TRACE.
+	We don't want to go through any display code.
+
+SWAT_BLK.ASM
+	Define DL on entry to DISP_BLK1.  I checked all possible calls to
+	this procedure (there were very few).  It is now called in a non-
+	display case.
+
+SWAT_CMD.ASM
+	Parse new gm command and .csip token.
+
+	Make dyadic function scanning data-driven.  Note that there's room
+	in the structure to set up precedence, but it will require a bit
+	more work as some look-ahead will be needed.
+
+	Add new dyadic functions for boolean evaluation.
+
+SWAT_GOT.ASM
+	Handle gm command.  All we do is syntax-check the expression,
+	save it away, set the flag to set monitor mode on exit from
+	SWATTER, and return.
+
+	Add monitor expression evaluator.  As can be seen, there's not
+	much to it; the real work is in PARSE_EXPR.
+
+SWAT_HTX.ASM
+	On-line help for .CSIP and GM.
+
+SWAT_INT.ASM
+	Add public label to use in checking the source of call to SWATTER.
+
+	Differentiate Int 9 (Ctl-Alt-Pad5) call to SWATTER from Int 1.
+
+SWAT_LC2.INC
+	Define "monitor mode enabled" flag.  When this is in effect SWAT
+	attempts to continue single-stepping with no display until the
+	monitor expression evaluates TRUE (non-zero) or SWAT is invoked
+	via Ctl-Alt-Pad5, GPF, NMI, or other means.
+
+SWAT_LC4.INC
+	Define "enable monitor mode" flag.  This is set so we can test
+	it on exit from SWATTER and turn on the @LC2_MONITOR flag.
+
+

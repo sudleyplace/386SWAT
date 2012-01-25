@@ -1,0 +1,14 @@
+Include Function-Specific Text in INT 21h Comments
+
+Becasue they occur so often in code, the display of INT 21h
+instructions which are the current instruction now includes
+function-specific text (e.g., "Write File (handle)").
+
+This is a completion of an old TWT of Mark Alexander's.
+
+INT1_FNS.ASM	 In @INTMSG, check for INT 21h instructions as the
+		   current instruction.
+
+INT1_WIN.ASM	 Include DOS function-specific text.
+
+

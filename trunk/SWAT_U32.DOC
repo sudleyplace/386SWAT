@@ -1,0 +1,7 @@
+This change fixes a bug in the disassembly of USE32 segment introduced
+during the command line changes.
+
+SWAT.ASM is affected.  UNAMASK is set appropriately.
+
+WRL
+

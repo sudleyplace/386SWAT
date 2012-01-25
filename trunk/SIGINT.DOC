@@ -1,0 +1,65 @@
+Implement SIGINT Command Line Function
+
+Sometimes, interrupts just don't occur when you want them to.  Now you
+can make them happen anytime, even with interrupts disabled.  The new
+command line SIGINT takes an interrupt # (00h-0FFh) as an argument and
+places an INT xx instruction at CS|EIP-2 and executes it, after
+setting a breakpoint at the corresponding PMIxx.  Also, as Bill
+pointed out you can exit from a VM program via R AH 4C/SIGINT 21/ESC.
+
+At the same time, the following changes were made:
+
+* Check for VME support by testing the CPUID feature bits.
+
+* Before executing PTE or PDE display code, ensure that paging is
+  enabled.  If not, display an error message.
+
+
+SWAT_LC3.INC	 Define bit to mark that we're processing a SIGINT.
+
+386SWAT.GRM	 Note new command line argument and its syntax.
+
+MAKEFILE	 Delete extra comments from a previous TWT.
+		 Include new module in .OBJ list.
+		 Remove dependency of SWAT_DTE.ASM on SWAT_LC2.INC.
+		 Note dependencies for new module SWAT_SIG.ASM.
+
+SWAT.ASM	 At the start of SWATTER, check for processing SIGINT.
+		   If so, restore the two bytes we overwrote with the
+		   INT xx instruction.
+		 After executing a command line function, take action
+		   if it was SIGINT.
+		 If command line function was SIGINT, get address of
+		   breakpoint and jump to common code.
+		 Before executing PTE or PDE display code, ensure that
+		   paging is enabled.  If not, display an error
+		   message.
+		 At SWATTER_TRACE, ensure $TF is set in the flags.
+		   This can be cleared in SWAT_SIG.ASM via SIGINT.
+		 Delete commented out code.
+		 Use INTVEC names when referencing the RM IDT.
+
+SWAT_CMD.ASM	 Define new error messages for SIGINT and PTE/PDE
+		   display when paging is not enabled.
+		 Include new command line function SIGINT in action
+		   table.
+		 Put .PMIxx code into a subroutine for use in
+		   multiple places.
+		 Define IZITEOL routine for later use.
+
+SWAT_DTE.ASM	 Check for VME features by testing CPUID feature bits.
+
+SWAT_INI.ASM	 Save CPUID feature bits for later testing.
+
+SWAT_SIG.ASM	 Define new module to handle SIGINT parsing and
+		   execution.
+		 If we're loaded via Device=, fix up the stack
+		   ourselves as .PMIxx isn't of much help.
+		 Otherwise, patch in an INT xx instruction at
+		   CS|EIP-2, back up EIP by 2, and set a breakpoint at
+		   .PMIxx where we should gain control next.  We use
+		   EIP-2 as the patch point (as opposed to just EIP)
+		   as it's too difficult to find the saved EIP on the
+		   stack to put back to the original value.
+
+

@@ -1,0 +1,30 @@
+Fix bug introduced with VMSCOUNT
+
+When VMSCOUNT was introduced to enable VMSINT debugging of
+background VCPI programs (like PIPES), the whole VMSINT
+mechanism was broken.
+
+Other minor enhancements:
+* Symbol names longer than 80 characters (as may be introduced
+  by a bug in symbol loader code) no longer trash SWAT
+* Ctrl-Bksp deletes the entire command line and homes the cursor
+* Symbol proximity offsets are now displayed in hex
+
+Files affected:
+
+INT1_FNS.ASM	Display symbol proximity offsets in hex.  The
+		maximum possible proximity value is FF.
+
+SWAT_CMD.ASM	Implement Ctrl-Bksp (clear command line and reset
+		cursor to home position).
+
+SWAT_SYM.ASM	Accommodate symbol names up to 255 characters in length.
+		Incidentally, don't let garbage symbol records break
+		SWAT.
+
+		When replacing a symbol with a duplicate name, also
+		change the group ID number.
+
+SWAT_VCP.ASM	Add missing jump target in VMSINT code.
+
+

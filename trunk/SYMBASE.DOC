@@ -1,0 +1,22 @@
+Allow Optional Physical Base Address for LOADSYM Symbols
+
+For the case where 386MAX uses the physical memory at the default base
+address of 00110000h, an optional switch is provided to the LOADSYM=
+keyword to load and restore the symbol file to and from another
+physical base address.
+
+At the same time the routine FCN_SYMLOAD is renamed to FCN_LOADSYM to
+match the documented keyword rather than the undocumented alias.
+
+The following modules are changed and why:
+
+386SWAT 	 Note optional switch on LOADSYM= keyword.
+
+SWAT_ARG.ASM	 Rename FCN_SYMLOAD to FCN_LOADSYM.
+
+SWAT_FCN.ASM	 Define error message in case the switch is not
+		   recognized.
+		 Rename FCN_SYMLOAD to FCN_LOADSYM.
+		 Check for optional switch characters.
+
+

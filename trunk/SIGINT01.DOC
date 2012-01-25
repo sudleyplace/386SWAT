@@ -1,0 +1,38 @@
+Handle SIGINT 1/3
+
+* While debugging an incompatibilty with ViruSafe, I needed a minor
+  enhancement to SIGINT to overcome their attempts to fool a RM
+  debugger.  They used many tricks including self-modifying code, as
+  well as installing their own INT 01h/03h handlers.  At one point
+  their code signals INT 01h which SWAT intercepts, of course.	I
+  needed to signal this interrupt to them, but SIGINT 1 invoked it as
+  a PM interrupt, which proceeded to crash the system.	The solution
+  was to signal INT 01h/03h as a VM interrupt, as well as ensure that
+  TF is set in the return flags if it's INT 01h from a single-step (as
+  opposed to a software interrupt INT 01h).
+
+  I'm sure these guys (from Israel) thought they were making it so
+  difficult to debug their code that nobody could figure it out.
+  Obviously, they hadn't encountered a PM debugger before.  Judicious
+  use of both TOGINT and SIGINT on both INTs 01h and 03h cracked it
+  wide open.
+
+* At the same time, I needed to save the incoming value of DR6 which
+  triggered another change (and bug fix).  The bug fixed is an
+  incorrect data value width in a struc missed when I changed the code
+  segment from USE16 to USE32.
+
+* A related change cleaned up (and documented) the tests which handle
+  the case where SWAT is entered other than through a debug exception,
+  but with the GD bit set.
+
+SWAT.ASM	 Define save area for incoming DR6.
+		 Fix bug with incorrect width for saved EFL on stack.
+		 Document and clean up code which handles GD bit.
+		 Save incoming DR6.
+
+SWAT_SIG.ASM	 Emulate INTs 01h and 03h as VM interrupts.
+		 If we're emulating INT 01h from a single-step, ensure
+		   that TF is set in the return flags.
+
+

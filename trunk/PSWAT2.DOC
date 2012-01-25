@@ -1,0 +1,36 @@
+Fix Bug In Preceding SWAT Code
+
+If we're debugging SWAT with a preceding copy of itself (call it
+PSWAT), it's possible (even likely) that the preceding SWAT is loaded
+at a different linear address (in its own linear address space) than
+the one we're debugging.  This is especially true when the two SWATs
+are running in different modes (e.g., device SWAT vs.  RUDE SWAT).
+When we ask PSWAT to fill in its GDT and IDT entries, it uses the only
+linear address it knows about.
+
+This means that not only do we need to reserve space for PSWAT in the
+second SWAT's linear address space, but also tell PSWAT about its new
+linear address.
+
+Note that we don't know how big PSWAT is (we probably should define a
+new function for this, or return it from an existing function).  Thus,
+we use a figure which should be big enough (I use 4MB as linear
+address space is cheap).
+
+At the same time, I extended the arguments passed to SET_DEVGDT to
+include flag bits so that that one routine sets the entire GDT entry.
+Previously, we needed to set the B-bit separately.
+
+SWAT_DRV.ASM	 Define variable for PSWAT's linear address, total
+		   PM-resident size, and version number.
+		 Move data around for better alignment.
+		 In INIT_VCPI, if there's a PSWAT, reserve linear
+		   address space for it.
+		 In INIT_VCPI, return CF=0 if all went OK.
+		 Extend calls to SET_DEVGDT to set flag bits in DTE.
+		 In CHECK_PSWAT, save debugger version number for
+		   later use.
+		 In INIT_PSWAT, if PSWAT supports the fill PTE
+		   function, use it to fill in its own PTEs.
+
+

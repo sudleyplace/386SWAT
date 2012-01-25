@@ -1,0 +1,30 @@
+Allocate SWAT's Local Stack As Unintialized Data
+
+In a never-ending attempt to reduce the low DOS memory footprint of
+SWAT, it occurred to me that the 1KB local stack switched to by SWAT
+each time it gains control could just as well be in uninitialized data
+rather than in static data.
+
+As we all know, nothing is that simple, so a few other changes were
+required:
+
+* Because the stack offset might be above 64KB, we must ensure that
+  the B-bit in our data selector is set so the CPU uses ESP for
+  implicit stack references.
+
+* Some stack references using BP were changed to use EBP.
+
+The following modules are changed and why:
+
+SWAT.ASM	 Delete declaration of LCLSTK.
+		 Define label at start of SWAT to avoid silly LINKer
+		   message about there being no starting address.
+
+SWAT_INI.ASM	 Ensure that the B-bit is set in our data selector in
+		   the GDT.
+		 Save the offset of the top of the stack in
+		   uninitialized data for later use.
+
+SWAT_WIN.ASM	 Change stack references from BP to EBP.
+
+

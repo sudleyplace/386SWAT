@@ -1,0 +1,27 @@
+Skip More GP Faults
+
+When debugging under Windows and trapping GP Faults, I found it
+convenient to define more instructions to skip when a GP Fault occurs.
+This is because Windows runs DOS with IOPL<CPL, thus the instructions
+skipped are the IOPL-sensitive ones.
+
+Also included in this change is the inclusion of JCXZ to the list of
+instructions which are subject to bookmark (s-F1/s-F2) processing.
+
+The following files are changed and why:
+
+386SWAT 	 Define new keywords to GPSKIP=.
+
+OPODES.INC	 Define opcodes equates.
+
+SWAT_GPS.INC	 Define bit flags/masks for new GPSKIP keywords.
+
+SWAT_AGR.ASM	 Include JCXZ as a bookmark instruction.
+
+SWAT_FCN.ASM	 Define struc and DB entries for new GPSKIP keywords.
+
+SWAT_VCP.ASM	 In CHECK_GPS, check for new GPSKIP instructions.
+		   Also included are the 32-bit I/O instructions which
+		   were omitted.
+
+

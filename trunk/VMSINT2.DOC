@@ -1,0 +1,12 @@
+Implement VMSINT Toggle Command
+
+Because some VCPI programs choke when VMSINT is enabled, it's helpful
+to turn this feature on and off selectively.  Need I say more?
+
+SWAT_CMD.ASM	 Define command line actions.
+
+SWAT_HTX.ASM	 Document new command.
+
+SWAT_VCP.ASM	 Define action routine for new command.
+
+

@@ -1,0 +1,19 @@
+Workaround A20 vs. I/O Port 92h Bugs
+
+Alas, from the no-good-deed-goes-unpunished file, it turns out that on
+some systems the very act of writing to I/O port 92h (the actual value
+doesn't matter) gates A20 on, but then that's all she wrote.  No
+further writes to 92h or to the 8042 for that matter have any effect.
+
+As this causes us some problems, we need to recognize this situation
+and avoid it.  On the system I encountered with this hardware bug, the
+input value of I/O port 92h is 0C0h, so the test used checks for the
+two high-order bits on.  If that's a valid I/O port (at least in MCA
+parlance), that would mean that both Fixed Disk lights are on, which
+is, I trust, an unlikely event.  This also catches the case where the
+I/O port has no effect and a read returns 0FFh.
+
+SWAT_A20.ASM	 Check for invalid value from I/O port 92h before
+		   writing to it.
+
+

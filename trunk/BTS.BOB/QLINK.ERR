@@ -1,0 +1,1768 @@
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001CE0C at word offset
+    00000002 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001CD55
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BD3A at word offset
+    00000019 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BC83
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B377 at word offset
+    0000002B in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B2C0
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001CB3B at word offset
+    0000003D in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001CA84
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BE26 at word offset
+    0000004F in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BD6F
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AF60 at word offset
+    00000061 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AEA9
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BFC8 at word offset
+    00000079 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BF11
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B67F at word offset
+    0000008B in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B5C8
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C6EE at word offset
+    00000098 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C637
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BB97 at word offset
+    000000B0 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BAE0
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AF94 at word offset
+    000000C2 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AEDD
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BF93 at word offset
+    000000DA in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BEDC
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C6ED at word offset
+    000000F2 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C636
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AF88 at word offset
+    0000010A in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AED1
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BF69 at word offset
+    00000122 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BEB2
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BC32 at word offset
+    0000013A in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BB7B
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BC1F at word offset
+    0000014C in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BB68
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BB92 at word offset
+    0000015E in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BADB
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BF97 at word offset
+    00000170 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BEE0
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AEF4 at word offset
+    00000188 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AE3D
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BF4D at word offset
+    0000019B in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BE96
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C355 at word offset
+    000001B3 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C29E
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AD07 at word offset
+    000001CB in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AC50
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AD3A at word offset
+    000001DE in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AC83
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001ADAC at word offset
+    000001F1 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001ACF5
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AC76 at word offset
+    00000204 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001ABBF
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AE61 at word offset
+    00000217 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001ADAA
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C975 at word offset
+    0000022A in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C8BE
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B379 at word offset
+    0000023D in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B2C2
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001CCC5 at word offset
+    00000250 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001CC0E
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BFCC at word offset
+    00000262 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BF15
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BA85 at word offset
+    00000275 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B9CE
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BA5D at word offset
+    00000288 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B9A6
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BEC4 at word offset
+    0000029B in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BE0D
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C0A7 at word offset
+    000002AE in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BFF0
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001CEA6 at word offset
+    000002C1 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001CDEF
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BD08 at word offset
+    000002D9 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BC51
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C8E9 at word offset
+    000002EC in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C832
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AF15 at word offset
+    000002FF in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AE5E
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AF69 at word offset
+    00000312 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AEB2
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AB28 at word offset
+    0000032B in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AA71
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C07E at word offset
+    00000344 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BFC7
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BFE7 at word offset
+    00000357 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BF30
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BED3 at word offset
+    0000036A in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BE1C
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AA1A at word offset
+    0000037D in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001A963
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AB0A at word offset
+    00000385 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AA53
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AB1A at word offset
+    0000038D in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AA63
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AB7B at word offset
+    00000395 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AAC4
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001ABDD at word offset
+    0000039D in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AB26
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001ACBA at word offset
+    000003A5 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AC03
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001ACF5 at word offset
+    000003AD in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AC3E
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AD72 at word offset
+    000003B5 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001ACBB
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001ADC4 at word offset
+    000003BD in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AD0D
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001ADE7 at word offset
+    000003C5 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AD30
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B491 at word offset
+    000003CD in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B3DA
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B234 at word offset
+    000003E6 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B17D
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001CE47 at word offset
+    000003FA in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001CD90
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BB98 at word offset
+    0000040D in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BAE1
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B9E8 at word offset
+    00000420 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B931
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B37C at word offset
+    00000433 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B2C5
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B834 at word offset
+    00000447 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B77D
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AADA at word offset
+    0000045A in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AA23
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001CDF7 at word offset
+    0000046E in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001CD40
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001A9E7 at word offset
+    00000487 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001A930
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AA2F at word offset
+    0000049B in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001A978
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AC51 at word offset
+    000004AF in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AB9A
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AE1F at word offset
+    000004C3 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AD68
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B010 at word offset
+    000004CC in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AF59
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AE4C at word offset
+    000004D5 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AD95
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B39C at word offset
+    000004DE in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B2E5
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B042 at word offset
+    000004E7 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AF8B
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AE59 at word offset
+    000004F0 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001ADA2
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B986 at word offset
+    000004F9 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B8CF
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B44D at word offset
+    00000502 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B396
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B05A at word offset
+    0000050B in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AFA3
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AE7E at word offset
+    00000514 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001ADC7
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BDBB at word offset
+    0000051D in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BD04
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BA0E at word offset
+    00000526 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B957
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B45F at word offset
+    0000052F in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B3A8
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B08E at word offset
+    00000538 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AFD7
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AE9C at word offset
+    00000541 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001ADE5
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001ACDD at word offset
+    0000054A in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AC26
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C4A8 at word offset
+    0000055E in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C3F1
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BE7A at word offset
+    00000567 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BDC3
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BAA1 at word offset
+    00000570 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B9EA
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B4B6 at word offset
+    00000579 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B3FF
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B0C9 at word offset
+    00000582 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B012
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AEE5 at word offset
+    0000058B in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AE2E
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C65A at word offset
+    00000594 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C5A3
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C4D0 at word offset
+    0000059D in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C419
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BE9D at word offset
+    000005A6 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BDE6
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BD8F at word offset
+    000005AF in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BCD8
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BAB9 at word offset
+    000005C3 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BA02
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B4CF at word offset
+    000005CC in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B418
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B167 at word offset
+    000005D5 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B0B0
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AFB2 at word offset
+    000005DE in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AEFB
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001CDB8 at word offset
+    000005E7 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001CD01
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C6A4 at word offset
+    000005F0 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C5ED
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C4FE at word offset
+    000005F9 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C447
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BF00 at word offset
+    00000602 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BE49
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BACC at word offset
+    0000060B in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BA15
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B4F3 at word offset
+    00000614 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B43C
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B179 at word offset
+    0000061D in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B0C2
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AFC4 at word offset
+    00000626 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AF0D
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C78E at word offset
+    0000062F in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C6D7
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C55E at word offset
+    00000638 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C4A7
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C097 at word offset
+    00000641 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BFE0
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BBFA at word offset
+    0000064A in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BB43
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B504 at word offset
+    00000653 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B44D
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B19E at word offset
+    0000065C in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B0E7
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B081 at word offset
+    00000665 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AFCA
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AFEB at word offset
+    00000679 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AF34
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C825 at word offset
+    00000682 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C76E
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C586 at word offset
+    0000068B in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C4CF
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C0A7 at word offset
+    00000694 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BFF0
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BC5E at word offset
+    0000069D in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BBA7
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B694 at word offset
+    000006A6 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B5DD
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B22D at word offset
+    000006AF in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B176
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B003 at word offset
+    000006B8 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AF4C
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001CB31 at word offset
+    000006C1 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001CA7A
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C59E at word offset
+    000006CA in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C4E7
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C0BA at word offset
+    000006D3 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C003
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BCAF at word offset
+    000006DC in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BBF8
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B6FD at word offset
+    000006E5 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B646
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B6AB at word offset
+    000006F4 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B5F4
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B33D at word offset
+    000006FD in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B286
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001CB81 at word offset
+    00000706 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001CACA
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C5BB at word offset
+    0000070F in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C504
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C1BD at word offset
+    00000718 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C106
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BCD9 at word offset
+    00000721 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BC22
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B97D at word offset
+    0000072A in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B8C6
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001CBC6 at word offset
+    00000733 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001CB0F
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C5E4 at word offset
+    0000073C in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C52D
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C40B at word offset
+    00000745 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C354
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BD63 at word offset
+    0000074E in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BCAC
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001CC41 at word offset
+    00000757 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001CB8A
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C625 at word offset
+    00000760 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C56E
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C491 at word offset
+    00000769 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C3DA
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001CD56 at word offset
+    00000772 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001CC9F
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C632 at word offset
+    0000077B in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C57B
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001CD83 at word offset
+    00000784 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001CCCC
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C873 at word offset
+    0000078D in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C7BC
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C1F6 at word offset
+    000007A1 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C13F
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C26F at word offset
+    000007B5 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C1B8
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BAAA at word offset
+    000007C9 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B9F3
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C7C9 at word offset
+    000007DD in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C712
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C2C9 at word offset
+    000007F1 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C212
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C385 at word offset
+    00000805 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C2CE
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C3BF at word offset
+    00000819 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C308
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C3F9 at word offset
+    0000082D in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C342
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C7F2 at word offset
+    00000841 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C73B
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C90E at word offset
+    00000855 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C857
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C90D at word offset
+    00000869 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C856
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BDD3 at word offset
+    0000087D in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BD1C
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C8C4 at word offset
+    00000891 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C80D
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001CE8E at word offset
+    000008A5 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001CDD7
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C709 at word offset
+    000008B9 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C652
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C837 at word offset
+    000008CD in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C780
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C85E at word offset
+    000008E1 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C7A7
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C888 at word offset
+    000008F5 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C7D1
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BEBD at word offset
+    00000909 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BE06
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C544 at word offset
+    00000918 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C48D
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001CF2B at word offset
+    0000092C in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001CE74
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AA2C at word offset
+    00000940 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001A975
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001CE88 at word offset
+    00000955 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001CDD1
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B019 at word offset
+    00000969 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AF62
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C561 at word offset
+    0000097E in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C4AA
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C5F0 at word offset
+    00000992 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C539
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001CEB0 at word offset
+    000009A6 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001CDF9
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001CE9A at word offset
+    000009BA in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001CDE3
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001CB00 at word offset
+    000009CE in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001CA49
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B137 at word offset
+    000009E2 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B080
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B139 at word offset
+    000009F7 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B082
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B14E at word offset
+    00000A0C in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B097
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001CE52 at word offset
+    00000A21 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001CD9B
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FRMSEG$) The Frame base of a FIXUPP record is the segment `DATA'
+    but perhaps should be the group `DGROUP' which contains that segment.
+    Frame segment `DATA'
+    Target segment `DATA'
+    Fixup segment `$$SYMBOLS'
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AFFC at word offset
+    00000A47 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AF45
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C9B1 at word offset
+    00000A5C in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C8FA
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B07A at word offset
+    00000A70 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AFC3
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001CDEB at word offset
+    00000A85 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001CD34
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C1C8 at word offset
+    00000A9F in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C111
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C8A0 at word offset
+    00000AB4 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C7E9
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C202 at word offset
+    00000AC9 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C14B
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C27B at word offset
+    00000ADE in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C1C4
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C361 at word offset
+    00000AF3 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C2AA
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001ABF3 at word offset
+    00000B08 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AB3C
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C391 at word offset
+    00000B1D in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C2DA
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C3CB at word offset
+    00000B32 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C314
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B46B at word offset
+    00000B47 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B3B4
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001CE97 at word offset
+    00000B5C in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001CDE0
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C732 at word offset
+    00000B71 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C67B
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C75B at word offset
+    00000B86 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C6A4
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C7A0 at word offset
+    00000B9B in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C6E9
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001CEBB at word offset
+    00000BB0 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001CE04
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C12E at word offset
+    00000BC5 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C077
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001ADEE at word offset
+    00000BDA in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AD37
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001CE5E at word offset
+    00000BF0 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001CDA7
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C689 at word offset
+    00000C05 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C5D2
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001ADD1 at word offset
+    00000C1A in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AD1A
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C45B at word offset
+    00000C30 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C3A4
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BBFB at word offset
+    00000C45 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BB44
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FRMSEG$) The Frame base of a FIXUPP record is the segment `DATA'
+    but perhaps should be the group `DGROUP' which contains that segment.
+    Frame segment `DATA'
+    Target segment `DATA'
+    Target offset 00007F6C
+    Fixup segment `$$SYMBOLS'
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B702 at word offset
+    00000C69 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B64B
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FRMSEG$) The Frame base of a FIXUPP record is the segment `DATA'
+    but perhaps should be the group `DGROUP' which contains that segment.
+    Frame segment `DATA'
+    Target segment `DATA'
+    Target offset 00008431
+    Fixup segment `$$SYMBOLS'
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C6DB at word offset
+    00000C88 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C624
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BEB7 at word offset
+    00000C9E in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BE00
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001CDBC at word offset
+    00000CB4 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001CD05
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BE53 at word offset
+    00000CCA in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BD9C
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AF59 at word offset
+    00000CE0 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AEA2
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AF70 at word offset
+    00000CF6 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AEB9
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BE98 at word offset
+    00000D12 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BDE1
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B6F6 at word offset
+    00000D28 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B63F
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BE86 at word offset
+    00000D39 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BDCF
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BB4D at word offset
+    00000D4F in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BA96
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AFA0 at word offset
+    00000D65 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AEE9
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B179 at word offset
+    00000D7C in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B0C2
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BB52 at word offset
+    00000D98 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BA9B
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B6EF at word offset
+    00000DAE in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B638
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001CE01 at word offset
+    00000DBF in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001CD4A
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C683 at word offset
+    00000DD5 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C5CC
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B6E9 at word offset
+    00000DEB in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B632
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B202 at word offset
+    00000DFC in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B14B
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C647 at word offset
+    00000E13 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C590
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B012 at word offset
+    00000E29 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AF5B
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B17E at word offset
+    00000E40 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B0C7
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BC86 at word offset
+    00000E57 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BBCF
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C46D at word offset
+    00000E68 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C3B6
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C6E1 at word offset
+    00000E7E in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C62A
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B1F4 at word offset
+    00000E95 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B13D
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B969 at word offset
+    00000EB2 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B8B2
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B1FC at word offset
+    00000EC8 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B145
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001BC3C at word offset
+    00000EE5 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001BB85
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AF7C at word offset
+    00000EFB in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AEC5
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B153 at word offset
+    00000F12 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B09C
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001CC25 at word offset
+    00000F29 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001CB6E
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B537 at word offset
+    00000F3A in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B480
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B5A6 at word offset
+    00000F46 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B4EF
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B5E1 at word offset
+    00000F52 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B52A
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B5F8 at word offset
+    00000F5E in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B541
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B609 at word offset
+    00000F6A in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B552
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B61A at word offset
+    00000F76 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B563
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B6EF at word offset
+    00000F82 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B638
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001CA80 at word offset
+    00000F8E in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C9C9
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001CC8C at word offset
+    00000FA0 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001CBD5
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001CCF1 at word offset
+    00000FB1 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001CC3A
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FRMSEG$) The Frame base of a FIXUPP record is the segment `DATA'
+    but perhaps should be the group `DGROUP' which contains that segment.
+    Frame segment `DATA'
+    Target segment `DATA'
+    Target offset 00007F5E
+    Fixup segment `$$SYMBOLS'
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C503 at word offset
+    00000FD7 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C44C
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C586 at word offset
+    00000FEE in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C4CF
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001B1B6 at word offset
+    00001005 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001B0FF
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001CD10 at word offset
+    0000101D in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001CC59
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001C187 at word offset
+    0000102E in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001C0D0
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+様> IGNORE:  (FIXOVF) Fixup overflow of 0001AB80 at word offset
+    00001045 in segment `$$SYMBOLS'
+    Frame group `PGROUP'
+    Target segment `PROG'
+    Target offset 0001AAC9
+    from FIXUPP record in file BET\SWAT_VCP.OBJ (.\SWAT_VCP.asm)
+    No source code line #s available for this segment.
+QLINK error summary:  252 ignores

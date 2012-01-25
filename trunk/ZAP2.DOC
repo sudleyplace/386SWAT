@@ -1,0 +1,12 @@
+Reduce Number Of Lines In Zap
+
+In order to reduce the number of lines taken up by a Zap (Ctrl-Z), we
+first fill in as many four-byte do-nothing instructions (SHL EAX,00),
+followed by three-byte do-nothing instructions (XCHG EAX,EAX),
+followed by two-byte do-nothing instructions (XCHG AX,AX), followed by
+one-byte do-nothing instructions (NOP).
+
+SWAT.ASM	 At SWATTER_ZAP, fill in four-byters, three-byters,
+		   two-byters, and one-byters.
+
+

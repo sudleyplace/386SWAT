@@ -1,0 +1,215 @@
+Convert SWAT From USE16 Code to USE32
+
+In order to avoid multiple 64KB segments when we overflow the last
+one, we define a single USE32 group and collect all PM code segments
+into it.
+
+In the process, I encountered two serious MS LINKer bugs, but found a
+workaround for each.  They are documented here so we can avoid them in
+the future.  The first bug is that the MS LINKer cannot handle a
+32-bit fixup between two USE32 segments even though both segments are
+grouped together.  The result is that we cannot use multiple segments
+in PGROUP.  The second bug is that the MS LINKer perversely copies
+extra data into the executable and moreover overwrites the good data
+which follows it.  In particular, PGROUP has about 14000h bytes
+followed by PCODEZ.  The MS LINKer correctly copies all of PGROUP to
+the executable and then copies the last 4000h bytes of PGROUP again
+overwriting the code/data in PCODEZ.  The workaround I found was to
+start PCODEZ with a DB 5000h dup (?) which provides a straw man for
+the MS LINKer to clobber without harm (unless you count the fact that
+there's an extra 20KB in the executable).  This also means that if the
+size of PGROUP exceeds 15000h, the constant in CODEZ in SWAT.ASM must
+increase correspondingly.
+
+Because USE16 and USE32 code differ in the value of the D-bit, any
+code in PGROUP (USE32) which is called from INIT_REAL (USE16) needs to
+be duplicated in a USE16 group (NGROUP).  This is accomplished by
+surrounding the definition of the procedure by a macro with a PREF
+parameter which assumes either "U32_" or "U16_" depending upon the
+group in which it is defined.  This also means that the code in
+INIT_COPY is moved to a separate group (PCODEZ) and is sandwiched
+between PGROUP and DGROUP.
+
+There were a number of changes in SWAT needed in order to convert to
+USE32.	The following notes are to be used as a guideline for all
+future development in SWAT as USE32 is quite different.
+
+* All implicit register instructions must be coded with an explicit
+  register so the assembler can provide proper typing.	In this
+  category are all string instructions as well as XLAT.  For example,
+
+	 GOOD						BAD
+--------------------------------------------------------------------
+	 stos	 es:[di].LO				stosb
+S16  rep movs	 <es:[di].EDD,ds:[si].EDD>	S16 rep movsd
+	 xlat	 HEXTABLE[bx]				xlat	HEXTABLE
+
+* Generally, offsets in the USE32 segment must be widened to dwords.
+  For example,
+
+	 Before 			After
+
+	 dw	 PGROUP:FOO		dd	offset PGROUP:FOO
+
+  Note that you need to use the "offset " prefix or the assembler
+  complains.
+
+* A PUSH of other than an explicit 16-bit GP register (e.g., AX, BX,
+  etc.) pushes a dword in a USE32 code segment.  For example,
+
+	 push	 0
+	 push	 -2
+	 push	 ds
+	 push	 seg ...
+	 push	 offset ...
+
+  Thus, you must either take this into account in the calling routine
+  (if it's an argument to a subroutine) or use the PUSHW macro which
+  forces the assembler to push a word in both a USE16 or USE32 code
+  segment.  If there's a constant which you want to be pushed as a
+  dword, I suggest using the PUSHD macro explicitly.
+
+* Correspondingly, a PUSHW of a segment register must be matched with
+  a POPW.
+
+* Don't forget to change the argument to the RET instruction to take
+  into account the new width of passed parameters.
+
+* LEA of an address in a USE32 segment needs to be widened from a
+  16-bit register to a 32-bit register.  Correspondingly, a CALL of
+  that register needs to be of the corresponding 32-bit register.
+
+* Structures need to be widened to account for a return address of EIP
+  rather than IP.
+
+* Structures used with ESP as a base need to take into account both
+  the above IP to EIP conversion as well as the dword width of segment
+  register pushes.
+
+* Loop instructions default to using ECX in a USE32 code segment.  I
+  suggest using the LOOPS macro when looping on CX and LOOPD when
+  looping on ECX.
+
+* In a USE32 context, the assembler generates a fixup for
+
+	 dd	 offset <USE32label>
+
+  as you would like:  an offset only (remember in a USE16 context
+  it generates a Seg:Off or pointer fixup).  However, the line
+
+	 df	 offset <USE32label>
+
+  perversely generates a pointer fixup in the form of
+
+	 dw	 offset ...
+	 dw	 seg ...
+	 dw	 0
+
+  This needs to be handled separately.
+
+
+The following modules are changed and the reasons for the changes are
+explained by the above comments:
+
+POP87.INC
+SWAT_CMD.INC
+SWAT_SEG.INC
+INT1_FNS.ASM
+INT1_GRP.ASM
+INT1_MSC.ASM
+INT1_TAB.INC
+P87_DISP.ASM
+P87_TABS.ASM
+POP87.ASM
+SWAT_AGR.ASM
+SWAT_ARG.ASM
+SWAT_BLK.ASM
+SWAT_DAT.ASM
+SWAT_DBG.ASM
+SWAT_DTE.ASM
+SWAT_ENT.ASM
+SWAT_FCN.ASM
+SWAT_FVM.ASM
+SWAT_GOT.ASM
+SWAT_HEX.ASM
+SWAT_HLP.ASM
+SWAT_IOP.ASM
+SWAT_KTB.ASM
+SWAT_MEM.ASM
+SWAT_MSC.ASM
+SWAT_REG.ASM
+SWAT_REM.ASM
+SWAT_SCR.ASM
+SWAT_SIG.ASM
+SWAT_SRC.ASM
+SWAT_SYM.ASM
+SWAT_UNA.ASM
+SWAT_VID.ASM
+SWAT_WIN.ASM
+SWAT_XLT.ASM
+
+
+The following modules are also changed for reasons not explained by
+the above comments:
+
+386.INC 	 Define new macros for 32-bit use.
+
+MASM5.MAC	 Define new macros for 32-bit use.
+
+OPCODES.INC	 Define additional opcodes.
+
+MAKEFILE	 Include SWAT_SEG.INC in almost everything.
+		 Delete code to copy PSS file as we don't generate it
+		   anymore.
+		 Include new option (v+) on MAPSSF to handle offset
+		   wrap.
+
+INIT1_ESC.ASM	 Use DWIDTH WORD override in LAR and LSL instructions
+		   as the memory operands are always interpreted as
+		   words even though the register operand might be
+		   32-bits.
+
+INT1_TAB.ASM	 Define new width for XLAT so as to fix bug in operand
+		   analysis display (we display the wrong byte because
+		   we don't take into account the offset in AL).
+
+SWAT.ASM	 Define USE32 bit in MD_ATTR for MAX.
+		 Define new ORGs to set segment fixups for Seg:Off
+		   entries which the assembler ignores.
+		 Use FIJMP macro to generate correct code in device
+		   header as the assembler doesn't know that that code
+		   actually executes in real (USE16) mode.
+
+SWAT_DRV.ASM	 Use FIJMP32 macro to generate correct code in USE32
+		   segment.
+		 Delete PGROUP2-specific code.
+
+SWAT_FBR.ASM	 Use FINTD macro as the return must be a 32-bitter
+		   (using EIP instead of IP).
+
+SWAT_INI.ASM	 In INIT_PROT, switch to a local stack so we don't
+		   clobber too much of the caller's stack (which is
+		   too small).
+
+SWAT_INT.ASM	 Use FIJMP32 macro to generate correct code in USE32
+		   segment.
+
+SWAT_KEY.ASM	 When processing Ctrl-Alt-Del, if the XBDA is in high
+		   DOS, copy it to low DOS and set XBDA_SEG in the
+		   BIOS data area.  This way, we can reboot from
+		   within SWAT on systems (such as certain PS/2s,
+		   especially model 95s) without generating an error
+		   on boot up (such as error 169).
+
+SWAT_OPR.ASM	 Define action for operand analysis of XLAT
+		   instruction so we display the correct byte.
+
+SWAT_VCP.ASM	 Change limit of CR3 selector in LDT to less than 4GB
+		   as the DISP_PTE code sees that as zero length.
+
+VERSION.ASM	 Because this is a major change, let's go to version
+		   3.00.
+
+VERSBETA.ASM	 ...and beta version 0.
+
+

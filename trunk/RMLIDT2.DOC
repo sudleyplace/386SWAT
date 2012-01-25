@@ -1,0 +1,11 @@
+Delete RM IDT From Resident Data If NORMLIDT
+
+If we're loading as device SWAT and NORMLIDT is in effect, we don't
+need to save the 1KB taken up by our local copy of the RM IDT.	This
+change moves the RM IDT to the end of the resident code/data in RGROUP
+and uses a variable (PRTAIL) to hold the ending offset.  This variable
+is set to a lower offset if NORMLIDT is in effect.
+
+This change affects SWAT_DRV.ASM only.
+
+

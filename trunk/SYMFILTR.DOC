@@ -1,0 +1,23 @@
+Filter Leading Text From Symbols
+
+Some symbols, especially from Windows programs written in C, are
+prefaced with text such as "__imp__", "_", and the like which adds the
+symbol's length but not understanding.  This feature allows you to
+specify in the SWAT profile leading text which is to be stripped from
+each symbol.
+
+SYMFILTER = text1 [text2 [...]]
+
+The default settings are
+
+SYMFILTER=__imp__ _
+
+Up to 128 characters can be specified in this way.
+
+SWAT_ARG.ASM	Include SYMFILTER in parse table.
+
+SWAT_FCN.ASM	Define action to profile keyword.
+
+SWAT_SYM.ASM	Strip leading text from symbols.
+
+

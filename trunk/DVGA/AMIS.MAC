@@ -1,0 +1,1622 @@
+.XLIST
+;-----------------------------------------------------------------------
+; Alternate Multiplex Interrupt Specification Library
+; AMIS.MAC	Public Domain 1992, 1993, 1996 Ralf Brown
+;		You may do with this software whatever you want, but
+;		common courtesy dictates that you not remove my name
+;		from it.
+;
+; Version 0.94
+; LastEdit: 4/30/96
+;-----------------------------------------------------------------------
+
+AMIS_VERSION equ 353	;(version 3.5.3 of the Alternate Multiplex Interrupt Spec)
+AMISLIB_VERSION equ 094 ;(version 0.94 of this library)
+
+;-----------------------------------------------------------------------
+; Return codes for various API calls
+;
+
+; general, applies to all standard calls
+AMIS_NOTIMPLEMENTED	equ 0
+AMIS_SUCCESSFUL 	equ 0FFh
+
+; additional return codes for Uninstall (function 02h)
+AMIS_UNINST_FAILED	equ 1
+AMIS_UNINST_WILL_DO	equ 2
+AMIS_UNINST_SAFE_ON	equ 3	; safe to unload, but no resident uninstaller
+				; (TSR still enabled)
+AMIS_UNINST_SAFE_OFF	equ 4	; safe to unload, but no resident uninstaller
+				; (TSR disabled)
+AMIS_UNINST_TRYLATER	equ 5	; can't unload at this time
+AMIS_UNINST_CONFIGSYS	equ 6	; can't unload -- was loaded from CONFIG.SYS
+				; (but resident code has been disabled)
+AMIS_UNINST_UNLINKDEV	equ 7	; disabled, but no resident uninstaller; must
+				; unlink from DOS device chain as well as
+				; unhooking interrupts and freeing memory
+
+; additional return codes for Popup (function 03h)
+AMIS_POPUP_TRYLATER	equ 1
+AMIS_POPUP_WILLDO	equ 2
+AMIS_POPUP_BUSY 	equ 3
+AMIS_POPUP_NEEDHELP	equ 4
+
+; additional return codes for Check Interrupt Chained (function 04h)
+AMIS_CHAIN_DONTKNOW	equ 1	; disparaged
+AMIS_CHAIN_HOOKED	equ 2	; disparaged
+AMIS_CHAIN_HOOKED_ADDR	equ 3	; disparaged
+AMIS_CHAIN_HOOKLIST	equ 4
+AMIS_CHAIN_NOTUSED	equ 0FFh
+
+; hotkey type bits returned by Get Hotkeys (function 05h)
+HK_INT09ENTRY		equ 01h ; TSR checks keys before calling orig INT 09h
+HK_INT09EXIT		equ 02h ; TSR checks keys after calling orig INT 09h
+HK_INT15ENTRY		equ 04h ; TSR checks keys before chaining INT 15h/AH=4Fh
+HK_INT15EXIT		equ 08h ; TSR checks keys after chaining INT 15h/AH=4Fh
+HK_INT16OLD		equ 10h ; TSR checks on INT 16/AH=00h-02h
+HK_INT16NEW		equ 20h ; TSR checks on INT 16/AH=10h-12h
+
+; hotkey shift bits returned by Get Hotkeys (function 05h)
+HK_NONE 		equ 0000h  ; no shift keys
+HK_RSHIFT		equ 0001h  ; right shift key
+HK_LSHIFT		equ 0002h  ; left shift key
+HK_BOTHSHIFT		equ 0003h  ; both Shift keys must be pressed
+HK_ANYCTRL		equ 0004h  ; either Control key must be pressed
+HK_ANYALT		equ 0008h  ; either Alt key must be pressed
+HK_SCRLLOCK_ON		equ 0010h  ; ScrollLock must be on when hotkey pressed
+HK_NUMLOCK_ON		equ 0020h  ; NumLock must be on when hotkey pressed
+HK_CAPSLOCK_ON		equ 0040h  ; CapsLock must be on when hotkey pressed
+HK_ANYSHIFT		equ 0080h  ; either Shift key must be pressed
+HK_LCTRL		equ 0100h  ; left control key
+HK_LALT 		equ 0200h  ; left Alt key
+HK_RCTRL		equ 0400h  ; right control key
+HK_RALT 		equ 0800h  ; right Alt key
+HK_BOTHCTRL		equ 0500h  ; both Control keys must be pressed
+HK_BOTHALT		equ 0A00h  ; both Alt keys must be pressed
+HK_SCROLLOCK		equ 1000h  ; ScrollLock must be pressed with hotkey
+HK_NUMLOCK		equ 2000h  ; NumLock must be pressed with hotkey
+HK_CAPSLOCK		equ 4000h  ; CapsLock must be pressed with hotkey
+HK_SYSREQ		equ 8000h  ; SysRq must be pressed with hotkey
+
+; hotkey flag bits returned by Get Hotkeys (function 05h)
+HK_CHAINBEFORE		equ 01h ; TSR chains hotkey before processing it
+HK_CHAINAFTER		equ 02h ; TSR chains hotkey after processing it
+HK_MONITOR		equ 04h ; other TSRs should pass through this hotkey
+				; so that it can be monitored
+HK_NOPRESSRELEASE	equ 08h ; hotkey won't activate if other keys pressed
+				; and released before hotkey combination
+				; completed
+HK_REMAPPED		equ 10h ; this key is remapped into some other key
+HK_CONDCHAIN		equ 20h ; this key is only sometimes chained
+
+HK_NOCHAIN		equ 0	; TSR swallows hotkey
+
+; hotkey scan codes returned by Get Hotkeys (function 05h)
+SCAN_NONE	equ 0
+SCAN_ESC	equ 1
+SCAN_1		equ 2
+SCAN_2		equ 3
+SCAN_3		equ 4
+SCAN_4		equ 5
+SCAN_5		equ 6
+SCAN_6		equ 7
+SCAN_7		equ 8
+SCAN_8		equ 9
+SCAN_9		equ 10
+SCAN_0		equ 11
+SCAN_HYPHEN	equ 12
+SCAN_EQUAL	equ 13
+SCAN_BACKSP	equ 14
+SCAN_TAB	equ 15
+SCAN_Q		equ 16
+SCAN_W		equ 17
+SCAN_E		equ 18
+SCAN_R		equ 19
+SCAN_T		equ 20
+SCAN_Y		equ 21
+SCAN_U		equ 22
+SCAN_I		equ 23
+SCAN_O		equ 24
+SCAN_P		equ 25
+SCAN_LBRACKET	equ 26
+SCAN_RBRACKET	equ 27
+SCAN_ENTER	equ 28
+SCAN_CTRL	equ 29
+SCAN_A		equ 30
+SCAN_S		equ 31
+SCAN_D		equ 32
+SCAN_F		equ 33
+SCAN_G		equ 34
+SCAN_H		equ 35
+SCAN_J		equ 36
+SCAN_K		equ 37
+SCAN_L		equ 38
+SCAN_SEMICOLON	equ 39
+SCAN_SQUOTE	equ 40
+SCAN_BACKQUOTE	equ 41
+SCAN_LSHIFT	equ 42
+SCAN_BACKSLASH	equ 43
+SCAN_Z		equ 44
+SCAN_X		equ 45
+SCAN_C		equ 46
+SCAN_V		equ 47
+SCAN_B		equ 48
+SCAN_N		equ 49
+SCAN_M		equ 50
+SCAN_COMMA	equ 51
+SCAN_PERIOD	equ 52
+SCAN_SLASH	equ 53
+SCAN_RSHIFT	equ 54
+SCAN_GREYSTAR	equ 55
+SCAN_ALT	equ 56
+SCAN_SPACE	equ 57
+SCAN_CAPSLK	equ 58
+SCAN_F1 	equ 59
+SCAN_F2 	equ 60
+SCAN_F3 	equ 61
+SCAN_F4 	equ 62
+SCAN_F5 	equ 63
+SCAN_F6 	equ 64
+SCAN_F7 	equ 65
+SCAN_F8 	equ 66
+SCAN_F9 	equ 67
+SCAN_F10	equ 68
+SCAN_NUMLK	equ 69
+SCAN_SCRLLK	equ 70
+SCAN_HOME	equ 71
+SCAN_UP 	equ 72
+SCAN_PGUP	equ 73
+SCAN_GREYMINUS	equ 74
+SCAN_LEFT	equ 75
+SCAN_KP5	equ 76
+SCAN_RIGHT	equ 77
+SCAN_GREYPLUS	equ 78
+SCAN_END	equ 79
+SCAN_DOWN	equ 80
+SCAN_PGDN	equ 81
+SCAN_INS	equ 82
+SCAN_DEL	equ 83
+SCAN_SYSRQ	equ 84
+SCAN_F11	equ 87
+SCAN_F12	equ 88
+SCAN_LWIN	equ 91
+SCAN_F13	equ 91
+SCAN_RWIN	equ 92
+SCAN_F14	equ 92
+SCAN_MENU	equ 93
+SCAN_F15	equ 93
+SCAN_F16	equ 99
+SCAN_F17	equ 100
+SCAN_F18	equ 101
+SCAN_F19	equ 102
+SCAN_F20	equ 103
+SCAN_F21	equ 104
+SCAN_F22	equ 105
+SCAN_F23	equ 106
+SCAN_F24	equ 107
+SCAN_ERASE	equ 109
+SCAN_COPY	equ 111
+SCAN_CRSEL	equ 114
+SCAN_DELTA	equ 115
+SCAN_EXSEL	equ 116
+SCAN_CLEAR	equ 118
+HK_ONRELEASE	equ 80h ; hotkey activates on key release (add to scan code)
+
+;-----------------------------------------------------------------------
+; Return codes for AMISLIB functions
+;
+
+; bit flags returned by CHECK_IF_HOTKEYS_USED
+HC_EXACT	equ 01h 	; exact match found
+HC_SUPERSET	equ 02h 	; some key whose shift states include ours used
+HC_SUBSET	equ 04h 	; some key whose shift states included by one of ours used
+HC_OVERLAP	equ 08h 	; hotkey overlap found
+HC_MONITOR	equ 80h 	; other TSRs monitor one or more hotkeys, but no
+				;   actual conflict because caller chains them
+
+HC_IS_CONFLICT	equ 7Fh 	; mask for testing whether conflict exists
+
+;-----------------------------------------------------------------------
+;	device driver definitions
+;
+
+DEVATTR_CHAR	  equ 8000h	; character device
+DEVATTR_BLOCK	  equ 0000h	; block device
+
+DEVATTR_IOCTL	  equ 4000h	; IOCTL call supported
+DEVATTR_NONIBM	  equ 2000h	; non-IBM-format block device
+DEVATTR_UNTILBUSY equ 2000h	; output until busy supported
+DEVATTR_OPENCLOSE equ 0800h	; OPEN/CLOSE/RM calls supported
+DEVATTR_GENCHECK  equ 0080h	; generic IOCTL check supported
+DEVATTR_GENIOCTL  equ 0040h	; generic IOCTL supported
+DEVATTR_FASTCON   equ 0010h	; fast-console
+DEVATTR_CLOCK	  equ 0008h	; device is CLOCK$
+DEVATTR_NUL	  equ 0004h	; device is NUL
+DEVATTR_STDOUT	  equ 0002h	; device is standard output
+DEVATTR_STDIN	  equ 0001h	; device is standard input
+DEVATTR_32BIT	  equ 0002h	; block device supports 32-bit sector numbers
+
+; flags returned by AMIS function 06h
+DEVFLG_CONFIGSYS  equ 0001h	; loaded from CONFIG.SYS -- can't remove
+DEVFLG_NOTDOS	  equ 0002h	; device(s) not linked into DOS device chain
+DEVFLG_REENTRANT  equ 0004h	; device driver is reentrant
+
+;-----------------------------------------------------------------------
+;
+DPL	STRUC
+ dpl_ax dw ?
+ dpl_bx dw ?
+ dpl_cx dw ?
+ dpl_dx dw ?
+ dpl_si dw ?
+ dpl_di dw ?
+ dpl_ds dw ?
+ dpl_es dw ?
+ dpl_reserved dw ?
+ dpl_machine  dw ?
+ dpl_pid      dw ?
+DPL	ENDS
+
+;-----------------------------------------------------------------------
+;
+; Set up a shorthand for the segment containing all the resident code and
+; data.
+; Note: the alignment 'align' must be blank to get the PARA alignment needed
+; for the code to be properly relocatable in small-code memory models.
+;
+TSRcode@ MACRO align
+	LOCAL alignment
+TGROUP GROUP RESIDENT_PSP, RESIDENT_CODE
+RESIDENT_PSP SEGMENT PUBLIC PARA 'TSRCODE'
+RESIDENT_PSP ENDS
+IFB <align>
+ RESIDENT_CODE SEGMENT PUBLIC PARA 'TSRCODE'
+ELSE
+ RESIDENT_CODE SEGMENT PUBLIC BYTE 'TSRCODE'
+ENDIF
+	ASSUME	DS:NOTHING,ES:NOTHING,SS:NOTHING
+	ASSUME	CS:TGROUP
+	ENDM
+TSRcodeEnd@ MACRO
+RESIDENT_CODE ENDS
+	ENDM
+
+;-----------------------------------------------------------------------
+; Set up a shorthand to create the resident PSP if the TSR needs one
+;
+TSRpsp_size equ 64
+
+TSRpsp@ MACRO
+RESIDENT_PSP SEGMENT PUBLIC PARA 'TSRCODE'
+public $AMIS$resident_PSP
+$AMIS$resident_PSP db TSRpsp_size dup (?)
+RESIDENT_PSP ENDS
+$AMIS$PSP equ 1
+	ENDM
+
+;-----------------------------------------------------------------------
+;
+; Set up shorthands for the segments containing all the resident data,
+; initialized and uninitialized.
+;
+TSRdata@ MACRO
+RESIDENT_DATA SEGMENT PUBLIC BYTE 'TSRCODE'
+	ENDM
+TSRdataEnd@ MACRO
+RESIDENT_DATA ENDS
+	ENDM
+
+TSRbss@ MACRO
+RESIDENT_BSS SEGMENT PUBLIC BYTE 'TSRCODE'
+	ENDM
+TSRbssEnd@ MACRO
+RESIDENT_BSS ENDS
+	ENDM
+
+;-----------------------------------------------------------------------
+;
+; dummy segment for determining the size of the resident code in the
+; executable
+;
+TSRlast@ MACRO
+RESIDENT_END SEGMENT PUBLIC BYTE 'TSRCODE'
+	ENDM
+TSRlastEnd@ MACRO
+RESIDENT_END ENDS
+	ENDM
+
+;-----------------------------------------------------------------------
+;
+; Set up a shorthand for declaring all three resident segments and a group
+; TGROUP for those segments.
+;
+TSRgroup@ MACRO align
+RESIDENT_PSP SEGMENT PUBLIC PARA 'TSRCODE'
+RESIDENT_PSP ENDS
+TSRcode@ align
+TSRcodeEnd@
+TSRdata@
+TSRdataEnd@
+TSRbss@
+TSRbssEnd@
+TSRlast@
+TSRlastEnd@
+TGROUP GROUP RESIDENT_PSP, RESIDENT_CODE,RESIDENT_DATA,RESIDENT_BSS,RESIDENT_END
+	ENDM
+
+;-----------------------------------------------------------------------
+;
+; Some of the code in AMIS.ASM uses conditional assembly to handle
+; segment registers differently in Tiny model than in other models, so
+; we need to ensure that __TINY__ is defined in tiny model.
+;
+IFDEF @Model		; simplified memory models being used?
+  IF @Model eq 1	; tiny model
+     IFNDEF __TINY__
+       __TINY__ equ 1
+     ENDIF ;NDEF
+  ENDIF
+  IF (@Model eq 1) or (@Model eq 2) or (@Model eq 3) ; Tiny, Small, or Compact?
+     DIST equ NEAR
+  ELSE
+     DIST equ FAR
+  ENDIF
+ELSE ;DEF @Model	; else assume TCC/BCC memory-model #defines
+   IFDEF __TINY__
+      DIST equ NEAR
+   ELSEIFDEF __SMALL__
+      DIST equ NEAR
+   ELSEIFDEF __COMPACT__
+      DIST equ NEAR
+   ELSEIFDEF __MEDIUM__
+      DIST equ FAR
+   ELSEIFDEF __LARGE__
+      DIST equ FAR
+   ELSEIFDEF __HUGE__
+      DIST equ FAR
+   ENDIF
+ENDIF
+
+;;NOWARN PDC	  ; don't warn about pass-dependent constructions
+IF1
+   IFNDEF DIST
+      &__DEFAULT_MODEL__ equ 1
+      IFDEF __TINY__
+	 DIST equ NEAR
+      ELSEIFDEF __SMALL__
+	 DIST equ NEAR
+      ELSEIFDEF __COMPACT__
+	 DIST equ NEAR
+      ELSEIFDEF __MEDIUM__
+	 DIST equ FAR
+      ELSEIFDEF __LARGE__
+	 DIST equ FAR
+      ELSEIFDEF __HUGE__
+	 DIST equ FAR
+      ENDIF
+   ENDIF
+ENDIF
+;;WARN PDC
+
+;;IFNDEF __TINY__
+;;   TGROUP@ equ TGROUP
+;;ENDIF
+
+;-----------------------------------------------------------------------
+;
+; first half of startup code (invoke right after INCLUDE AMIS.MAC in main module)
+;
+; arguments:	major,minor,stksize
+;		[opt] major,minor   major/minor version of min supported DOS ver
+;		[opt] stksize	    size of initial stack for non-Tiny models
+;
+@Startup MACRO major,minor,stksize
+  ;----------------------------------
+  ; Declare our segments in the order
+  ; we want them in the executable.
+  ;
+  _INIT SEGMENT PUBLIC PARA 'INIT'
+  _INIT ENDS
+  TSRgroup@
+  RESIDENT_PSP SEGMENT PUBLIC PARA 'TSRCODE'
+  $AMIS$start_TGROUP label byte
+  RESIDENT_PSP ENDS
+  _TEXT SEGMENT PUBLIC PARA 'CODE' ; must be aligned PARA to work properly
+  _TEXT ENDS
+IFNDEF __TINY__
+  _STACK SEGMENT STACK 'STACK'
+  IFNB <stksize>
+	db <stksize> dup (?)
+  ELSE
+	db 100h dup (?)
+  ENDIF
+  _STACK ENDS
+ENDIF ;ndef __TINY__
+
+  ;----------------------------------
+  ; set up labels for start and end of
+  ; resident code
+  ;
+  TSRcode@
+  $AMIS$start_TSRcode label byte	; find address of beginning of segment
+  TSRcodeEnd@
+
+  TSRlast@
+  $AMIS$end_TSRcode label byte	; marker for end of resident code in executable
+  TSRlastEnd@
+
+IFDEF __TINY__
+_INIT SEGMENT 'INIT'
+	ASSUME	CS:_INIT,DS:_INIT,ES:_INIT,SS:_INIT
+	ORG	100h
+ELSE
+_TEXT SEGMENT 'CODE'
+	ASSUME	CS:_TEXT,DS:NOTHING,ES:NOTHING,SS:NOTHING
+ENDIF ;def __TINY__
+
+INIT	proc far
+IFNB <major>
+  IFNB <minor>
+	CHECK_DOS_VER major,minor
+  ENDIF
+ENDIF
+IFNDEF __TINY__
+	mov	dx,TGROUP
+	mov	es,dx
+	ASSUME	ES:TGROUP
+	jmp	$AMIS$PROGRAM_START
+ELSE
+	mov	ax,offset _INIT:$AMIS$start_TGROUP
+	mov	cl,4
+	shr	ax,cl
+	mov	dx,es
+	add	dx,ax
+	mov	es,dx
+	ASSUME	ES:TGROUP
+	;
+	; compute normalized address of actual program entry point
+	;
+	mov	dx,offset _INIT:$AMIS$PROGRAM_START
+	mov	ax,offset _TEXT:$AMIS$PROGRAM_START
+	sub	dx,ax
+	shr	dx,cl			; CL still 4
+	mov	cx,cs
+	add	dx,cx
+	push	dx			; simulate far jump to computed address
+	push	ax
+	ret
+ENDIF ;ndef __TINY__
+
+INIT	endp
+
+	ASSUME	DS:NOTHING,ES:NOTHING,SS:NOTHING
+IFDEF __TINY__
+ _INIT	ENDS
+ELSE
+ _TEXT	ENDS
+ENDIF ;def __TINY__
+
+	ENDM
+
+;-----------------------------------------------------------------------
+;
+; additional startup code (invoke at start of main program)
+;
+; arguments: need_psp	non-blank to allocate __psp variable, blank if provided
+;			by some other module (such as the C runtime library)
+;
+@Startup2 MACRO need_psp
+
+IFDEF __TINY__
+  public TGROUP@
+  TGROUP@	dw ?
+ENDIF ;__TINY__
+IFNB <need_psp>
+  public __psp
+  __psp 	dw ?
+ENDIF ;need_psp
+
+$AMIS$PROGRAM_START:
+	ASSUME	DS:NOTHING,ES:TGROUP
+	mov	__psp,ds
+IFDEF __TINY__
+	mov	TGROUP@,es
+ENDIF
+	ENDM
+
+;-----------------------------------------------------------------------
+;
+; installation flags (mainly internal use--see INSTALL_TSR below)
+;
+BEST_FIT   equ 1	; use best-fit rather than first-fit
+UMB_ONLY   equ 2	; don't load into low memory, only into a UMB
+LOW_ONLY   equ 4	; don't use UMB even if high memory available
+			; (note: can't set both UMB_ONLY and LOW_ONLY)
+
+;-----------------------------------------------------------------------
+;
+; DISPLAY_STRING	output a '$'-terminated string to standard output
+; arguments:	string	the label of the string to be displayed
+;		dataseg [opt] the segment of the string
+;
+DISPLAY_STRING MACRO string,dataseg
+IFNB <dataseg>
+	push	ds
+	mov	ax,dataseg
+	mov	ds,ax
+ENDIF
+	mov	dx,offset string
+	mov	ah,9
+	int	21h
+IFNB <dataseg>
+	pop	ds
+ENDIF
+	ENDM
+
+;-----------------------------------------------------------------------
+;
+; CHECK_DOS_VER 	ensure that the program is running under the proper
+;			version of DOS, and terminate with an error message
+;			specifying the minimum required version if not.
+;
+CHECK_DOS_VER MACRO major,minor
+	LOCAL	bad_version_msg,version_OK
+IF major GE 5
+	mov	ax,3306h		; get true DOS version
+ELSE
+	mov	ax,3000h
+ENDIF
+	int	21h
+	xchg	al,ah
+	cmp	ax,256*major + minor
+	jae	version_OK
+IFNDEF __TINY__
+	push	cs
+	pop	ds
+ENDIF
+	DISPLAY_STRING bad_version_msg
+	int	20h			; terminate program
+
+bad_version_msg label byte
+	db	"This program requires DOS "
+	db	major+'0',".",(minor/10)+'0',(minor mod 10)+'0'
+	db	" or higher.",13,10,"$"
+
+version_OK:
+	ENDM
+
+;-----------------------------------------------------------------------
+;
+; IF_INSTALLED	conditionally branch somewhere if TSR is already installed
+; arguments:
+;	dest	label to branch to if already installed
+;	sig	[opt] label for signature string, if testing for another TSR's
+;			installation
+; at exit:
+;	CF set if installed
+;		AH = multiplex number
+;		CX = version number
+;	CF clear if not installed
+;
+IF_INSTALLED MACRO dest,sig
+	LOCAL	not_installed
+IFB <sig>
+	mov	dx,TGROUP@
+	mov	ax,offset TGROUP:ALTMPX_SIGNATURE
+ELSE
+IFDEF __TINY__
+	mov	dx,ds
+ELSE
+	mov	dx,seg sig
+ENDIF ;__TINY__
+	mov	ax,offset sig
+ENDIF ;sig
+	extrn check_if_installed:DIST
+	call	check_if_installed
+	jnc	not_installed
+	jmp	dest
+not_installed:
+	ENDM
+
+;-----------------------------------------------------------------------
+;
+; IF_HOTKEY_USED conditionally branch somewhere if TSR's hotkeys already in use
+; arguments:
+;	dest	label to branch to if one or more hotkeys conflict
+; at exit:
+;	ZF clear if hotkeys conflict
+;	    AX = conflict types
+;		bit 0: exact key already in use
+;		bit 1: key with less-strict shift states in use
+;		bit 2: key with stricter shift states in use
+;		bit 7: some TSR monitors one or more hotkeys (not a conflict)
+;	ZF set if no conflicts
+;	    AX = flags
+;		bit 7: some TSR monitors one or more hotkeys (not a conflict)
+;
+IF_HOTKEY_USED MACRO dest
+	LOCAL	no_conflicts
+	mov	dx,TGROUP@
+	mov	ax,offset TGROUP:$AMIS$HOTKEY_LIST
+	extrn check_if_hotkeys_used:DIST
+	call	check_if_hotkeys_used
+	jz	no_conflicts
+	jmp	dest
+no_conflicts:
+	ENDM
+
+;-----------------------------------------------------------------------
+;
+; INSTALL_TSR
+; arguments:
+;	extra	[opt] number of additional paragraphs needed in resident part
+;	fit	[opt] FIRST (default) or BEST fit allocation
+;	high	[opt] HIGHONLY to only use UMBs, LOWONLY to ignore UMBs
+;		      Obsolete options for <high>:
+;			TOPMEM: ignored
+;			TOPLOW: treated as LOWONLY
+;	init	[opt] function to call after installing TSR but before exiting
+;	if_inst [opt] label to branch to if already installed
+;	on_err	[opt] label to branch to if unable to install
+;	more_flags [opt] label of byte containing additional flags to OR into
+;		   flags setup by <fit> and <high>
+;	psp	[opt] nonblank if TSR needs a PSP
+;
+; if 'init' is specified, the indicated function will be called with
+;    AX = segment at which TSR was loaded
+; if 'if_inst' is specified, the indicated function will be jumped at with
+;    AH = multiplex number
+;    CX = version number
+;
+INSTALL_TSR MACRO extra,fit,high,init,if_inst,on_err,more_flags,psp
+	LOCAL not_installed,install_failed,iflags,install_error_msg
+	mov	bx,TGROUP@
+	push	bx			; remember location of resident code
+	mov	dx,bx
+	mov	ax,offset TGROUP:ALTMPX_SIGNATURE
+	extrn	check_if_installed:DIST
+	call	check_if_installed
+	pop	bx			; retrieve location of resident code
+	jnc	not_installed
+install_failure:
+IFNB <if_inst>
+	jmp	if_inst
+ELSE
+	jmp short install_failed
+ENDIF
+not_installed:
+	cmp	al,1
+	je	install_failure
+	mov	dx,offset TGROUP:$AMIS$end_TSRcode+15
+	mov	cl,4			; convert bytes to paragraphs
+	shr	dx,cl
+	mov	cx,dx
+IFNB <extra>
+	mov	dx,extra
+ELSE
+	xor	dx,dx			; no extra memory required
+ENDIF
+	iflags = 0
+IFDIFI <fit>,<FIRST>
+	iflags = iflags OR BEST_FIT
+ENDIF
+IFIDNI <high>,<HIGHONLY>
+	iflags = iflags OR UMB_ONLY
+ENDIF
+IFIDNI <high>,<LOWONLY>
+	iflags = iflags OR LOW_ONLY
+ENDIF
+IFIDNI <high>,<TOPLOW>
+	iflags = iflags OR LOW_ONLY
+ENDIF
+	mov	al,iflags
+IFNB <more_flags>
+	or	al,more_flags
+ENDIF
+	extrn $AMIS$install_TSR:DIST
+	call	$AMIS$install_TSR
+	; if success, returns CF clear, AX=segment at which TSR was installed
+	jc	install_failed
+IFNB <&init>
+	call	init
+ENDIF
+IFNB <psp>
+	extrn $AMIS$copy_PSP:DIST
+	call	$AMIS$copy_PSP
+ELSE
+ IFDEF $AMIS$PSP
+	extrn $AMIS$copy_PSP:DIST
+	call	$AMIS$copy_PSP
+ ENDIF ;$AMIS$PSP
+ENDIF ;psp
+	extrn $AMIS$go_TSR:DIST
+	call	$AMIS$go_TSR		; never returns
+
+install_failed:
+IFNB <on_err>
+	jmp	on_err
+ELSE
+	push	cs
+	pop	ds
+	DISPLAY_STRING cs:install_error_msg
+	mov	ax,4CFFh		; exit with ERRORLEVEL 255
+	int	21h
+
+install_error_msg db "Unable to go resident.",13,10,"$"
+ENDIF
+	ENDM
+
+
+;-----------------------------------------------------------------------
+;
+; UNINSTALL	remove the TSR from memory
+; arguments:
+;	on_err	[opt] label to branch to if unable to remove from memory
+;
+; If 'on_err' is omitted, check CF after this macro to determine whether
+; the removal was successful (CF clear if successful, set on error)
+;
+UNINSTALL MACRO on_err
+	LOCAL	success
+	mov	dx,TGROUP@
+	mov	ax,offset TGROUP:ALTMPX_SIGNATURE
+	extrn $AMIS$uninstall_TSR:DIST
+	call	$AMIS$uninstall_TSR
+IFNB <on_err>
+	jnc	success
+	jmp	on_err
+ENDIF
+success:
+	ENDM
+
+;-----------------------------------------------------------------------
+;
+;			 I M P O R T A N T ! ! !
+; Note: in order to work properly with the code in AMIS.ASM, all of
+; the following macros must be used inside TSRcode@
+;
+
+;-----------------------------------------------------------------------
+; DEVICE_HEADER 	build a device driver header
+; arguments:
+;	next	offset of next device header, or blank if last header
+;	attr	device driver's attributes
+;	strat	offset of strategy routine
+;	intrpt	offset of interrupt routine
+;	name	device driver's name (blank for block devices)
+; exported labels:
+;	none
+;
+; Note: the first device header must be the very first
+;	item in TSRcode@, and you can't use Tiny model for a device driver
+;
+DEVICE_HEADER MACRO next,attr,strat,intrpt,name
+	LOCAL	devname
+IFB <next>
+	DD	-1
+ELSE
+	DW	next,0
+ENDIF ;next
+	DW	attr		; device attributes
+	DW	strat		; strategy routine
+	DW	intrpt		; interrupt routine
+IFB <name>
+	DB	8 DUP (0)
+ELSE
+devname DB	name
+IF ($-devname) gt 8
+	ERR "Device name >8 chars"
+ELSEIF ($-devname) lt 8
+	db	(devname+8-$) dup (' ')
+ENDIF
+ENDIF ;name
+	ENDM
+
+;-----------------------------------------------------------------------
+;
+; ISP_HEADER	set up Interrupt Sharing Protocol header for an interrupt
+; arguments:
+;	intr	interrupt number
+;	reset	[opt] name of routine to perform hardware reset
+;	eoi	[opt] if nonzero, this is the primary handler for a hardware int
+; exported labels: (for example "ISP_HEADER 00h,reset_func,0")
+;	INT00h_handler (public), ORIG_INT00h (public), HWRESET_00h,
+;	EOI_FLAG_00h
+;	[in addition, hw_reset_00h would be present for ISP_HEADER 00h,,0]
+;
+ISP_HEADER MACRO intr,reset,eoi
+public INT&intr&_handler,ORIG_INT&intr
+	ASSUME	CS:TGROUP,DS:NOTHING,ES:NOTHING,SS:NOTHING
+IFB <reset>
+hw_reset_&intr:
+	db	0CBh			; RETF
+ENDIF ;reset
+
+INT&intr&_handler:
+	db	0EBh,10h		; short JMP to skip the header
+ORIG_INT&intr dd ?			; previous handler in chain
+	dw   424Bh			; ISP signature
+EOI_FLAG_&intr label byte
+IFB <eoi>
+	db   0				; software int or secondary hardware int
+ELSE
+IF eoi eq 0
+	db   0				; software int or secondary hardware int
+ELSE
+	db   80h			; primary hardware int handler
+ENDIF ;eoi eq 0
+ENDIF ;B eoi
+IFB <reset>
+HWRESET_&intr: jmp short hw_reset_&intr
+ELSE
+HWRESET_&intr: jmp short reset
+ENDIF ;B reset
+	db   7 dup (0)
+	ENDM
+
+;-----------------------------------------------------------------------
+;
+; HOOKED_INTS		declare the interrupts this TSR hooks
+; arguments:		up to 32 interrupt numbers
+; exported labels:	$AMIS$HOOKED_INT_LIST (public)
+;
+HOOKED_INTS MACRO a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,aa,ab,ac,ad,ae,af,over
+public $AMIS$HOOKED_INT_LIST
+$AMIS$HOOKED_INT_LIST label byte
+IFNB <over>
+	%out Too many interrupts hooked!
+	.err
+ENDIF ;NB over
+	IRP	intrpt,<a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,aa,ab,ac,ad,ae,af>
+	    IFNB <intrpt>
+		IF intrpt ne 2Dh   ; ignore INT 2Dh if in the list
+		    DB 0&&intrpt
+		    DW INT&&intrpt&&_handler
+		ENDIF ;DIFI
+	    ENDIF ;NB
+	ENDM
+	;
+	; the list terminator is INT 2Dh, since we know that one will always
+	; be hooked; thus, all interrupts from 00h to FFh may be hooked
+	;
+		    DB 2Dh
+		    DW INT2Dh_handler
+	ENDM
+
+;-----------------------------------------------------------------------
+;
+; HOTKEYS		declare the type of hotkeys this TSR uses
+; arguments:
+;	check	hotkey check type
+;	flags	[opt] default flags for following hotkeys
+; exported labels:	$AMIS$HOTKEY_LIST (public),
+;			$amis$hotkey_list_start (internal use)
+;
+; To declare the TSR's hotkeys, you must use macros in the following order:
+;			HOTKEYS type
+;			HOTKEY	scan1,req1,disall1
+;			HOTKEY	scan2,req2,disall2,flags2
+;			...
+;			HOTKEY	scanN,reqN,disallN
+;			HOTKEYS_DONE
+; these definitions must precede the use of the ALTMPX macro
+;
+HOTKEYS MACRO check,flags
+public $AMIS$HOTKEY_LIST
+$AMIS$HOTKEY_LIST label byte
+	db	check			; type of hotkey check
+	db	$amis$num_hotkeys	; number of hotkeys following
+$amis$hotkey_list_start label byte
+IFNB <flags>
+   $amis$hotkey_def_flags equ flags
+ELSE
+   IF (check AND HK_INT15EXIT)
+      $amis$hotkey_def_flags equ HK_CHAINBEFORE
+   ELSEIF (check AND HK_INT09EXIT)
+      $amis$hotkey_def_flags equ HK_CHAINBEFORE
+   ELSE
+      $amis$hotkey_def_flags equ HK_NOCHAIN
+   ENDIF
+ENDIF ;flags
+	ENDM
+
+;-----------------------------------------------------------------------
+;
+; HOTKEY		declare one of the hotkeys this TSR uses
+; arguments:
+;	scan	scan code
+;	req	required shift states
+;	disall	disallowed shift states
+;	flags	[opt] flags describing actions taken on hotkey
+; exported labels: none
+;
+; To declare the TSR's hotkeys, you must use macros in the following order:
+;			HOTKEYS type
+;			HOTKEY	scan1,req1,disall1
+;			HOTKEY	scan2,req2,disall2,flags2
+;			...
+;			HOTKEY	scanN,reqN,disallN
+;			HOTKEYS_DONE
+; these definitions must precede the use of the ALTMPX macro; the first HOTKEY
+; line should define the TSR's primary hotkey
+;
+HOTKEY	MACRO	scan,req,disall,flags
+	LOCAL	t
+	db	scan
+IFNB <req>
+	dw	req
+ELSE
+	dw	HK_NONE
+ENDIF ;req
+IFNB <disall>
+	t = disall
+   IF (((disall) AND HK_ANYSHIFT) eq HK_ANYSHIFT)
+	t = t OR HK_LSHIFT OR HK_RSHIFT
+   ENDIF
+   IF (((disall) AND HK_ANYCTRL) eq HK_ANYCTRL)
+	t = t OR HK_LCTRL OR HK_RCTRL
+   ENDIF
+   IF (((disall) AND HK_ANYALT) eq HK_ANYALT)
+	t = t OR HK_LALT OR HK_RALT
+   ENDIF
+	dw	t
+ELSE
+	dw	HK_NONE
+ENDIF ;disall
+IFNB <flags>
+	db	flags
+ELSE
+	db	$amis$hotkey_def_flags
+ENDIF ;flags
+	ENDM
+
+;-----------------------------------------------------------------------
+;
+; HOTKEYS_DONE		mark end of hotkey list
+; arguments:	none
+; exported labels:	$amis$num_hotkeys (equate)
+;
+; To declare the TSR's hotkeys, you must use macros in the following order:
+;			HOTKEYS type
+;			HOTKEY	scan1,req1,disall1
+;			HOTKEY	scan2,req2,disall2
+;			...
+;			HOTKEY	scanN,reqN,disallN
+;			HOTKEYS_DONE
+; these definitions must precede the use of the ALTMPX macro
+;
+HOTKEYS_DONE MACRO
+$amis$num_hotkeys equ ($-$amis$hotkey_list_start)/6
+	ENDM
+
+;-----------------------------------------------------------------------
+;
+; ALTMPX	define the alternate multiplex interrupt handler for the program
+; arguments:
+;	manuf	   one- to eight-character manufacturer's name
+;	prodname   one- to eight-character product name
+;	version    four-digit hex version number (hi byte = major, lo = minor)
+;	descrip    [opt] string (max 63 char) describing the product
+;	priv_funcs [opt] name of routine to handle private INT 2Dh functions
+;	api_entry  [opt] name of FAR routine giving non-INT 2Dh API entry point
+;	popup	   [opt] name of function to call to request a popup
+;	remover    [opt] name of function to call to remove TSR from memory
+;	devhdrs    [opt] if nonblank, number of device driver headers to report
+;	devflags   [req. if devhdrs nonblank] device driver flags
+; limitations on routines:
+;	all: must be located inside TSRcode@
+;	<priv_funcs>
+;		input:	AL = function number (10h-FFh)
+;			AH = multiplex number (ignore)
+;			others available for handler
+;		return: via IRET, with regs as appropriate for requested func
+;	<api_entry>
+;		input:	registers as desired (no limitations)
+;		return: registers as desired (no limitations)
+;	<popup>
+;		input:	nothing
+;		return: AL = status
+;				01h can not pop up now, try again later
+;				02h can not pop up yet, will do so when able
+;				03h already popped up
+;				04h unable to popup, user intervention required
+;				    BX = standard reason code
+;					0000h unknown failure
+;					0001h int chain passes through memory
+;						which must be swapped out
+;					0002h swap-in failed
+;				    CX = application's reason code if nonzero
+;				FFh TSR popped up and was exited by user
+;				    BX = return value
+;					0000h no return value
+;					0001h TSR unloaded
+;					0002h-00FFh reserved
+;					0100h-FFFFh application-specific
+;	<remover>
+;		input:	DX:BX = return address if uninstall successful
+;		return: AL = status
+;				01h unable to remove from memory
+;				02h can't remove now, will do so when able
+;				03h safe to remove, but no resident uninstaller
+;				    (TSR still enabled)
+;					BX = segment of memory block
+;				04h safe to remove, but no resident uninstaller
+;				    (TSR now disabled)
+;					BX = segment of memory block
+;				05h not safe to remove now, try again later
+;				FFh successful (DX:BX were ignored)
+;		return at DX:BX with AX destroyed if successful and <remover>
+;			honors specific return address
+;		if <remover> omitted, ALTMPX returns AL=03h
+; exported labels:
+;	INT2Dh_handler (public), ORIG_INT2Dh (public), HWRESET_2Dh,
+;	EOI_FLAG_2Dh, hw_reset_2Dh, $AMIS$MULTIPLEX_NUMBER (public),
+;	ALTMPX_SIGNATURE (public)
+;
+ALTMPX MACRO manuf,prodname,version,descrip,priv_funcs,api_entry,popup,remover,devhdrs,devflags
+	LOCAL our_int_2Dh,int2D_func_00,int2D_func_01,int2D_func_02
+	LOCAL int2D_func_03,int2D_func_04,int2D_func_06
+	LOCAL func_is_supported,func_not_supported,func_supported_segDX
+	LOCAL return_resident_seg
+	PUBLIC $AMIS$MULTIPLEX_NUMBER,ALTMPX_SIGNATURE
+
+ALTMPX_SIGNATURE label byte
+	db	manuf
+IF ($-ALTMPX_SIGNATURE) gt 8
+	ERR "Manufacturer name >8 chars"
+ELSEIF ($-ALTMPX_SIGNATURE) lt 8
+	db	(ALTMPX_SIGNATURE+8-$) dup (' ')
+ENDIF
+	db	prodname
+IF ($-ALTMPX_SIGNATURE) gt 16
+	ERR "Product name >8 chars"
+ELSEIF ($-ALTMPX_SIGNATURE) lt 16
+	db	(ALTMPX_SIGNATURE+16-$) dup (' ')
+ENDIF
+IFNB <descrip>
+	db	descrip
+ENDIF
+	db	0
+IF ($-ALTMPX_SIGNATURE) gt 80
+	ERR "Description >63 chars"
+ENDIF
+
+; save an additional byte by overlaying the null hardware reset handler over
+; other code, if possible
+IFNB <remover>
+hw_reset_2Dh:				; <remover> not blank
+	db	0CBh			; RETF
+ENDIF
+					; if <remover> is blank,
+					;   hw_reset_2Dh is defined below
+
+	ISP_HEADER 2Dh,hw_reset_2Dh
+	cmp	ah,0			; will be patched with multiplex number
+$AMIS$MULTIPLEX_NUMBER equ byte ptr ($-1)
+	je	short our_int_2Dh
+	jmp	ORIG_INT2Dh
+our_int_2Dh:
+	sti				; OK to interrupt from now on
+	cmp	al,0
+	je	short int2D_func_00
+	cmp	al,2
+IFNB <api_entry>
+	jb	short int2D_func_01
+ELSE
+  IFNB <popup>
+	jb	short func_not_supported
+  ENDIF
+ENDIF
+	je	short int2D_func_02
+	cmp	al,4
+IFNB <popup>
+	jb	short int2D_func_03
+ENDIF ;popup
+	je	short int2D_func_04
+IFDEF $amis$num_hotkeys
+	cmp	al,5
+	jne	short not_hotkey_check
+	mov	bx,offset TGROUP:$AMIS$HOTKEY_LIST
+	jmp short func_supported_segDX
+not_hotkey_check:
+ENDIF ;$amis$num_hotkeys
+IFNB <devhdrs>
+	cmp	al,6
+	je	short int2D_func_06
+ENDIF ;devhdrs
+IFNB <priv_funcs>
+	cmp	al,10h
+	jb	short func_not_supported
+	jmp	priv_funcs
+ENDIF ;priv_funcs
+func_not_supported:
+	mov	al,0
+	iret
+
+int2D_func_00:
+	mov	cx,version
+	mov	di,offset ALTMPX_SIGNATURE
+func_supported_segDX:
+	mov	dx,cs
+func_is_supported:
+	mov	al,0FFh
+	iret
+
+IFNB <api_entry>
+int2D_func_01:
+	mov	bx,offset api_entry
+	jmp	func_supported_segDX
+ENDIF ;api_entry
+
+int2D_func_02:
+IFNB <remover>
+	call	remover
+ELSE
+;	mov	al,3			; safe to remove, no resident uninstaller
+	inc	ax			; AL was 02h, now 03h
+	mov	bx,cs
+hw_reset_2Dh equ near ptr ($-1) ; prev instruction happens to expand to 8Ch CBh
+ENDIF ;remover
+	iret
+
+IFNB <popup>
+int2D_func_03:
+	call	popup
+	iret
+ENDIF ;popup
+
+int2D_func_04:
+	;mov	al,4 ;not needed since AL=04h anyway
+	mov	bx,offset cs:$AMIS$HOOKED_INT_LIST
+return_resident_seg:
+	mov	dx,cs
+	iret
+
+IFNB <devhdrs>
+int2D_func_06:
+	mov	al,devhdrs
+	mov	ah,devflags
+	xor	bx,bx
+	jmp	short return_resident_seg
+ENDIF ;devhdrs
+
+	ENDM
+
+;-----------------------------------------------------------------------
+; generic hotkey dispatcher
+; args:
+;	chain	when to chain INT 15h: BEFORE or AFTER
+;		should match what HOTKEYS macro declares
+;	funcs	name of list of words containing offsets for the NEAR
+;		functions to invoke for each hotkey (in the order they are
+;		listed via the HOTKEY macro)
+;	other	[opt] address to jump at if not INT 15/AH=4Fh
+;		the target code must chain via ORIG_INT15h
+;
+HOTKEY_DISPATCHER MACRO chain,funcs,other
+	LOCAL	int15_handler,not_anyshift
+	LOCAL	int15_4F,int15_done,scan_hotkeys,try_next,not_hotkey
+	LOCAL	got_hotkey,no_chainbefore,no_chainafter,chain_1
+
+int15_handler proc far
+ISP_HEADER 15h
+	ASSUME	DS:NOTHING,ES:NOTHING,SS:NOTHING
+IFIDNI <chain>,<BEFORE>
+	pushf
+	call	ORIG_INT15h
+ENDIF ;chain
+	cmp	ah,4Fh
+	je	short int15_4F
+IFNB <other>
+	jmp	other
+ELSE
+   IFIDNI <chain>,<BEFORE>
+	iret				; we've already chained
+   ELSE
+chain_1:
+	jmp	ORIG_INT15h
+   ENDIF ;chain
+ENDIF ;other
+
+int15_4F:
+	sti				; OK to interrupt
+	cld				; string ops move up in memory
+	push	bx
+	push	ax
+	mov	ah,12h			; get shift states
+	int	16h
+	and	ax,not HK_ANYSHIFT
+	test	ax,HK_RSHIFT or HK_LSHIFT
+	jz	short not_anyshift
+	or	ax,HK_ANYSHIFT
+not_anyshift:
+	mov	bx,ax			; BX <- current shift states
+	pop	ax			; restore scan code in AL
+	push	ds
+	push	si
+	push	cx
+	push	cs
+	pop	ds
+	ASSUME	DS:TGROUP
+	mov	si,offset TGROUP:$AMIS$HOTKEY_LIST+1
+	mov	cl,[si]
+	mov	ch,0
+	jcxz	short not_hotkey	; skip loop if no hotkeys active
+	inc	si			; skip hotkey list header
+scan_hotkeys:
+	cmp	al,[si] 		; is it our hotkey?
+	jne	short try_next		; if scan code differs, it isn't
+	test	bx,[si+3]		; any disallowed shift states active?
+	jnz	short try_next		; if yes, not our hotkey
+	push	bx
+	not	bx
+	test	bx,[si+1]		; any required shift states missing?
+	pop	bx
+	jz	short got_hotkey
+try_next:
+	add	si,6			; move to next hotkey record
+	loop	scan_hotkeys
+not_hotkey:
+	stc				; key not used by TSR
+	pop	cx
+	pop	si
+	pop	ds
+	ASSUME	DS:NOTHING
+	pop	bx
+IFDIFI <chain>,<BEFORE>
+   IFNB <other>
+	jmp	ORIG_INT15h
+   ELSE
+	jmp	chain_1
+   ENDIF ;other
+ELSE
+	iret
+ENDIF ;chain
+
+got_hotkey:
+	ASSUME	DS:TGROUP
+	push	ax
+	mov	ax,si
+	sub	ax,offset TGROUP:$AMIS$HOTKEY_LIST+2
+	mov	bl,3
+	div	bl
+	mov	bx,ax			; BX <- offset of func in hk-func list
+	pop	ax
+	pop	cx
+IFDIFI <chain>,<BEFORE>
+	test	byte ptr [si+5],HK_CHAINBEFORE
+	jz	short no_chainbefore
+	stc
+	pushf
+	call	ORIG_INT15h
+no_chainbefore:
+	test	byte ptr [si+5],HK_CHAINAFTER
+ENDIF ;chain
+	pop	si
+	pop	ds
+	ASSUME	DS:NOTHING
+IFDIFI <chain>,<BEFORE>
+	pushf
+ENDIF ;chain
+	call	word ptr TGROUP:[bx+funcs]
+IFDIFI <chain>,<BEFORE>
+	popf
+	pop	bx
+  IFNB <other>
+	jz	short no_chainafter
+	stc
+	jmp	ORIG_INT15h
+  ELSE
+	stc
+	jnz	chain_1
+  ENDIF ;other
+no_chainafter:
+ELSE
+	pop	bx
+ENDIF ;chain
+	clc				; throw out scan code, all processing done
+	ret	2
+int15_handler endp
+
+	ENDM
+
+;-----------------------------------------------------------------------
+;
+TSRstack@ MACRO size
+TSRbss@
+TSR_local_stack db size dup (?)
+TSR_local_stack_end label byte
+TSRbssEnd@
+	ENDM
+
+;-----------------------------------------------------------------------
+; high-level language interrupt handler interface for AMISLIB
+; not yet ready to use
+;
+;	intnum	the number of the interrupt to hook
+;	chain	one of FIRST, BEFORE, DURING, AFTER, NONE
+;		FIRST chains before doing anything else, including testing the
+;			registers; if none of the register values matches, an
+;			IRET is executed
+;		BEFORE chains after testing the register but before calling the
+;			user handler; if none of the register values matches,
+;			a FAR JMP to the original interrupt handler is
+;			performed
+;		AFTER chains after the user handler returns; if none of the
+;			register values matches, a FAR JMP to the original
+;			interrupt handler is performed
+;		DURING permits the user handler to chain the interrupt at its
+;			discretion by calling _chain_INT<intnum>; if none of
+;			the register values matches, a FAR JMP to the original
+;			interrupt handler is performed
+;		NONE never chains the interrupt
+;	dseg	label (or segment name) to be loaded into DS
+;	localstk    [opt] label of DWORD containing address of local stack
+;	handler     the user function for handling the interrupt when triggered
+;	resetfunc   [opt] the function to call on a call to the ISP "reset"
+;			 entry point
+;	i286	[opt] if nonblank, use 286 PUSHA/POPA instructions
+;	reg	the name of the register to test
+;	valN	a list of up to eight values for the specfied register on which
+;		the user handler is to be invoked
+;
+;
+AMIS_INT MACRO intnum,chain,dseg,localstk,handler,resetfunc,i286,reg,val1,val2,val3,val4,val5,val6,val7,val8,over
+	LOCAL	TESTVALUES, our_func, not_ours, on_local_stack
+	LOCAL	stackptr, old_SP, old_SS
+TESTVALUES = 0
+
+IFB <dseg>
+	.err "Must specify DSEG"
+ENDIF
+IFB <handler>
+	.err "Must specify an interrupt handler"
+ENDIF
+IFNB <over>
+	.err "Too many values specified"
+ENDIF
+
+IFIDNI <chain>,<DURING>
+stackptr dw ?
+ENDIF ;chain during
+
+IFNB <localstk>
+old_SP	dw  ?
+old_SS	dw  ?
+ENDIF ;NB localstk
+
+hw_reset_&intnum proc far
+	ASSUME	DS:NOTHING,ES:NOTHING,SS:NOTHING
+IFNB <resetfunc>
+	pushf
+	push	es
+	push	ds
+IFNB <i286>
+	pusha
+ELSE
+	push	ax
+	push	cx
+	push	dx
+	push	bx
+	push	sp
+	push	bp
+	push	si
+	push	di
+ENDIF ;i286
+	mov	ax,dseg
+	mov	ds,ax
+	call	resetfunc
+IFNB <i286>
+	popa
+ELSE
+	pop	di
+	pop	si
+	pop	bp
+	pop	bx
+	pop	bx
+	pop	dx
+	pop	cx
+	pop	ax
+ENDIF ;i286
+	pop	ds
+	pop	es
+	popf
+ENDIF ;NB resetfunc
+	ret
+hw_reset_&intnum endp
+
+	ISP_HEADER intnum,hw_reset_&intnum
+	sti				; OK to interrupt here
+IFIDNI <chain>,<FIRST>
+	pushf
+	call	orig_INT&intnum 	; simulate interrupt
+ENDIF ;chain
+IFNB <reg>
+	pushf
+	IRP	val,<val1,val2,val3,val4,val5,val6,val7,val8>
+	    IFNB <val>
+		cmp	reg,val
+		je	short our_func
+		TESTVALUES = 1
+	    ENDIF ;NB val
+	ENDM
+	IF TESTVALUES
+		popf
+	   IFIDNI <chain>,<FIRST>
+		iret
+	   ELSE
+		jmp	orig_INT&intnum
+	   ENDIF ;chain
+	ENDIF ;TESTVALUES
+our_func:
+ENDIF
+
+IFIDNI <chain>,<BEFORE>
+  IFB <reg>
+	pushf
+  ENDIF ;reg
+	call	orig_INT&intnum 	; chain, original flags already on stack
+ELSE
+  IFNB <reg>
+	popf				; clean up stack
+  ENDIF ;reg
+ENDIF ;chain before
+IFNB <localstk>
+	push	old_SS
+	push	old_SP
+	push	ax
+	mov	ax,ss
+	mov	old_SS,ax		; remember current stack pointer
+	mov	old_SP,sp
+	cmp	ax,word ptr localstk+2	; already on local stack?
+	pop	ax
+	je	short on_local_stack	; if yes, don't switch
+	cli
+	mov	ss,word ptr localstk+2	; switch to local stack
+	mov	sp,word ptr localstk
+	sti
+on_local_stack:
+ENDIF ;NB localstk
+IFIDNI <chain>,<DURING>
+	push	cs:stackptr
+ENDIF
+	pushf
+	push	es
+	push	ds
+IFNB <i286>
+	pusha
+ELSE
+	push	ax
+	push	cx
+	push	dx
+	push	bx
+	push	sp
+	push	bp
+	push	si
+	push	di
+ENDIF ;i286
+IFIDNI <chain>,<DURING>
+	mov	cs:stackptr,sp
+ENDIF
+	mov	ax,dseg
+	mov	ds,ax
+	call	handler
+IFNB <i286>
+	popa
+ELSE
+	pop	di
+	pop	si
+	pop	bp
+	pop	bx
+	pop	bx
+	pop	dx
+	pop	cx
+	pop	ax
+ENDIF ;i286
+	pop	ds
+	pop	es
+	popf
+IFIDNI <chain>,<DURING>
+	pop	cs:stackptr
+ENDIF
+IFNB <localstk>
+	cli
+	mov	ss,cs:old_SS
+	mov	sp,cs:old_SP
+	sti
+	pop	old_SP
+	pop	old_SS
+ENDIF ;NB localstk
+IFIDNI <chain>,<AFTER>
+	jmp	orig_INT&intnum
+ELSE
+	iret
+ENDIF
+
+IFIDNI <chain>,<DURING>
+public _chain_INT&intnum
+_chain_INT&intnum proc DIST
+	ASSUME	DS:NOTHING,ES:NOTHING,SS:NOTHING
+	push	bp
+	mov	bp,stackptr
+	mov	ax,[bp+0Eh]			; load registers from stack frame
+	mov	bx,[bp+8]
+	mov	cx,[bp+0Ch]
+	mov	dx,[bp+0Ah]
+	mov	si,[bp+2]
+	mov	di,[bp]
+	mov	ds,[bp+10h]
+	mov	es,[bp+12h]
+	push	word ptr [bp+14h]	; push flags
+	popf				; setup flags
+	mov	bp,[bp+4]
+	pushf
+	call	orig_INT&intnum 	; chain by simulating the interrupt
+	push	bp
+	mov	bp,stackptr
+	pop	word ptr [bp+4] 	; store returned BP
+	pushf
+	pop	word ptr [bp+12h]	; store returned flags
+	mov	[bp+0Eh],ax		; store returned registers back in
+	mov	[bp+8],bx		;   stack frame
+	mov	[bp+0Ch],cx
+	mov	[bp+0Ah],dx
+	mov	[bp+2],si
+	mov	[bp],di
+	mov	[bp+10h],ds
+	mov	[bp+12h],es
+	pop	bp
+	ret
+_chain_INT&intnum endp
+ENDIF ;chain during
+
+	ENDM
+
+;-----------------------------------------------------------------------
+;
+GRAB_INTERRUPT MACRO intnum,handler
+	TSRbss@
+	TSR_old_INT&intnum dd ?
+	TSRbssEnd@
+
+	mov	ax,3500h+intnum
+	int	21h
+	mov	word ptr TSR_old_INT&intnum,bx
+	mov	word ptr TSR_old_INT&intnum+2,es
+	mov	dx,offset TGROUP:handler
+	mov	ax,2500h+intnum
+	int	21h
+	ENDM
+
+;-----------------------------------------------------------------------
+;
+RESTORE_INTERRUPT MACRO intnum
+	push	ds
+	lds	dx,TSR_old_INT&intnum
+	mov	ax,2500h+intnum
+	int	21h
+	pop	ds
+	ENDM
+
+;-----------------------------------------------------------------------
+
+IF_CONFIG_SYS MACRO is_config_sys
+
+	ENDM
+
+;-----------------------------------------------------------------------
+
+HOOK_DEVICE_CHAIN MACRO devhdr
+
+	ENDM
+
+;-----------------------------------------------------------------------
+
+UNHOOK_DEVICE_CHAIN MACRO devhdr
+
+	ENDM
+
+;-----------------------------------------------------------------------
+
+.LIST
+

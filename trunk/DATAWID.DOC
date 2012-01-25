@@ -1,0 +1,26 @@
+* Implement Data Width Switch
+
+When displaying data via the Dx command, a new switch allows you to
+specify the number of elements to be displayed per line.  For example,
+to display five (instead of the usual eight) words per line, use DW/5.
+
+This feature is a stopgap until I implement a more general data record
+display as in the Periscope debugger.
+
+386SWAT.DOC	Document new switch.
+
+386SWAT.GRM	Document new switch.
+
+SWAT_DAT.ASM	Define CHECK_WIDTH routine to parse the data width
+		  switch and save it in MEMCNT.
+		At the start of CMD_DATA, check for the data width
+		  switch.
+
+SWAT_HTX.ASM	Document new switch.
+
+SWAT_MEM.ASM	Replace the MEMLEN table with MEMGRAN * MEMCNT.
+		In each MEMACT_x function, save the default count
+		  value in MEMCNT.
+		Use MEMCNT instead of data specific count values.
+
+

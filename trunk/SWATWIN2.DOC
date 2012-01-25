@@ -1,0 +1,8 @@
+This changes INT1_WIN.ASM to include WINDEVID.INC and use the define for
+the SWATVXD device ID.
+
+It also changes INT1_FNS.ASM to mask off the high-order bit of the Windows
+DYNALINK function code.  This bit controls the JMP versus CALL operation of
+the INT 20h.  Before this change, SWAT declared those with the high bit set
+to be unknown functions.
+

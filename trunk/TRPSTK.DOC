@@ -1,0 +1,8 @@
+Fix Big In INT 0Ch Handling
+
+If we've specified TRAPSTACK, the system crashes upon receiving a HW
+IRQ4 because there's an extra POPFD in the code.
+
+SWAT_INT.ASM	 Remove extra POPFD.
+
+

@@ -1,0 +1,103 @@
+Allow PS/2 mouse movements when SWAT is active.
+
+This problem, which has plagued us from many months, occurs on MC
+systems with a mouse attached through the mouse port (but not COM1 or
+COM2).	If SWAT is active and the mouse is moved, the system locks up.
+
+The nub of the problem is that in the above environment, the mouse
+communicates to the system through the 8042 PPI.  In particular, the
+sequence of events is as follows:
+
+1.  The mouse is moved (usually inadvertently such as by hitting the
+    table or keyboard hard enough to jar it).
+
+2.  A byte from the mouse is placed in the PPI output port buffer and
+    latched there meaning that no other byte can be put there until
+    this byte has been cleared.
+
+3.  If the mouse interrupt has been enabled (such as by a mouse
+    driver), IRQ2 (the cascade interrupt) is signalled but remains
+    pending because it is masked off.
+
+4.  If the mouse interrupt has been enabled (such as by a mouse
+    driver), IRQ12 (the mouse interrupt) is signalled but remains
+    pending because it is masked off.
+
+5.  A keystroke occurs but is ignored because there is already a
+    latched byte in the PPI output port buffer.  At this point the
+    keyboard is dead.  SWAT is in a tight loop waiting for a keyboard
+    interrupt (IRQ1) but none occurs because the mousestroke hasn't
+    been cleared from the PPI.
+
+To fix this problem, we install two new interrupt handlers whenever
+SWAT becomes active:  one for each of IRQ2 and IRQ12.  In the process,
+several other changes are made.
+
+* The SAVE_KEYB/SAVE_TIMER routines are combined into one (SAVE_IRQS)
+  and the IRQ2 and IRQ12 interrupts are handled there as well.
+
+* Similarly, the REST_KEYB/REST_TIMER routines are combined into
+  REST_IRQS and the IRQ2 and IRQ12 interrupts are restored there.
+
+* The ENABLE_KBTM routine is renamed to ENABLE_IRQS and the IRQ2 and
+  IRQ12 interrupts are enabled there as well.
+
+* IRQ2 and IRQ12 interrupt handlers are defined to clear the
+  mousestroke so the keyboard can continue to function.
+
+* A common routine to drain the PIQ is defined and used widely.  This
+  routine also attempts to deal with the sticky problem of 486 cache
+  obviating the JMP SHORT $+2 delays if the prefetch is satisfied from
+  the cache.  If we're on a Micro Channel system, we write a byte to
+  I/O port 4Fh, a technique used by IBM in its 486 BIOSes.  The idea
+  is that this I/O port (whose meaning is undefined) will (by virtue
+  of the I/O activity), cause a sufficient delay to overcome
+  back-to-back I/O problems.  As you can see, I originally thought
+  that this might be the problem and did all the work to no avail.
+  Nonetheless, this is a good idea, so I left it in.
+
+* Fix a bug in the ENABLE_NMI routine on MC systems where we don't
+  clear enough bits in the arbitration register.  I know of no problem
+  caused by this, but it can't hurt to follow the spec.
+
+
+The modules changed and why are as follows:
+
+SWAT.ASM	 Coalesce and rename SAVE_xxx, REST_xxx, ENABLE_KBTM
+		 routines.
+
+SWAT_CMD.ASM	 Define IMR command to read and display the master and
+		 slave PIC IMRs.
+
+SWAT_DTE.ASM	 When displaying the IDT (via F4), temporarily restore
+		 the original IDT entries for IRQ1 and IRQ12 (as we
+		 already do for IRQ0 and IRQ1).
+
+SWAT_FVM.ASM	 Call DRAINPIQ as needed.
+
+SWAT_INI.ASM	 Call DRAINPIQ as needed.
+
+SWAT_INT.ASM	 Call DRAINPIQ as needed.
+
+SWAT_IOP.ASM	 Define IMR command to read and display the master and
+		 slave PIC IMRs.
+		 Read in and display both master and slave IMR, IRR,
+		 and ISR bytes.
+		 Call DRAINPIQ as needed.
+
+SWAT_KEY.ASM	 Define IRQ2 and IRQ12 handlers.
+		 Coalesce and rename SAVE_xxx, REST_xxx, ENABLE_KBTM
+		 routines.  Handle IRQ2 and IRQ12 therein.
+		 Define DRAINPIQ routine and call as needed.
+
+SWAT_VCP.ASM	 Call DRAINPIQ as needed.
+		 When enabling NMI, clear all bits but Bit 7 in the
+		 arbitration register to enable disk activity.
+
+SWAT_VID.ASM	 Call DRAINPIQ as needed.
+
+8253.INC	 Define @8253_XCIO as 4Fh
+
+8255.INC	 Define @S2C_AUXDIS and @S2C_AUXENA PPI commands.
+
+

@@ -1,0 +1,106 @@
+Miscellaneous Bug Fixes From Testing QDPMI.SYS
+
+This TWT contains several miscellaneous bug fixes found while testing
+Quarterdeck's QDPMI.SYS DPMI host driver.  In no particular order they
+are as follows:
+
+* Define a new profile option GPSKIP which allows the user to ignore
+  certain instructions when they generate a GP Fault.  The syntax is
+  GPSKIP=key[,key], where the list element may be repeated as many
+  times as necessary.  The current list includes HLT, OUTD (for OUT
+  DX,A?), and OUTI (for OUT immed,A?) instructions.
+
+* Handle Goto/Return (S-F1/F2) in the presence of USE16/32 segments.
+
+* Handle Page Faults when displaying the stack.
+
+* In the code which installs IDT entries, always initialize the TSS
+  for an interrupt even if it hasn't been selected via VMSINT.  That
+  way, we can toggle on an initially unchosen interrupt at a later
+  time.
+
+* In CHECK_EPM, if the GDT base is the same as before but the IDT base
+  has changed, initialize the IDT entries again without inserting new
+  GDT entries.	It turns out that QDPMI.SYS changes the IDT after the
+  initial EPM call.  By making this change, we avoid cluttering up the
+  GDT.
+
+* In RESET_COMMON, save the current CR3 into the TSS before returning
+  to it.  QDPMI.SYS doesn't initialize the CR3 value in new TSSs (so
+  they're going poof if a spurious NT occurs).  In order to debug in
+  this context, we have to save it there ourselves.
+
+* Fix bugs in TSS_INTCOM when ignoring faults.	The code just didn't
+  work.  The wrong stack was used to push addresses onto and ring
+  transitions weren't handled.  We need to use the PL0 stack of the
+  back link TSS.
+
+The following modules were changed and why:
+
+MAKEFILE	 Note dependency of SWAT_FCN.ASM and SWAT_VCP.ASM on
+		   SWAT_GPS.INC.
+
+386SWAT 	 Document new profile option GPSKIP.
+
+SWAT_AGR.INC	 Define additional fields to save UNAMODE and UNAMASK
+		   over S-F1/F2.  Without this, we won't handle mixed
+		   USE16/32 segments.
+
+SWAT_CMD.INC	 Define new equates for USE32 and Code selectors.
+
+SWAT_GPS.INC	 Define record and equates for GPSKIP instructions.
+
+SWAT.ASM	 Save and restore UNAMODE/UNAMASK over S-F1/F2.
+		 Define new UNAMODE and UNAMASK values after S-F1.
+
+SWAT_AGR.ASM	 If the current instruction is USE32, check for
+		   ptr16:32 instructions (previously we skipped this
+		   case).
+		 Define separate routine to convert a Sel|Off to an
+		   address possibly through call/task gates and TSSs.
+
+SWAT_ARG.ASM	 Define new error message for invalid list element.
+		 Define new profile option GPSKIP.
+
+SWAT_CMD.ASM	 In .PMIxx processing, convert Sel|Off to address
+		   using common routine possibly through call/task
+		   gates and TSSs.
+
+SWAT_FCN.ASM	 Define GPSKIP tables.
+		 Define FCN_GPSKIP to handle GPSKIP profile option.
+
+SWAT_INT.ASM	 In the normal INT 0Dh handler, check for GPSKIP
+		   instructions.
+
+SWAT_MSC.ASM	 Note that GETCGSEL can return the selector from
+		   either a call or task gate.
+
+SWAT_SCR.ASM	 Handle Page faults when displaying the stack.
+
+SWAT_VCP.ASM	 Save the interrupt # in the TSS_SS1 field (which is
+		   otherwise unused) so we can see when displaying the
+		   TSS and see which interrupt this TSS handles.
+		 Break out code which installs IDT entries into a
+		   common subroutine so it can be called multiple
+		   times.
+		 In the code which installs IDT entries, always
+		   initialize the TSS for an interrupt even if it
+		   hasn't been selected via VMSINT.  That way, we
+		   can toggle on an initially unchosen interrupt at
+		   a later time.
+		 In CHECK_EPM, if the GDT base is the same as before
+		   but the IDT base has changed, initialize the IDT
+		   entries again without inserting new GDT entries.
+		 In SET_COMMON, delete dead code references to BX.
+		 In RESET_COMMON, save the current CR3 into the TSS
+		   before returning to it.
+		 Define routine to save CR3 into the back link TSS.
+		 In LCL_INT07, use PUSHW macro as appropriate.
+		 Fix bugs in TSS_INTCOM when ignoring a fault.
+		 In TSS_INTCOM, check for GP Fault instructions to
+		   skip.
+		 Delete special code in TSS_INTCOM to skip GP Fault in
+		   Lotus 1-2-3 at a particular address.
+		 Make SEL2GDT sensitive to selectors in the LDT.
+
+

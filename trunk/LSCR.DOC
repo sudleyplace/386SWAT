@@ -1,0 +1,50 @@
+Implement profile option to control the number of last screen buffers
+saved by SWAT.	Previously, we used a default of sixteen buffers; now
+that number can be changed to any value.  Each screen buffer uses 4000
+bytes of extended memory.  The modules changed and why are as follows:
+
+SWAT.ASM	 Increase # digits in "Last Screen-xxx" message.
+		 Convert usage of NLSTBUF from ABS to WORD.
+		 Convert usage of PLSTBUF_TAB from table of ptrs to
+		   ptr to table of ptrs (PPLSTBUF_TAB).
+
+SWAT_ARG.ASM	 Include SAVESCREEN keyword.
+		 Define BASE2BIN routine and associated variables for
+		   FCN_SAVESCREEN.
+
+SWAT_CMD.ASM	 Define FLOWERCASE routine for BASE2BIN.
+
+SWAT_COM.INC	 Define PLSTBUF_STR structure for PLSTBUF.
+
+SWAT_FCN.ASM	 Define FCN_SAVESCREEN routine.
+
+SWAT_FMT.INC	 New include file for @DEC_xxx equates.
+
+SWAT_INI.ASM	 Convert NLSTBUF from ABS to WORD.
+		 Convert PLSTBUF_TAB from table of ptrs to
+		   ptr to table of ptrs (PPLSTBUF_TAB).
+		 Initialize PPLSTBUF_TAB in SETUP once and only once.
+		 Include size of PPLSTBUF_TAB in uninitialized data.
+		 Include size of last screen buffers in uninitialized
+		   data.
+
+SWAT_LC2.INC	 Define bit to mark whether or not PPLSTBUF_TAB has
+		 been initialized.
+
+P87_DISP.ASM	 Move @DEC_xxx equates into SWAT_FMT.INC and include
+		   that file.
+
+MAKEFILE	 Mark dependency of SWAT.ASM and P87_DISP.ASM on
+		 SWAT_FMT.INC.
+
+386SWAT 	 Include SAVESCREEN=nnn keyword.
+
+386SWAT.DOC	 Document SAVESCREEN=nnn keyword.
+
+QMAX_IN2.ASM	 Fix bug in setting MOVE_TAB limit if it exceeds 1MB.
+		 In fact, the value that was used (PRGSIZE) was larger
+		 than necessary as we don't actually move that amount.
+		 Instead, we now set the limit to the amount actually
+		 moved based upon ZLDATA.
+
+

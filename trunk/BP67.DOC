@@ -1,0 +1,63 @@
+Fix Bug When Single-Skipping Over Certain INT 67h calls
+
+If a call to INT 67h invokes SWATTER for command line processing, if
+we single-skip over that instruction or PadStar around it, the code in
+SWATTER would undo the pending breakpoint and thus would not stop as
+expected.  This change checks for that condition.
+
+Corequisite changes include:
+
+* If we're executing an internal command, don't call SET_CURINSTR
+  (otherwise, we'll lose our place and think that when we come back to
+  VM we're not contiguous with the previous instruction stream).
+
+* If we're executing an internal command, don't save registers in
+  OLDxx variables as nothing should change (otherwise, we may see
+  spurious register changes from the internal PM call).
+
+* Reorganize the code which saves registers into the OLDxx variables
+  as there's a lot of duplicate code (i.e., between the VM and TSS
+  cases).
+
+* At the same time, I skipped around the code which flashed the
+  command line ever so briefly when an internal command was called.
+
+Also, some data alignment is improved.
+
+MAKEFILE	 Note dependency of SWAT_CMD.ASM on SWAT_LC3.INC.
+
+SWAT_LC3.INC	 Align and document bit mask values.
+		 Rename flag bit from LC3_NOLASTSCR to LC3_INTERNAL.
+
+SWAT.ASM	 Improve data alignment.
+		 Rename flag bit from LC3_NOLASTSCR to LC3_INTERNAL.
+		 If we're executing an internal command, don't call
+		   ROM skip code, and message code.
+		 If we're executing an internal command, don't call
+		   IRQ- and screen-related code.
+		 If we're executing an internal command, don't call
+		   SET_CURINSTR (otherwise, we'll lose our place and
+		   think that when we come back to VM we're not
+		   contiguous with the previous instruction stream).
+		 If we're executing an internal command, don't undo
+		   a pending breakpoint.
+		 If we're executing an internal command, don't save
+		   registers in OLDxx variables as nothing should
+		   change (otherwise, we may see spurious register
+		   changes from the internal PM call).
+		 Reorganize the saving of registers into the OLDxx
+		   variables.
+
+SWAT_CMD.ASM	 Improve data alignment.
+		 In CMD_CHAR, if we're executing an internal command,
+		   don't display the command line when EOL occurs.
+		 In CLEAR_CMDLINE, if we're executing an internal
+		   command, don't display the command line.
+
+SWAT_VCP.ASM	 Rename flag bit from LC3_NOLASTSCR to LC3_INTERNAL.
+		 Use LC3_NOVID at LCL_INT67_COMMAND to avoid command
+		   line flash.
+		 Use local equates to hold flag bits to set locally
+		   and clear upon exit.
+
+

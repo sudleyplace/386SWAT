@@ -1,0 +1,69 @@
+P5 Related Changes
+
+The following changes related to P5 support are included in this TWT:
+
+* Detect whether or not we're running on a P5.
+
+* Display the Software Interrupt Redirection Bitmap (SIRB) in the TSS
+  display.  This portion is displayed only if we're on a P5 and the
+  $VME bit in CR4 is set.
+
+* Support Breakpoint on I/O via the BD command with either an "I" or
+  "O" qualifier (the two are functionally identical) as in
+  "BD addr L1 I".  There must be no segment/selector specified (as it
+  makes no sense).  If BD I/O specified and we're on a P5, enable the
+  debugging extensions in CR4.
+
+* Define record elements for new P5 bits.
+
+Other changes made at the same time include:
+
+* Define record elements for arbitrary bits by number.
+
+* Allow the U command to specify a Task Gate, Call gate, or a TSS and
+  translate it to the corresponding CS|EIP via a common routine
+  (already defined elsewhere).
+
+
+The following files are changed and why:
+
+386.INC 	 Define new P5 bits.
+
+SWAT_LC2.INC	 Define new P5 present bit.
+		 Reorganize equates to use mask values instead of
+		   constants.
+
+MAKEFILE	 Note dependency of SWAT_DTE.ASM on SWAT_LC2.INC.
+
+SWAT_DBG.ASM	 Define new equate for BD ... I or O.
+		 Define display text for BD I/O.
+		 Check for "I" or "O" qualifier if it's a P5 and no
+		   selector/segment specified.
+		 If BD I/O, set CR4.DE.
+		 If BD I/O, don't display selector/segment field.
+
+SWAT_DTE.ASM	 Define header line for SIRB.
+		 Display SIRB if we're on a P5 and the $VME bit in CR4
+		   is set.
+
+SWAT_INI.ASM	 Determine whether or not we're on a P5.
+		 Define routine to determine whether or not the CPU
+		   supports the CPUID instruction.
+		 Define routine to determine whether or not we're on a
+		   P5.
+
+SWAT_REG.ASM	 Delete old record elements for $CE and $WT (early
+		   design of 486 which was changed before production
+		   release).
+		 Define record for bits in CR4.
+		 Define new record elements for P5 bits in EFL.
+		 Define new record elements for P5 bits in PTEs.
+		 Define record for arbitrary bit values by number.
+		 In SETREG_CR0, if the CPU is a 486 or later and we
+		   just set the $NW bit in CR0, execute WBINVD.
+
+SWAT_UNA.ASM	 Convert the Sel|Off from the command line to CS|EIP
+		   through common routine which handles Task Gates,
+		   Call Gates, and TSSs.
+
+

@@ -1,0 +1,26 @@
+Handle Page Faults When Unassembling
+
+Previously, if we attempted to unassemble at a linear address which
+was not present in memory, SWAT went poof.  This can happen most
+easily when debugging under Windows due to a typing mistake at the
+command line.  With this change, the disassembly code installs a Page
+Fault handler which, if triggered, puts in a disassembly of ????  for
+one byte.  That way, the disassembly screen shows one-byte opcodes
+(which display as ??) and ????	as the instruction disassembly.
+
+INT1_FNS.ASM	 Define data varibales to handle re-entrancy issues.
+		 Define install and restore routines for the Page
+		   Fault handler.
+		 Define Page Fault handler which cleans up the stack,
+		   puts in the appropriate display data, and jumps to
+		   a common exit point.
+		 Document return register from INSTR_OPER_COM.
+		 At the start of INSTR_OPER_COM, save re-entrancy data
+		   variables on the stack and install the Page Fault
+		   handler.
+		 At the end of INSTR_OPER_COM, restore the original
+		   Page Fault handler, and pop off re-entrancy
+		   variables.
+		 Remove extraneous <> around STOS target.
+
+

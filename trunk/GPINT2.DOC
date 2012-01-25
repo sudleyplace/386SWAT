@@ -1,0 +1,9 @@
+Include INT 03h and INTO in GPSKIP=INT Processing
+
+When I put in GPSKIP=INT, I checked for the INT xxh opcode (0CDh), but
+forgot about INT 03h (0CCh) and INTO (0CEh).  These cases are now
+covered.
+
+SWAT_VCP.ASM	 In CHECK_GPS, also check for INT 03h and INTO.
+
+

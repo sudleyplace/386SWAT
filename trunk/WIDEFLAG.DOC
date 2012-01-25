@@ -1,0 +1,50 @@
+Widen Flags Words To Dwords
+
+To accommodate growth, certain flag words are widened to dwords.  The
+flags changed are LCL_FLAG, LC2_FLAG, LC4_FLAG, and TRP_FLAG.  Mostly,
+the only item changed in a file is the EXTRN declaration, but
+sometimes a flag is moved into a register and that register is
+widened, or a flag is pushed onto the stack, etc.
+
+The following files are affected in similar ways:
+
+INT1_FNS.ASM
+SWAT.ASM
+SWAT_AFL.ASM
+SWAT_ARG.ASM
+SWAT_BLK.ASM
+SWAT_CMD.ASM
+SWAT_COM.INC
+SWAT_DAT.ASM
+SWAT_DBG.ASM
+SWAT_DR2.ASM
+SWAT_DRV.ASM
+SWAT_DTE.ASM
+SWAT_ENT.ASM
+SWAT_FBR.ASM
+SWAT_FCN.ASM
+SWAT_FVM.ASM
+SWAT_GOT.ASM
+SWAT_HEX.ASM
+SWAT_HLP.ASM
+SWAT_HST.ASM
+SWAT_INI.ASM
+SWAT_INT.ASM
+SWAT_IOP.ASM
+SWAT_KEY.ASM
+SWAT_MAC.ASM
+SWAT_MEM.ASM
+SWAT_MSR.ASM
+SWAT_PTE.ASM
+SWAT_REG.ASM
+SWAT_REM.ASM
+SWAT_SCR.ASM
+SWAT_SIG.ASM
+SWAT_SRC.ASM
+SWAT_SYM.ASM
+SWAT_TOG.ASM
+SWAT_UNA.ASM
+SWAT_VCP.ASM
+SWAT_VID.ASM
+
+

@@ -1,0 +1,8 @@
+Fix MAKEFILE Bug
+
+The dependency for SWAT_ARG.ASM needs to have {$(P)} preceding it in
+order for NEWDIR to work.
+
+This change affects MAKEFILE only.
+
+

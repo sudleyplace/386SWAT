@@ -1,0 +1,18 @@
+Fix Bug When Running in RM
+
+An earlier TWT introduced a bug (for RM SWAT only) which set the B-bit
+in the stack selector.	The problem is that I forgot to reset that bit
+when returning to RM.  The solution is to define a new selector which
+has the same characteristics as DTE_SS, except with the B-bit is
+clear.	Before returning to RM, we switch to this new selector so as
+to return to an environment which is compatible with RM.
+
+SWAT_DRV.INC	 Define new selector.
+
+SWAT_DRV.ASM	 Fill tail of para-sligned segments with NOPs to
+		   simplify debugging.
+		 In GOREAL, switch back to DTE_SSB0.
+		 After each set to DTE_SS, set the same value into
+		   DTE_SSB0, this time with the B-bit clear.
+
+

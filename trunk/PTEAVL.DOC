@@ -1,0 +1,11 @@
+Workaround Feature In Win95
+
+Because of a quirk in Win95 (what only one!), when we blast in the
+PTEs for SWAT to address the monochrome and color video buffers from
+local addresses, we need to preserve the AVL bits and set the accessed
+bit so this PTE won't be thought of as one available for allocation.
+
+SWAT_FVM.ASM	In SET_VIDPTE, preserve the PTE_AVL bits when setting
+		  our video PTEs.
+
+

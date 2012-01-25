@@ -1,0 +1,24 @@
+; WSG file for DPMITSR protected mode symbols
+
+; See SWATDPMI.WSG for notes on use of the 386SWAT ts command.
+
+; Comments are begun with ';' as in assembler.
+
+; The ID is a 16-bit value specified in hex which may be used with
+; the TS command within SWAT for retranslation.
+
+; Mode is P for protected mode, V for V86 mode, or D for delete.
+
+; The specified segment or selector replaces that in the map file.
+
+; If a group!segment name is specified, translation occurs only for
+; the specified segment within a group.  If only the group name is
+; specified, all symbols within that group (except those specified
+; in a group!segment translation) will be translated.
+
+; ID    mode	sel	group name
+
+  0100	P	CF	PGROUP!CODE	; Code in extended memory
+  0101	P	D7	PGROUP!EDATA	; Data in extended memory
+  0102	D	0	PGROUP!ZDATA	; How to delete symbols in a segment
+

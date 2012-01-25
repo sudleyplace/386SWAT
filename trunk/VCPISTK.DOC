@@ -1,0 +1,39 @@
+Fix Bug When Handling VCPI TSS Stacks
+
+When our common TSS interrupt handler takes an interrupt and we don't
+handle it (e.g., it's a timer tick, not a Double Fault), we didn't use
+to handle the stack switch correctly.  If there is a ring transition
+we should use the TSS_SS0|TSS_ESP0 stack (which we did beforehand),
+but if there's no ring transition (typically the case), we should use
+TSS_SS|TSS_ESP.
+
+At the same time, a couple of miscellaneous bugs are fixed:
+
+* Round down the GDT limit (after converting it to a length) to an
+  eight-byte boundary (size of a DTE).	Some VCPI clients put the GDT
+  length in that field instead of the limit.
+
+* Fix a minor dependency bug in MAKEFILE for SWAT_AGR.ASM.
+
+* Clear TF when passing on an interrupt we don't handle when using
+  VCPI TSSs (which is what the CPU would have done if we hadn't been
+  involved).
+
+The following files are changed and why:
+
+MAKEFILE	 Use separate subdirectory for INT1 .OBJ files.
+		 Fix dependency bug for SWAT_AGR (should be
+		   SWAT_CMD.INC instead of SWAT_COM.INC).
+		 Include SWAT.WSG in 386SWAT.LOD dependency list so
+		   it is remade if the .WSG file changes.
+
+SWAT_VCP.ASM	 Round down the GDT limit we get from the VCPI
+		   caller's EPM structure in case they used a length
+		   instead of a limit (off by one error on their
+		   part).
+		 If there's no ring transition when we pass on the
+		   interrupt, use TSS_SS|TSS_ESP.
+		 Clear TF when we pass on the interrupt to better
+		   emulate what the CPU does.
+
+

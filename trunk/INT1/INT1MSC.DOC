@@ -1,0 +1,15 @@
+Miscellaneous INT1 Changes
+
+* In INT1_GRP.ASM, display the register target of SLDT, STR, and SMSW
+  as a 32-bit target if (implicit or explicit) OSP is present and the
+  MOD R/M is a register, but as a 16-bit target if to a memory operand
+  independent of any implicit or explicit OSP.	That's the way the CPU
+  works.
+
+* In INT1_TAB.ASM, ignore implicit or explicit OSP preceding NOP so it
+  can display as NOP or NOPD.  Previously, it didn't display correctly
+  in a USE32 segment.
+
+* In INT1_WIN.ASM, define comments for additional interrupts.
+
+

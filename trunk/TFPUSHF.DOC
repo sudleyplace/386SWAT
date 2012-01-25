@@ -1,0 +1,12 @@
+Avoid TF After POPF
+
+If we trace over a PUSHF or PUSHFD, the CPU puts a flag (d)word onto
+the stack with TF set.	The subsequent POPF then causes an INT 01h
+after the next instruction whether or not we traced the POPF.  This
+change avoids that problem by recognizing PUSHF and PUSHFD and
+skipping over them (planting an INT 03h) instead of tracing them.
+
+SWAT.ASM	 At SWATTER_TRACE, check for PUSHF and PUSHFD and
+		   convert a trace into a skip.
+
+

@@ -1,0 +1,21 @@
+Avoid Spurious Interrupt On Certain Systems
+
+It appears from talking with Intel that some 8259s are flaky and can
+generate a spurious interrupt (IRQ7) even if that IRQ is masked off in
+the Interrupt Mask Register.  This means that on such systems, an IRQ7
+can be generated while SWAT is active and be passed on down to 386MAX
+as SWAT didn't expect it to occur and has no handler at the ready.
+This change puts on additional body armor to cover this hardware bug.
+
+The following modules are changed and why:
+
+SWAT_INT.INC	 Define equates for IRQ7 intercept.
+
+SWAT_DTE.ASM	 Save and restore SWAT's local IRQ7 handler around
+		   the IDT display.
+
+SWAT_KEY.ASM	 Define save areas for INT 0Fh handler.
+		 Intercept INT 0Fh handler while SWAT is active.
+		 Restore original INT 0Fh handler when SWAT exits.
+
+

@@ -1,0 +1,9 @@
+Allow Bookmark Processing With Physical Unassemble
+
+With this change, you can use the Bookmark feature (Shift-F1/F2) when
+unassembling physical memory (U addr P or U addr P cr3).
+
+SWAT_AGR.ASM	 If physical unassemble, setup for physical memory
+		   unassemble.
+
+

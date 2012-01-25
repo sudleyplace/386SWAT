@@ -1,0 +1,28 @@
+
+	     ______             ____  ______     _____  ______ 
+	    |  ____|           |  _ \|  ____|   / / _ \|  ____|
+	    | |__ _ __ ___  ___| |_) | |__     / / |_| | |__ 
+	    |  __| '__/ _ \/ _ \  _ <|  __|   / /|  _  |  __|
+	    | |  | | |  __/  __/ |_) | |____ / / | | | | |
+	    |_|  |_|  \___|\___|____/|______/_/  |_| |_|_|
+
+
+		    Trident driver implementation notes.
+
+
+
+   This is a software-only driver for Trident chipsets, based on the native 
+   Trident driver from old versions of the Allegro library. It only supports 
+   256 color modes, and has no support for linear framebuffers or 
+   accelerated drawing. This code has been made obsolete by the accelerated 
+   TGUI driver recently written by SET, and is included only because it may 
+   support a slightly wider range of chipset variants. Any future 
+   development effort should be spent on improving the TGUI driver instead 
+   of this one.
+
+   This code is not portable to any platforms other than DOS+DPMI, because 
+   it uses BIOS calls to set the initial video mode.
+
+
+   By Shawn Hargreaves (shawn@talula.demon.co.uk)
+   Support for newer chipsets by Mark Habersack (grendel@ananke.amu.edu.pl)

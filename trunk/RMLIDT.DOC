@@ -1,0 +1,103 @@
+Implement Real Mode IDT Redirection
+
+In order to debug RM apps which step on the IDT at linear address
+zero, this TWT implements a mechanism whereby the RM IDTR points to an
+IDT in memory local to device SWAT.  This way, we can be independent
+of apps (it was an early MS-DOS 6 beta) which misbehave in this way.
+
+The default entries in the redirected IDT all point to the same
+routine (it's called DEVINTCOM) but use a different segment and
+offset.  In particular, the segment is the segment of PGROUP less the
+INT # and the offset is adjusted correspondingly upwards by 16*INT #.
+That way, we don't need separate handlers for each of the 256
+interrupts which then just jump to a common handler (don't you wish
+you could do this in PM).
+
+This method of redirecting the IDT can fail if an app (or, say, a BIOS
+function) respecifies the IDTR back to linear zero.  There are two
+such BIOS functions which do this:  87h (BIOS Block Move) and 89h
+(Enter PM).  We protect ourselves from the first one by trapping that
+function, passing it on down to the BIOS, and respecifying the IDTR
+back to our local copy upon return.  There's not much we can do about
+the second method as we can't really catch the point at which the app
+returns to RM.	Also, the app can enter PM not via the BIOS in which
+case we also can't catch the return to RM.
+
+We do respecify the IDTR in our INT 09h handler as a stopgap against
+the above cases we can't otherwise handle.
+
+If for some reason this feature doesn't work for you, use the NORMLIDT
+profile option and it's gone.  We don't recover the extra 1KB of low
+DOS memory this feature takes up though.
+
+Also, a new dot keyword is introduced, .RMIxx, which returns the
+address for interrupt xx from the local IDT in case you want to see
+where the interrupts really go.  This address differs from that in
+.VMIxx only if it does not point to DEVINTCOM.
+
+At the same time, if we come up in RM (through device SWAT), display
+RM in the flags instead of VM (a nice touch).
+
+
+The following modules are changed and why:
+
+386SWAT 	 Note new profile option NORMLIDT.
+
+386SWAT.GRM	 Note new dot keyword .RMIxx.
+
+SWAT_AR2.INC	 Define new flag if NORMLIDT is specified.
+
+MAKEFILE	 Note dependency of SWAT.ASM on SWAT_DRV.INC.
+		 Note dependency of SWAT_BLK.ASM on SWAT_DRV.INC.
+		 Note dependency of SWAT_CMD.ASM on SWAT_AR2.INC.
+		 Note dependency of SWAT_CMD.ASM on SWAT_DRV.INC.
+
+SWAT.ASM	 Add a bunch of extra blank lines for readability.
+		 Clear PE bit from saved CR0 (in OLDCR0) if we're in
+		   device SWAT as we're not really in PM.
+
+SWAT_ARG.ASM	 Enable keyword NORMLIDT.
+
+SWAT_BLK.ASM	 If we're in device SWAT, when deciding whether or not
+		   CR0 changed from the last time, clear the PE bit as
+		   we're not really in PM.
+
+SWAT_CMD.ASM	 Switch order of SIGINT in CMDARG_MAC so it's
+		   alphabetical.
+		 In PARSE_EA, note new dot keyword .RMIxx.
+		 Check for .RMIxx and define action routine for it.
+
+SWAT_DRV.ASM	 Define variables which contain the linear addresses
+		   of the local IDT as well as the common interrupt
+		   routine for ease in processing the interrupts.
+		 Delete separate declarations of OLDDEVxx dwords in
+		   favor of an IRP on @HOOKINTS,15.
+		 Define save area for various IDTR values as well as
+		   the local IDT itself.
+		 Define local routine which is the common handler for
+		   all default interrupts.
+		 In RMDEV09, if we're coming in with neither VM nor
+		   TF set, respecify the IDTR to point to our local
+		   IDT.  Note that if NORMLIDT is in effect, this
+		   points to zero.
+		 In RMDEV15, trap function 87h (BIOS Block Move) and
+		   respecify the IDTR to our local handler upon exit.
+		 In CHECK_SCAN, if we're rebooting (via Ctrl-Alt-Del)
+		   respecify the IDTR to linear address zero as the
+		   BIOS doesn't handle that well.
+		 At the start of device SWAT initialization, change
+		   'VM' in flags display to 'RM', and calculate and
+		   save the addresses of our local IDT and DEVINTCOM.
+		 In SETINTS, handle NORMLIDT case (save our interrupt
+		   hooks into the IDT at linear address zero).
+		 In SETINTS, if we're using the redirected IDT, save
+		   our interrupt hooks into our local IDT and
+		   respecify the IDTR to point to it.
+
+SWAT_FCN.ASM	 Define action routine to handle NORMLIDT profile
+		   option.
+
+SWAT_SCR.ASM	 Define label for 'VM' in flags display so code in
+		   SWAT_DRV.ASM can change it to 'RM'.
+
+

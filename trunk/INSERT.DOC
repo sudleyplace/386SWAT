@@ -1,0 +1,56 @@
+Implement INSERT Command
+
+To debug Windows at the lowest level, we need to be able to insert
+ourselves into Windows startup shortly after it enters PM.  To this
+end, the INSERT command is available.  It is used from the SWAT
+command line at the point just before Windows enters PM.  The syntax
+of the command is as follows:
+
+At the same time, the following changes are made:
+
+* Handle case where we're entered in SWATTER on a stack with the B-bit
+  clear, we need to clear the high-order word of ESP so we can use it
+  as a base register.
+
+* Fix a bug in GD bit handling where we need an INT 01h handler to
+  catch our own references to the debug registers.
+
+* Change base selectors for SWAT as we now almost always load it as a
+  device driver.
+
+* Simplify DR register handling to respecify DR7 from the internal
+  data as opposed to the DRn registers.  Thsi is needed as some
+  programs (e.g. Windows) can clobber the DRn registers when we're
+  not in control.
+
+
+The following files are changed and why:
+
+386SWAT.DOC	Document changes.
+
+SWAT.ASM	In SWATTER, handle entry on 16-bit stack.
+		Handle GD bit settings.
+
+SWAT.WSG	Change base selectors.
+
+SWAT_CMD.ASM	Place new command into parse table.
+		Alphabetize other entries.
+		Document other entries as appropriate.
+
+SWAT_DBG.ASM	Simplify DR register handleing.
+
+SWAT_DR2.ASM	Handle GD bit settings.
+
+SWAT_HTX.ASM	Document new command.
+
+SWAT_INI.ASM	Define table for local CR3.
+		Move IDT setting entries into separate routine.
+
+SWAT_INT.ASM	Reorganize OLDINTxx and other variables.
+
+SWAT_VCP.ASM	Define additional GDT entries for new command.
+		Define action routine for new command.
+
+SWAT_VCP.INC	Define new DTE TSS entries.
+
+

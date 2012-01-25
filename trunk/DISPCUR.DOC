@@ -1,0 +1,35 @@
+Fix Disappearing Cursor Bug
+
+For years we've put up with this bug.  Now it's fixed.
+
+The problem occurs in any of three contexts:
+
+* when reviewing last screens (Alt-F10),
+* when switching between color and mono adapters (Alt-F7), or
+* when swapping screens (say, when exiting SWAT).
+
+The problem occurs because not all programs maintain a consistent set
+of data values in the BIOS data area on which we rely (e.g., the
+dependence between the cursor type and the cursor emulation bit).
+
+The fix is to read the cursor start and end line values upon entry and
+restore those values in the above circumstances.  A new routine,
+GET6845 is defined for the read starting value part.  I seem to recall
+that the original definition of the 6845 registers was that they were
+write-only, but apparently they are now readable as well.
+
+At the same time, while testing the different contexts in which SWAT
+changes the cursor type, I noticed that the Enter command handles the
+INS key, but not the XINS key, so I changed it.
+
+SWAT_ENT.ASM	 Make XINS work the same as INS.
+
+SWAT_VID.ASM	 Replace code which restores the old cursor type when
+		   restoring screens with call to SET6845.
+		 Replace code which gets old cursor type from the BIOS
+		   data area with code which reads that value from the
+		   6845.
+		 Define routine GET6845 which reads 6845 register
+		   values.
+
+

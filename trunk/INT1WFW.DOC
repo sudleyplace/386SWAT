@@ -1,0 +1,38 @@
+
+P:\TWT\INT1WFW.WRL
+
+===============================================================================
+
+FIX file entry:
+
+* Add new Windows for Workgroups VxDs to 386SWAT's disassembly comments
+
+  Description:	Windows for Workgroups is implemented mostly by six new VxDs.
+		INT 20h dynalinks to their services show up as 'Unknown'.
+		This TWT add the new VxDs to the comment tables in SWAT.
+		These new VxDs also provide services.  These are all
+		undocumented at this time.  I have figured out several critical
+		ones, and added names for them to the tables.
+		More of the standard Windows 3.1 VxDs and their services have
+		been added as well.
+		The code that displays the device and service names has been
+		changed to display the name of a device even when we don't
+		understand the service.  Previously the entire thing was listed
+		as 'Unknown'.
+  When: 30 SEP 92.
+  Who:	WRL
+  SW/HW Environment:  Debugging inside Windows for Workgroups.
+  Symptom:  INT 20h instructions display as unknown xxxx, xxxx.
+  Temporary Workaround:  Simply remember even more hex constants.
+  Test Procedure:  Disassemble some VXDCALLs refering to the new VxDs
+  Version:  2.00.006
+
+===============================================================================
+
+What's changed...
+
+INT1_FNS.ASM	Display the device name even if its service is unknown.
+
+INT1_WIN.ASM	Add new VxDs and services to the tables.
+
+

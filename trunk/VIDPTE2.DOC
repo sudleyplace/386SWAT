@@ -1,0 +1,21 @@
+Fix Two Bugs in VIDPTE.BOB
+
+Two bugs crept into the VIDPTE.BOB changes:
+
+* The variable SWATDATA isn't initialized before it is used in
+  SET_VIDPTE.  This causes SWAT to fail whenever the previous value of
+  this variable is different from what the current one should be.  In
+  particular, shifting modes (e.g., MAX to VCPI) or shifting from
+  paging disabled (the initial state) to paging enabled where SWAT
+  resides in memory which is not one-to-one linear to physical can
+  exacerbate this bug.	This change affects SWAT_FVM.ASM only.
+
+* When the LDT_VID selector was deleted from the LDT structure in
+  SWAT_VCP.ASM, a constant value wasn't updated.  This change affects
+  SWAT_VCP.ASM only.
+
+* At the same time, I noticed that the stack in SWAT is not
+  dword-aligned; now it is.  This change affects SWAT.ASM only.
+
+
+

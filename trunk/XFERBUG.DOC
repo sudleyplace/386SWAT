@@ -1,0 +1,8 @@
+Fix Bug In New XFER Function
+
+In SWAT's response to an XFER (INT 67h/AX=0DEFAh) request, I used the
+wrong register (EDX instead of DX).  This corrects that error.
+
+SWAT_VCP.ASM	 Use DX instead of EDX.
+
+

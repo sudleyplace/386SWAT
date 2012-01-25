@@ -1,0 +1,73 @@
+######################################################################
+#
+# Makefile for the Dual-VGA system
+#
+# Public Domain 1996 Ralf Brown
+# Version 0.00
+# Last Edit: 4/28/96
+#
+######################################################################
+
+# the C compiler to invoke
+CC = tcc
+# memory model
+MDL = c
+# the flags to pass to the C compiler
+CFLAGS = -m$(MDL)
+
+# the linker to invoke
+LINK = tlink
+# the flags to pass to the linker
+LFLAGS = /t /m
+
+# the assembler to invoke
+ASM = tasm
+AMDL = __TINY__
+AMDL_C = __COMPACT__
+AFLAGS = /Mx
+
+# the object librarian to invoke
+LIB = tlib
+LIBFLAGS = /c/0
+
+# default rule for making a .EXE from a C source file
+.c.exe:
+	$(CC) $(CFLAGS) $<
+
+# default rule for making a .COM from an object module
+.obj.com:
+	$(LINK) $(LFLAGS) $<,,,amis$(MDL)
+
+# default rule for making an object module from a C source file
+.c.obj:
+	$(CC) $(CFLAGS) -c $<
+
+# default rule for making an object module from an assembler source file
+.asm.obj:
+	$(ASM) $(AFLAGS) /D$(AMDL) $*
+
+all:  dualvga.com ###amitsrs.exe remove.exe popup.exe
+
+amis.obj:	amis.asm amis.mac
+amishotk.obj:	amishotk.asm amis.mac
+amisutil.obj:	amisutil.asm amis.mac
+amipopup.obj:	amipopup.asm amis.mac
+amispsp.obj:	amispsp.asm amis.mac
+
+amis$(MDL).lib: amis.obj amishotk.obj amisutil.obj amipopup.obj amispsp.obj
+	del amis$(MDL).lib
+	$(LIB) $(LIBFLAGS) amis$(MDL) +amis+amishotk+amipopup+amisutil+amispsp
+
+###amitsrs.exe:    amitsrs.c
+popup.exe:	popup.c findtsrs.obj
+	$(CC) $(CFLAGS) popup.c findtsrs.obj
+remove.exe:	remove.c findtsrs.obj uninstal.obj
+	$(CC) $(CFLAGS) remove.c findtsrs.obj uninstal.obj
+
+dualvga.com:	dualvga.obj amis$(MDL).lib
+
+uninstal.obj:	uninstal.asm amis.mac
+	$(ASM) $(AFLAGS) /D$(AMDL_C) uninstal.asm
+
+dualvga.obj:	dualvga.asm amis.mac
+

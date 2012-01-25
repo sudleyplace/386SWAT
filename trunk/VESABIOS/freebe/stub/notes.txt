@@ -1,0 +1,86 @@
+
+	     ______             ____  ______     _____  ______ 
+	    |  ____|           |  _ \|  ____|   / / _ \|  ____|
+	    | |__ _ __ ___  ___| |_) | |__     / / |_| | |__ 
+	    |  __| '__/ _ \/ _ \  _ <|  __|   / /|  _  |  __|
+	    | |  | | |  __/  __/ |_) | |____ / / | | | | |
+	    |_|  |_|  \___|\___|____/|______/_/  |_| |_|_|
+
+
+		    Stub driver implementation notes.
+
+
+
+   This is an example driver implementation, intended as a starting point 
+   for anyone who wants to make a real driver for a specific card. It 
+   provides all the essential VBE/AF functions, but it runs on top of your 
+   existing VESA driver, using VESA calls to set the video mode and then 
+   simple software drawing functions to emulate the hardware accelerated 
+   operations. As such it is not useful in any practical way, but it does 
+   work: just copy the vbeaf.drv file to c:\ and you should be able to use 
+   it from any Allegro programs, or the SciTech VBETEST utility (run 
+   "vbetest -f" to use VBE/AF rather than regular VESA).
+
+   This driver is not portable, because it uses DPMI calls to communicate 
+   with VESA. This is no problem as long as it is being used with Allegro, 
+   but the binary will not work on any other platforms until you have 
+   removed all the VESA calls and are using direct hardware access for 
+   everything.
+
+   This driver provides "accelerated" (emulated in software, and painfully 
+   slow, but they look like hardware functions to the calling program), 
+   versions of the VBE/AF routines:
+
+      WaitTillIdle()
+      SetMix()
+      Set8x8MonoPattern()
+      Set8x8ColorPattern()
+      Use8x8ColorPattern()
+      DrawScan()
+      DrawPattScan()
+      DrawColorPattScan()
+      DrawRect()
+      DrawPattRect()
+      DrawColorPattRect()
+      DrawLine()
+      DrawTrap()
+      PutMonoImage()
+      BitBlt()
+      BitBltSys()
+      SrcTransBlt()
+      SrcTransBltSys()
+
+   If you don't want to support all these in your driver, they should be 
+   replaced with NULL pointers so the caller will know to use their normal 
+   drawing code instead. VBE/AF provides many more routines than these, but 
+   Allegro only uses the ones from that list, so it would be rather futile 
+   to implement any others.
+
+   This driver supports the FreeBE/AF extension mechanism for enabling true 
+   protected mode access to video memory. Uncomment the definition of 
+   NO_HWPTR at the top of driver.c if you want to return to the standard 
+   nearptr memory access.
+
+   If you comment out the definition of USE_ACCEL at the top of driver.c, 
+   the emulated acceleration routines will be removed, leaving only a dumb 
+   framebuffer driver. This may be useful to see what is the bare minimum of 
+   functions that you need to include in a VBE/AF driver.
+
+   This driver implements the FreeBE/AF FAF_CFG_FEATURES extension 
+   mechanism, which allows the installation program to selectively disable 
+   some of the hardware accelerated drawing routines. Comment out the 
+   definition of USE_FEATURES at the top of driver.c if you want to remove 
+   this capability.
+
+   There is no support for hardware cursors, 8 bit DAC modes, or the refresh 
+   rate control functions.
+
+   The VESA implementation assumes a single 64k memory bank, so it will not 
+   function correctly on cards with dual banks or other granularities. This 
+   won't be a problem for the real drivers, though, because you will know 
+   the granularity in advance. VBE/AF only allows 4k or 64k, so other sizes 
+   must be scaled up to 64k units.
+
+
+   By Shawn Hargreaves
+   shawn@talula.demon.co.uk

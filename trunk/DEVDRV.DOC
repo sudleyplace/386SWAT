@@ -1,0 +1,286 @@
+Implement Real Mode Debugging for SWAT
+
+This change to SWAT allows it to be loaded as a device driver for real
+mode (RM) debugging.  Previously, we allowed SWAT to be loaded as a
+device driver in anticipation of something like this, but printed an
+error message.	Now we actually make it work.  In particular, we hook
+specified interrupts in RM and switch to PM to handle each one.  Upon
+exit from any particular interrupt, we return to RM.  Before entering
+PM, we check and save the status of A20.  Upon return to RM, we return
+the A20 gate to the same status.
+
+The code for SWAT is initialized in RM and then moved up to the top of
+extended memory (as marked by the result of function 88h, INT 15h).
+We protect that memory by installing our own INT 15h handler and
+returning a value for function 88h below our memory.  Also saved in
+extended memory just below the code/data for SWAT is the IDT used for
+SWAT when running in PM.  The same interrupts hooked in RM are hooked
+in PM, but they shouldn't be needed.  If desired, we could implement
+(meaning I didn't do this) a switch on the TRAPxxx keywords to
+indicate whether the interrupt should be hooked in RM only (/r) , PM
+(/p) only, or both.  At the moment, we hook the interrupt in both
+modes.
+
+The resident code/data to support real mode debugging is put into a
+new group RGROUP.  After it has been initialized, that group is moved
+to the bottom of memory overlaying PGROUP which was there previously.
+Thus before the the move to low memory, we need to reference code/data
+there via the RGROUP segment, and after the move we need to use
+PGROUP.
+
+The sequence of events is as follows:
+
+* Take control in device initialization.
+
+* Call INIT_REAL portion of code passing it a pointer to the device
+  driver command line.
+
+* Copy initialized code/data to extended memory.
+
+* Call INIT_PROT portion of code in extended memory.
+
+* Copy RGROUP to low memory overlaying PGROUP.
+
+* Hook interrupts as specified in the SWAT profile.
+
+* Call INIT_VIRT portion of code in low memory.
+
+
+At the same time, the following changes were made:
+
+* An include file (MOVSPR.INC) is defined to emulate moves between
+  any special register (CRn, DRn, TRn) and any 32-bit register.  This
+  macro is needed because MASM doesn't handle the newer registers
+  defined for the P5.
+
+* A single include file (SWAT_SEG.INC) maps all segments in SWAT in a
+  particular order.  Any new segments shoud be placed in this file in
+  the order they should occur in the resulting executable.  Because
+  this file is included in SWAT.ASM (the first .OBJ the LINKer sees),
+  the order of the segments is specified as per this file.
+
+* Handle $GD bit by saving it in a separate variable.  When a GD
+  breakpoint occurs because a program references one of the DRn
+  registers, we need to handle it specially.  In particular, when a GD
+  breakpoint fault occurs, the processor clears the GD bit in DR7 and
+  then signals INT 01h.  We save the current value of DR7, but unless
+  we remember elsewhere whether or not we're trapping GD faults, we
+  won't have a record in DR7 itself.  Thus FORCE_DR7 contains those
+  bit in DR7 which we wish to force (GD only at the moment).  Note
+  that the program which references a DRn register might be SWAT if we
+  come up via an interrupt other than 01h.  This can occur on a GP
+  Fault, via Ctrl-Alt-Pad5, etc.  This case is handled specially by
+  checking for CS|EIP at each of the points SWAT references a DRn
+  register and ignoring the breakpoint fault.
+
+* Emulate RETFD n instruction in SAVEMSG because it's broken in the
+  A0-step of the Intel P5.
+
+* Allow SWAT to trace through an INT 0FFh instruction going directly
+  to the PM INT 0FFh handler.  This instruction is used in 386MAX
+  hardware interrupt handling as well as DPMI mode switches.
+
+* Reorder segments so that XGROUP appears below NGROUP.  Previously,
+  XGROUP appeared after NGROUP and in certain cases, INIT_REAL code
+  could overwrite INIT_VIRT code if there was some REPLAY data such as
+  when DVGA is active.
+
+* Stack Faults (INT 0Ch) can be trapped via TRAPSTACK.	The routine
+  LCL_INT0C and related variables are added.
+
+* Fix bug in operand analysis where we mistakenly checked UNAMODE for
+  VM vs.  PM instead of FORW_EFL.  This would result in incorrect
+  operand analysis display where we came up in one mode and then
+  disassembled code in the other mode.
+
+* In SYMHASH_SRCH where we're looking up a symbol by linear address,
+  if the current symbol name starts with a '@' (typically used for an
+  equate) and another symbol has the same linear address, use that
+  name instead.
+
+
+The following modules are changed and why:
+
+MOVSPR.INC	 Define a macro to emulate MOV SPR,R32 or R32,SPR
+		   where SPR is any special register and R32 is any
+		   32-bit register.
+
+MASM5.MAC	 Extend FICALL macro to allow return segment (to RM).
+
+SWAT_AR2.INC	 Define equates for new flag word AR2_FLAG.
+
+SWAT_COM.INC	 Define global IRET_STR for everyone's use.
+
+SWAT_DRV.INC	 Define common structures and macros for use with SWAT
+		   when loaded as a device driver for RM debugging.
+
+SWAT_SEG.INC	 Define a single include file which maps all segments
+		   used in SWAT.  This file can be included in any
+		   source file eliminating the need to specify a
+		   segment just to be sure it's placed in proper
+		   order.
+
+386SWAT 	 Split out default TRAPDEBUG setting to TRAPSTEP and
+		   TRAPSKIP.
+		 Note TRAPSTACK as new keyword and include in default
+		   list.
+
+MAKEFILE	 Modify to use search order for directories.
+		 Include SWAT_A20.OBJ and SWAT_DRV.OBJ as new .OBJ
+		   files.
+		 Note dependency of SWAT.ASM on SWAT_SEG.INC.
+		 Note new source file SWAT_A20.ASM and its
+		   dependencies.
+		 Delete dependency of SWAT_BLK.ASM on SWAT_LCL.INC.
+		 Note new source file SWAT_DRV.ASM and its
+		   dependencies.
+		 Note dependency of SWAT_FCN.ASM on SWAT_AR2.INC.
+		 Note dependency of SWAT_INI.ASM on SWAT_AR2.INC and
+		   SWAT_SEG.INC.
+		 Note dependency of SWAT_INT.ASM on SWAT_DRV.INC and
+		   SWAT_SEG.INC.
+		 Note dependency of SWAT_VCP.ASM on SWAT_DRV.INC and
+		   SWAT_SEG.INC.
+
+SWAT.ASM	 Delete empty segment declarations in favor of
+		   SWAT_SEG.INC.
+		 Define variable FORCE_DR7 to hold $GD if specified.
+		 Define new flag word AR2_FLAG.
+		 Move DEV_STRA and DEV_INTR from NCODE to RCODE.
+		 Define flag byte DEVLOAD which marks whether or not
+		   we're loaded as a device driver.
+		 Name additional fields in SAVEMSG_STR for use in
+		   emulating RETFD n.
+		 Emulate RETFD n instruction in SAVEMSG because the
+		   A0-step of the Intel P5 doesn't do it correctly.
+		 Label initial references to DRn register in case the
+		   GD bit is set in DR7 and we signal a GD Fault at
+		   these points.
+		 Before saving the current value of DR7, include any
+		   forced bits (e.g., $GD).  This way, we can enable
+		   or disable GD debugging through a command line
+		   switch such as "R DR7.GD=n".
+		 Allow SWAT to trace through an INT 0FFh instruction
+		   going directly to the PM INT 0FFh handler.  This
+		   instruction is used in 386MAX hardware interrupt
+		   handling as well as DPMI mode switches.
+		 Rename IRET_STR to IRETX_STR as the later name has a
+		   different global meaning.
+		 Document use of SI rather than the expected ESI
+		   register when tracing through a VM interrupt.
+
+SWAT_A20.ASM	 Define new module to handle A20 gating routines for
+		   RM debugging.  This code was taken from QMAX.ASM
+		   and QMAX_OVR.ASM.  We need to use different names
+		   than the usual ones because some of them are in use
+		   in SWAT's PGROUP when it's loaded as a LOD module.
+
+
+SWAT_ARG.ASM	 Note TRAPSTACK keyword.
+
+SWAT_BLK.ASM	 Delete reference to LCL_FLAG/SWAT_LCL.INC as it's
+		   unused.
+
+SWAT_DBG.ASM	 Change the format of the BD screen display to
+		   accommodate the GD bit.
+		 Use MOVSPR instead of hand-coded instructions.
+
+SWAT_DRV.ASM	 Define new module to handle real mode debugging and
+		   loading of SWAT as a device driver.
+		 Define local routines (RMDEVxx) to hook RM
+		   interrupts.
+		 Define routine EPM to enter PM.  Note that this
+		   routine checks for already in VM via SMSW as well
+		   as TF set upon entry (in case 386MAX is
+		   single-stepping looking for BIOS entry points for
+		   BCF processing).
+		 Define routine ERM to enter RM upon exit from a
+		   RMDEVxx routine.
+		 Define routine GOREAL to enter RM upon exit from a
+		   RMDEVxx routine or after calling INIT_PROT.
+		 Define routine DEV_INTR_NR to handle the device
+		   driver initialization.
+		 Define routine CHECK_EXT to determine the size of
+		   extended memory.
+		 Define routine DEV_ARGS to process the device driver
+		   command line by passing it to the INIT_REAL code.
+		 Define routine LOADUP to copy code/data to the top of
+		   extended memory in up to 64KB blocks.
+
+SWAT_DTE.ASM	 Use MOVSPR instead of hand-coded instructions.
+
+SWAT_FCN.ASM	 Define routine FCN_TRAPSTACK as response to TRAPSTACK
+		   keyword.
+
+SWAT_INI.ASM	 Delete unused XMS_ENTRY variable.
+		 In INIT_PROT, initialize save screens to blank to
+		   avoid garbage when scrolling back beyond last saved
+		   screen.
+		 Initialize INT 0Ch if TRAPSTACK specified.
+		 Uninitialize INT 0Ch if TRAPSTACK specified.
+		 In SETUP, initialize selector for LCLINT0C_FVEC.
+		 Move RH_VEC to SWAT_DRV.ASM.
+		 Update copyright date in display message.
+		 Move error messages to SWAT_DRV.ASM.
+		 Replace CSOVR with .8086/DOT386.
+		 In INIT_REAL, don't display copyright message if
+		   loaded as device driver (already displayed).
+		 Initialize MAPSEG_NXT to RTAIL_NR if loading as
+		   device driver or NTAIL if not.
+		 Remove test for MD_VSIZE when returning ending
+		   address.  After we switched the order of NGROUP and
+		   XGROUP, the ending address is always DTAIL.
+		 Move DEV_STRA, DEV_INTR, and KEYWAIT to SWAT_DRV.ASM.
+
+SWAT_INT.ASM	 Define associated variables for INT 0Ch handler.
+		 Define routine LCL_INTCOM_DEVORIG to handle exit from
+		   an interrupt where we're to pass it on to the next
+		   handler in sequence by setting up the RM stack as
+		   if the interrupt had just occurred and we're
+		   emulating it in the usual way.
+		 Define entry point LCL_INTCOM_DEVDONE in
+		   LCL_INTCOM_DEVORIG to handle return from interrupt
+		   to RM.
+		 In LCL_INT00, setup stack similar to other handlers
+		   so we can jump to either LCL_INTCOM_DEVDONE or
+		   LCL_INTCOM_DEVORIG as appropriate with a consistent
+		   stack frame.
+		 At end of LCL_INT00 if handled, test for VM and entry
+		   from RM.  If both are true, exit to
+		   LCL_INTCOM_DEVDONE.
+		 At end of LCL_INT00 if not handled, test for VM and
+		   entry from RM.  If both are true, exit to
+		   LCL_INTCOM_DEVORIG.
+		 Something similar to the above changes is done for
+		   all other LCL_INTxx handlers.
+		 Define routine LCL_INT0C to handle stack faults.
+		 Note that LCL_INT0E (Page Fault) and LCL_INT11
+		   (Alignment Check) are not sensitive to being called
+		   from RM as neither of these interrupts are
+		   interesting in RM.
+
+SWAT_OPR.ASM	 Fix bug in operand analysis where we mistakenly
+		   checked UNAMODE for VM vs. PM instead of FORW_EFL.
+		   This would result in incorrect operand analysis
+		   display where we came up in one mode and then
+		   disassembled code in the other mode.
+
+SWAT_REG.ASM	 Use MOVSPR instead of hand-coded instructions.
+		 When setting DR7, isolate GD bit and save in
+		   FORCE_DR7 so we remember it for later use.
+
+SWAT_SYM.ASM	 In SYMHASH_SRCH where we're looking up a symbol by
+		   linear address, if the current symbol name starts
+		   with a '@' (typically used for an equate) and
+		   another symbol has the same linear address, use
+		   that name instead.
+
+SWAT_VCP.ASM	 In LCL_INT67, setup stack similar to other handlers
+		   so we can jump to either LCL_INTCOM_DEVDONE or
+		   LCL_INTCOM_DEVORIG as appropriate with a consistent
+		   stack frame.
+		 In LIN2PHYS, if paging not enabled, pass the value on
+		   through.  Without this check, we stop on a Page
+		   Fault when called from RM.
+
+

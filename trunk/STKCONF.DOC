@@ -1,0 +1,22 @@
+Fix Stack Conflict In INIT_PROT
+
+In a previous TWT, when I switched stacks in INIT_PROT to avoid
+stepping on our caller's stack (that is, MAX's), I used the default
+stack which is used when SWAT pops up.	What I forgot is that if we
+need to use SWAT during that period (say, we need to debug it via
+DEBUG=PMI, or we generate an INT 03h because there's not enough
+SYMSIZE for a LOADSYM), then SWAT will attempt to use the same stack.
+The solution is to use the lower portion of the default stack for
+INIT_PROT.  At the same time, I noticed that our default stack was
+only 1KB in size, which seems somewhat small especially taking into
+consideration that we're now a USE32 program.  So I doubled the stack
+to 2KB and use the lower 1KB during execution of INIT_PROT.
+
+I also changed the code in INIT_PROT such that if we're in device
+SWAT, we always initialize the PM IDT entries to our fault handlers.
+The only time we need these handlers is when we're stepping through PM
+code.  For device SWAT, that's SWAT itself.
+
+The only module affected in SWAT_INI.ASM.
+
+

@@ -1,0 +1,44 @@
+
+	     ______             ____  ______     _____  ______ 
+	    |  ____|           |  _ \|  ____|   / / _ \|  ____|
+	    | |__ _ __ ___  ___| |_) | |__     / / |_| | |__ 
+	    |  __| '__/ _ \/ _ \  _ <|  __|   / /|  _  |  __|
+	    | |  | | |  __/  __/ |_) | |____ / / | | | | |
+	    |_|  |_|  \___|\___|____/|______/_/  |_| |_|_|
+
+
+		    S3 driver implementation notes.
+
+
+
+   This is a driver for S3 chipsets. It supports 8/15/16/24/32bits color 
+   modes, and has support for accelerated drawing (currently only for BitBlt 
+   between vram).
+
+   This code is not portable to any platforms other than DOS+DPMI, because 
+   it uses BIOS calls to set the initial video mode.
+
+
+   Accelerated functions
+   ---------------------
+
+   BitBlt - I'm sorry I didn't add more functions yet, but I haven't got a 
+	    time and this function was very important for me. I hope it help 
+	    you too. If I had a more time a I will send to Allegro new 
+	    functions.
+
+
+   Supported Hardware
+   ------------------
+
+   I think all earlier S3 cards and some older. I'm sure for Trio64, I 
+   tested it. If somebody have a problem, please send me note and your
+   ident. number of S3 card.
+
+	 Thank you, Michal Stencl
+
+
+   Original Allegro code by Shawn Hargreaves (shawn@talula.demon.co.uk)
+   Improved by Michael Bukin (M.A.Bukin@inp.nsk.su)
+   Hardware acceleration by Michal Stencl (stenclpmd@ba.telecom.sk)
+

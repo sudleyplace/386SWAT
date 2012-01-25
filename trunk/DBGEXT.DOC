@@ -1,0 +1,12 @@
+Enable Debugging Extensions (If Supported) At Virtual Init Time
+
+The Pentium CPU's debugging extensions are supported in SWAT via the
+BD command on an I/O port at which time the $DE bit is set in CR4.
+This change enables them at an earlier time so any other program (such
+as 386MAX) can modify its behavior depending upon whether or not the
+$DE bit is set.
+
+SWAT_VCP.ASM	In LCL_INT67_HOST, enable debugging extensions if
+		  supported.
+
+

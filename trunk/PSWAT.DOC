@@ -1,0 +1,61 @@
+Allow Debugging of Device SWAT INIT_PROT
+
+By using two copies of device SWAT, we can debug the second one's
+INIT_PROT by using the VCPI mechanism to have the first copy of SWAT
+intrude into the second copy's GDT and IDT.
+
+
+The following modules are changed and why:
+
+SWAT_DRV.INC		Define enough additional GDT entries to handle
+			  the first SWAT's code, data, LDT, and TSSs.
+			Define flag to indicate that there is a
+			  preceding device SWAT.
+
+SWAT_DRV.ASM		Define data variables associated with
+			  detecting and handling preceding device
+			  SWAT.
+			Check on preceding device SWAT.
+			Set third selector in device SWAT's GDT to the
+			  same entry as the code selector so it can be
+			  used by the first SWAT when intruding into
+			  the second SWAT's GDT.
+			Setup TSS selector as the first SWAT uses TSSs
+			  to handle interrupts so the second SWAT
+			  needs a TSS into its register and other data
+			  is saved upon a task switch to the first
+			  SWAT.
+			After entering PM in the second SWAT, if there
+			  is a preceding device SWAT, setup the second
+			  SWAT's TR and call the first SWAT (via INT
+			  01h).
+			Delete unneeded code to initialize the second
+			  SWAT's IDT.
+			Define routine to check on preceding device
+			  SWAT.  If present, set flag and initialize
+			  the first SWAT in the second SWAT's GDT.
+			Define routine to initialize preceding device
+			  SWAT's data including the second SWAT's IDT
+			  which is then BIOS block moved to extended
+			  memory.
+
+SWAT_INI.ASM		In INIT_PROT, if there's a preceding device
+			  SWAT, don't initialize the PM IDT as it's
+			  already been done.
+			In INIT_PROT, if we're device SWAT but not a
+			  preceding device SWAT, don't force Alignment
+			  Check interrupts even if we did know it's
+			  a 486.  The subsequent code enables the AM
+			  bit in CR0 which can complicate things
+			  later.
+			In INIT_REAL, count in the size of the TSS if
+			  there's a preceding device SWAT.
+			In CHECK_CPUID, use GP register to address the
+			  stack rather than ESP as we shouldn't use
+			  that in RM.
+
+SWAT_VCP.ASM		In INST_GDT, if we're in device SWAT, don't
+			  initialize our CR3 selector as paging isn't
+			  enabled and there's nothing to translate.
+
+

@@ -1,0 +1,14 @@
+Fix Bugs When Line Numbers Off
+
+If we're running with line number display disabled (LI-), we still can
+display line numbers for Jcc/JMP/CALL targets.	Also, with LI- in
+effect and when scrolling the screen, if the last line would have a
+line number on it (even though they're not displayed), the last line
+is left blank.	Both these bugs are fixed by checking for line number
+display off and the matching label being a line number.
+
+SWAT_SYM.ASM	 In SYMHASH_SRCH, if we're not to display line
+		   numbers, and the matching record is a line number,
+		   continue searching.
+
+

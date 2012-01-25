@@ -1,0 +1,34 @@
+Fix Bug In Device SWAT When Hooking/Toggling Interrupts
+
+In device SWAT, when an interrupt occurs in which we might have an
+interest, previously we didn't test to see if we should do anything
+about it.  For example, we are interested in GP Faults and if such an
+event occurs in device SWAT, we would always pop up.  Some GP Faults
+are normal (i.e., if HIMEM.SYS is in the picture), so we should not
+intrude in that case.
+
+This is accomplished by testing to see if we're to handle a particular
+interrupt by passing to the common Enter PM (EPM) routine the
+corresponding flag @TRP_Ixx from TRP_FLAG.  Thus, for device SWAT,
+TRP_FLAG is the low DOS memory indicator of what we're trapping.  This
+also means that when we toggle an interrupt handler on/off, we need to
+toggle the corresponding bit in TRP_FLAG.
+
+
+The following modules are changed and why:
+
+SWAT_DRV.INC	 Move @TRP_Ixx flags from SWAT_DRV.ASM to here for use
+		   by other modules.
+
+SWAT.ASM	 If an interrupt is toggled and we're in device SWAT,
+		   toggle the @TRP_Ixx flag in TRP_FLAG in low memory.
+
+SWAT_DRV.ASM	 When calling EPM, also pass the @TRP_Ixx flag to test
+		   to see if we're to trap this interrupt.
+		 In EPM, handle additional word (RM_TRP) passed on the
+		   stack.  Note that we don't pass this word on to the
+		   PM handler so we don't need to change the entries
+		   in the corresponding structure (DEVSTK_STR) in
+		   SWAT_DRV.INC.
+
+

@@ -1,0 +1,36 @@
+Prepare For WINSWAT
+
+* A feature needed by WINSWAT is the ability to set a temporary
+  breakpoint from a Windows program.  This requires that we fill in
+  the rest of the fields where else this feature is used.
+
+* A feature needed by WINSWAT is the ability to refresh debug hooks
+  when a selector's linear address changes.
+
+* The assumption that DS=AGROUP in SEL2BASE became sufficiently
+  annoying that I removed it by setting DS within the routine.	At the
+  same time, to improve stack alignment, the argument to SEL2BASE is
+  widened from a word to a dword.
+
+
+MAKEFILE	Note dependency of SWAT_VCP.ASM on SWAT_CMD.INC.
+
+SWAT.ASM	Fill in additional SIGINT_xxx fields for temporary
+		  breakpoints.
+		Fill in additional BREAKPT_xxx fields for temporary
+		  breakpoints.
+
+SWAT_DBG.ASM	Define routine REFRESH_DEBUG to refresh BC and BD
+		  values.
+
+SWAT_INT.ASM	Widen argument passed to SEL2BASE from word to dword.
+
+SWAT_SIG.ASM	Define additional SIGINT_xxx fields and set them as
+		  appropriate.
+
+SWAT_VCP.ASM	Remove setting DS to AGROUP around call to SEL2BASE.
+		Widen argument to SEL2BASE from word to dword.
+		Define two additional @DBGSYM_xxx functions to refresh
+		  debug hooks and to set a temporary breakpoint.
+
+

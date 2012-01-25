@@ -1,0 +1,94 @@
+Shrink The Low DOS Memory Load Size
+
+As SWAT gets bigger and bigger, it spans an ever growing range of low
+DOS memory during its initialization.  Recently, when debugging in a
+DOS 7.0 (Chicago) context, there is even less low DOS memory available
+for device drivers as the transient CONFIG.SYS code is larger.
+
+This change attempts to address that problem, at least in part, by
+introducing the concept of overlays.  In particular, WGROUP in SWAT
+consists of all static data which can be loaded later on in the
+initialization phase, specifically during INIT_VIRT.
+
+The changes to effect this are as follows:
+
+* Move all of WGROUP to the end of 386SWAT.LOD so that the EXE header
+  can be reduced to a point below it and thus DOS won't load that
+  portion into memory during the 4B03h call.
+
+* If we're loaded as a device driver, relocate INIT_VIRT code to a
+  point just above RGROUP so there's plenty of low DOS memory in which
+  to load WGROUP.
+
+* Define new INT 67h debugging function to transfer data from low DOS
+  memory to extended memory.
+
+
+Note that the same technique can be applied to the video and DVGA
+tables when needed.
+
+
+The following modules are changed and why:
+
+386SWAT:
+
+MAKEFILE	 Call FIXOVL after LINK to delete the overlays from
+		   the file size in the EXE header.
+
+VCPI.INC	 Define new INT 67h function to transfer data.
+
+SWAT_LCL.INC	 Define bit to determine whether or not WINTAB is
+		   present in memory.
+
+SWAT_SEG.INC	 Move WGROUP segment to the end of the file.
+		 Change alignment type on WDATAZ to para so we can
+		   find it more easily in the file.
+
+SWAT_OVL.INC	 Define new include file to map the overlay structure.
+
+SWAT.ASM	 Move WDATAZ segment from here to INT1_WIN.ASM (and
+		   rename DTAIL to WTAIL).
+
+SWAT_DRV.ASM	 Relocate the INIT_VIRT code to lower memory (just
+		   above the relocated RGROUP) so we have plenty of
+		   low DOS memory to read in WGROUP.
+
+SWAT_INI.ASM	 Change alignment type on WDATAZ to para so we can
+		   find it more easily in the file.
+		 Rename DTAIL to WTAIL to better reflect its
+		   parentage.
+		 Define XFILPTR to hold local XGROUP copy of FILPTR.
+		 In INIT_VIRT, open the .LOD file, read in the EXE
+		   header, move the file pointer to the WINTAB
+		   overlay, read it into memory, and pass it up to
+		   SWAT in extended memory.
+		 In INIT_REAL, copy contents of FILPTR to XFILPTR for
+		   use within INIT_VIRT.
+		 In INIT_REAL, use the address following XGROUP as the
+		   start of dynamic data.
+		 In INIT_RERAL, count in the size of WINTAB as it's no
+		   longer part of initial data.
+
+SWAT_VCP.ASM	 Define handler for new transfer data function.
+
+
+INT1:
+
+MAKEFILE	 Move target files (.OBJ, .MAP, .ARF) to subdirectory
+		   RET.
+		 Define missing dependency in INT1_FNS.ASM on
+		   QMAX_FIL.INC.
+		 Define dependency in INT1_FNS.ASM on SWAT_LCL.INC.
+		 Define dependency in INT1_WIN.ASM on SWAT_OVL.INC.
+
+INT1_FNS.ASM	 Before using WINTAB, ensure it's present.
+
+INT1_WIN.ASM	 Define overlay structure in WDATAZ for WGROUP.
+
+
+FIXOVL:
+
+FIXOVL.ASM	 Define module to fix the EXE header for files which
+		   conform to the SWAT overlay structure.
+
+

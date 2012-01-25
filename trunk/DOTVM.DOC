@@ -1,0 +1,13 @@
+Fix .VMSTK and .VMRET Commands
+
+For some reason, the implementations of the .VMSTK and .VMRET commands
+didn't work, so now they do.  Moreover, .VMSTK is now called .VMCRS
+(for Client Register Struc).
+
+SWAT_CMD.ASM	    Fix bugs.
+
+SWAT_HTX.ASM	    Change documentation.
+
+386SWAT.DOC	    Change documentation.
+
+

@@ -1,0 +1,23 @@
+Toggle Default State of LOADHIGH
+
+When I changed SWAT to a USE32 code segment, it got bigger.  So big
+that it could blow low DOS memory (overwriting transient CONFIG.SYS
+processing) unless LOADHIGH is specified.  This change makes LOADHIGH
+the default as well as implements a disabling keyword, LOADLOW (a.k.a.
+LOADLO).
+
+The following modules are changed and why:
+
+386SWAT 	 Re-define old LOADHIGH keyword.
+		 Define new LOADLOW keyword.
+
+SWAT_ARG.ASM	 Define entry for new keyword.
+
+SWAT_FCN.ASM	 Note old keyword is now the default.
+		 Define action routine for new keyword.
+
+SWAT_INI.ASM	 Mark LOADHIGH as the default state.
+		 Change comments from not specifying LOADHIGH to
+		   specifying LOADLOW.
+
+

@@ -1,0 +1,44 @@
+Fix Bug When VCPI Debugging
+Miscellaneous VCPI Debugging Changes
+
+Another USE32 bug has been found and fixed.  When we are debugging on
+the other side of the VCPI wall and a HW interrupt occurs (which we
+don't handle), we pass it on to the next handler in sequence.  In the
+process, we push the caller's segment registers onto the stack as
+words, but pop them off using REGREST, thus as dwords (via POPD)
+because we're now USE32.
+
+At the same time, the determination of whether we need to re-install
+ourselves into the VCPI client's GDT and IDT has been improved by a
+check not just on the incoming GDT linear address, but also on whether
+or not the base address of our CODESEL is still there.	This also
+involves saving the linear address of the GDT and IDT when the
+debugging calls are made.  This way, if the VCPI client has copied the
+GDT to another linear address (along with our entries), we don't
+attempt to intrude into the GDT again.
+
+Also, when a client uses our debugging interface to install SWAT
+itself (rather than our intruding), we note that (by setting @VCP_EPM)
+to reduce the times we attempt to intrude.
+
+Finally, in our LCL_INT07 handler we need to push and pop EAX rather
+than AX because the following SMSW into AX actually writes into EAX
+because we're now in a USE32 code segment.
+
+SWAT_VCP.ASM	 Define initial invalid value for CODESEL.
+		 Invalidate CODESEL on debugger presence (DEF0) call.
+		 In LCL_INT67_INI (DEF2), save linear address of GDT
+		   for later use (in CHECK_EPM).
+		 In LCL_INT67_INI (DEF2), set @VCP_EPM for later use
+		   (in CHECK_EPM).
+		 In LCL_INT67_IDT (DEF3), save linear address of IDT
+		   for later use (in CHECK_EPM).
+		 In CHECK_EPM, if the GDT linear address has changed,
+		   check for our base address at the CODESEL entry in
+		   the GDT.  If still there, save new linear address.
+		 In LCL_INT07, push/pop EAX to preserve SMSW target.
+		 In TSS_INTCOM, push caller's return registers as
+		   dwords instead of words as they'll be popped via
+		   POPD.
+
+

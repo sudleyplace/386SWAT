@@ -1,0 +1,37 @@
+Allow Search Command Of PTEs
+
+When tracking down a bug in Win95, I found it useful to extend the
+search command to search through the PTEs for a specific value.  The
+new syntax is
+
+S  addr addr   # PTE
+S  addr L expr # PTE
+
+where PTE can be any expression.
+
+At the same time, I fixed a bug where a Page Fault during the display
+of the searched for data caused a crash.
+
+386SWAT.DOC	Document new syntax.
+
+386SWAT.GRM	Document new syntax.
+
+SWAT_MOD.INC	Define new bit for PTE searching.
+
+SWAT_HTX.ASM	Document new syntax.
+
+SWAT_OPR.ASM	When returning from a trapped Page Fault, ensure that
+		  ZF=1 in case the Page fault occurs on a REPNE
+		  operation.
+
+SWAT_SRC.ASM	Change default SRC?MODE and SRC?MASK to PM with full
+		  4GB range.
+		Define variables for searching PTEs.
+		Use PARSE_EXPR instead of PARSE_ATOM as appropriate
+		  for greater generality.
+		Document new syntax.
+		Defer offset vs. mask checks to later so as to avoid
+		  them for PTE searching.
+		Define actions for PTE searching.
+
+

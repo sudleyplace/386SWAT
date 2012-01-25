@@ -1,0 +1,16 @@
+Fix Rounding Bug In Initialization
+
+When we allocate the local stack, we round up its size without
+including the rounded portion in the uninitialized data.  This can
+cause us to fail much later (when we take our first interrupt) because
+the stack offset of our local stack is out of bounds for the stack
+selector.
+
+This is a problem only when loading SWAT directly (such as in QMT from
+RM) where we happen not to round up the data portion of SWAT to a
+paragraph boundary (MAX does this which is why we hadn't seen it
+before).
+
+This change affects SWAT_INI.ASM only.
+
+

@@ -1,0 +1,67 @@
+Handle Large Size SWAT With VCPI Clients
+
+If the resident portion of SWAT becomes too large (perhaps a large
+SYMSIZE or SAVESCREEN), then we might not be able to debug VCPI
+clients because our footprint exceeds the 4MB limit (one page
+directory) for VCPI.  If this happens, we should at least warn the
+user in case s/he intends to debug VCPI clients.
+
+SWAT_DRV.ASM	Warn user if too many PTEs used by SWAT for VCPI
+		  debugging.
+
+----------------------------------------------------------
+
+Fix Bug With Unused GDT Entry
+
+When SWAT loads via the 386MAX profile, it is passed its linear
+address when it is a VCPI client in the third of the three GDT entries
+allocated for load modules.  This is done because SWAT's PTEs are part
+of 386MAX's and get relocated by 386MAX when a VCPI client loads.
+
+When SWAT intrudes into a Memory Manager, we don't use the third GDT
+entry in the same way, and in some cases we might not even allocate a
+third GDT entry if we have found existing GDT entries for an all
+memory selector and one which maps CR3.  In this case (I encountered
+it when intruding into QEMM), we can mistakenly reference the third
+GDT entry.  This TWT fixes that.
+
+SWAT_DRV.INC	Define new bit.
+
+SWAT_DR2.ASM	In INTRUDE, mark as not using spare (third) GDT entry
+		  for VCPI linear address.
+
+SWAT_INI.ASM	In SETUP, check to see if the spare GDT entry is
+		  supposed to contain our VCPI linear address.
+
+------------------------------------------------------------------
+
+Check For Additional Autofault Errors For TSS Faults
+
+If a TSS fault occurs, there are some additional reasons for it which
+we now test for and report on, such as invalid selectors in the back
+link TSS when a return from a nested TSS occurs.
+
+At the same time, I included some additional fault error messages
+which occur when we're using TSSs ourselves (typically when we're
+debugging VCPI clients) which we we're checking for before.  This also
+involves moving that error message text from the data to the code
+segment to match where the Autofault code expects it.
+
+Also, I changed references to $PTE_0 to $PTE_G as that's its new
+definition, and checked for Page Fault problems related to that bit if
+PTE Global Extensions are enabled in CR4.
+
+SWAT_VCP.INC	Note that fault message text is now in code segment.
+
+SWAT_AFL.ASM	Define additional error messages for TSS Faults.
+		Include additional Autofault error messages for when
+		  we're debugging VCPI clients.
+		Check for additional TSS Fault cases.
+		Change references to $PTE_0 to $PTE_G and check for
+		  Page Fault problems related to that bit if PTE
+		  Global Extensions are enabled in CR4.
+
+SWAT_VCP.ASM	Move fault error message text from data to code
+		  segment.
+
+

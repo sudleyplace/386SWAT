@@ -1,0 +1,17 @@
+Swap Out Local IDT Entries Around TOGINT Call
+
+When SWAT is active, it hooks various interrupts for its own use such
+as the timer, keyboard, cascade, and mouse (the latter two in case
+there's a PS/2-style mouse which goes through the keyboard
+controller).
+
+When we toggle an interrupt via command line (TOGINT xx xx ...), or
+keystroke (Alt-F1, etc.), we need to swap out our local entries around
+the toggle so that we save the new entry in the proper (global)
+location.  In particular, this affects TOGINT 0A which is hooked
+locally.
+
+SWAT_TOG.ASM	In ACT_TOGINT, call REST_IRQS at the start and
+		  SAVE_IRQS at the beginning of the routine.
+
+

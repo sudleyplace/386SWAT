@@ -1,0 +1,9 @@
+Fix Bug In The Stack Width Change Calculation
+
+Previously, the calculation of when to change stack width (words or
+dwords) occurred only when the code selector changed.  In fact, it
+should be checked when the stack selector changes (duh!).
+
+SWAT.ASM	In SET_UNAVARS, change CS checking to SS checking.
+
+

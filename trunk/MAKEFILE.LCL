@@ -1,0 +1,8 @@
+#
+# Local MAKEFILE.INC
+#
+# Definitions here may override MAKEFILE.INC definitions.
+#
+
+#MAKE=nmake
+

@@ -1,0 +1,145 @@
+RBdualVGA v0.92 	 Copyright 1996 Ralf Brown
+
+[Note: this documentation is very preliminary, and the software is a
+       pre-release version]
+
+What is RBdualVGA?  It is a set of programs which permit the use of two
+color SuperVGA displays on a single PC (which is ordinarily not supported).
+
+
+Contents
+========
+
+	System Requirements
+        Files
+	Installation
+	Limitations
+	Known Problems
+	Source Code
+	Contact Information
+
+
+
+System Requirements
+===================
+
+     DOS 3.0 or higher
+     DESQview 2.26 or higher (if using DESQview)
+     TWO PCI-bus SuperVGA cards; they should be as similar as possible
+     1100 bytes memory for TSR
+
+
+Files
+=====
+
+Permission is granted to redistribute this package, provided that all files
+are distributed together, unmodified.
+
+Files which comprise RBdualVGA:
+          DUALVGA.DOC        this documentation
+	  INITDUAL.SYS	     initialize second monitor at boot time
+          DUALVGA.COM        screen blanker and switcher TSR
+          MONITOR2.COM       run specified program on second monitor
+	  DO-PIF.DVP	     sample DESQview .DVP
+	  DO-SCRIP.SCR	     sample DESQview Learn script
+
+
+Installation
+============
+
+  1. Add INITDUAL to your CONFIG.SYS by inserting a line like
+	   DEVICE=C:\INITDUAL.SYS
+     This DEVICE= line should be as early in CONFIG.SYS as possible, and
+     *must* precede any memory manager which remaps ROMs (i.e. QEMM with
+     Stealth enabled).	If you are using DOSMAX or QEMM's DOS-UP, the call
+     to INITDUAL should follow the DOSDATA.SYS line to avoid being
+     executed twice.
+
+     INITDUAL.EXE runs as a device driver, but does not remain resident, and
+     therefore does not consume any memory.
+
+     A sample CONFIG.SYS fragment:
+	      DEVICE=C:\QEMM\DOSDATA.SYS
+	      DEVICE=C:\BOOT\INITDUAL.SYS
+	      DEVICE=C:\QEMM\QEMM386.SYS RAM ST:M XBDA:H R:1 DMA=64 SRBP:N
+	      device=c:\qemm\dos-up.sys @c:\qemm\dos-up.dat
+	      DEVICE=C:\BOOT\XMSDISK.SYS 2560K
+	      ...
+	      SHELL=C:\4DOS\4DOS.COM C:\4DOS @C:\4DOS\4DOS.INI /P
+
+  2. Add DUALVGA to your AUTOEXEC.BAT by inserting a line like
+	    DUALVGA I 2 12 15 20
+     This command installs the screen blanker and switcher TSR and tells
+     it to blank the screen after two minutes of inactivity, then select
+     the DPMS power modes "standby", "suspend", and "off" after 12, 15,
+     and 20 minutes, respectively.  The monitor which is active at the
+     time DUALVGA is installed becomes the primary monitor, and the other
+     monitor becomes the secondary monitor.  Which monitor is active at
+     boot time depends on the order in which your system's BIOS scans
+     adapters; if the monitor which you wish to be the primary monitor
+     is not active at boot time, you will need to rearrange your video
+     cards.
+
+     Once DUALVGA has been installed, you may switch the active display
+     at any time by pressing RightShift-RightCtrl-F12.	You may also
+     cause an immediate switch into low-power mode by pressing
+     RightShift-RightCtrl-F11; on pressing this keystroke, both
+     screens are immediately blanked and then placed into VESA "off"
+     mode a second later; unblanking is disabled for three seconds to
+     give you time to release the keys.
+
+  3. Add MONITOR2 to batch files and DESQview .DVP files as appropriate.
+     Simply precede any line in a batch file which is to execute on the
+     secondary monitor with MONITOR2, i.e.
+	       MONITOR2 edit foo.bar
+     For a DESQview .DVP, set the program to execute to MONITOR2.COM, and
+     set the program arguments to the actual program and arguments you
+     wish to execute on the secondary monitor.	For example,
+	       Program...: c:\dv\monitor2.com
+	       Parameters: c:\4dos\4dos.com
+     You may also want to add the startup script from DO-SCRIP.SCR to the
+     Learn scripts for the DESQview .DVP is you normally run your screen
+     at other than 80x25, since running MONITOR2 tends to reset the screen
+     to that mode.
+
+
+Limitations
+===========
+
+   DUALVGA assumes that a single copy of the video BIOS can drive either
+   video board, so both boards need to use the same chipset, and otherwise
+   be as nearly identical as possible.
+
+
+Known Problems
+==============
+
+   MONITOR2 v0.9 is not able to intercept DESQview's cursor emulation in
+   graphical modes (30-line or 60-line text display on the Rearrange/Video
+   Options menu).  The result is occasional disruption of graphics or even
+   text fonts on the secondary monitor, and sporadic cursor remnants on
+   the primary monitor if the program on the secondary display is running
+   in the background.  Neither problem appears when the primary monitor
+   is in a true text mode, a graphical program is running full-screen
+   on the primary monitor, or the secondary display's program is suspended
+   (i.e. in the background when background execution is turned off).
+
+
+Source Code
+===========
+
+   Full source code will be included when v1.0 is released.
+
+
+Contact Information
+===================
+
+	       Ralf Brown
+	       813 Copeland Way Suite 26
+	       Pittsburgh, PA 15232-2217
+	       (valid until May 1, 1997)
+
+	       ralf@pobox.com
+
+  ---End of File---
+

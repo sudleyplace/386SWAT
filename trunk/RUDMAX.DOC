@@ -1,0 +1,79 @@
+Allow SWAT To Intrude Into 386MAX
+
+Thanks to the extraordinary top of low DOS requirements of Win95, this
+TWT is necessary -- it's the only way we can get SWAT to load with
+386MAX.
+
+The problem occurs because MAX uses a different first PDE when a VCPI
+client is active than when it is inactive.  Among other things, this
+means we need to put into place the outside VCPI PDE when we are
+active as a VCPI client ourselves.
+
+This involves
+
+* detecting whether or not MAX is present,
+* before entering PM via VCPI reading MAX's first PDE,
+* after entering PM via VCPI swapping MAX's first PDE with the outside
+  VCPI PDE, and restoring it upon exit.
+
+
+At the same time (and somewhat related), this TWT includes the
+following changes:
+
+* Define a new DExx function to return various selectors for resident
+  SWAT.  If these selectors (All Memory and CR3 linear) are present
+  when intruding into a PL0 context, they are re-used instead of
+  allocating new selectors.  Mostly this was of value for MMEXT, but
+  it's not a bad idea when debugging SWAT so as to minimize the number
+  of selectors SWAT needs.
+
+* Take advantage of the above selectors (if present) and use them
+  instead of allocating new ones.
+
+* If we can find a selector in the MM's GDT which maps CR3 as a linear
+  address, use it instead of allocating a new one.  This is done in
+  the new routine FIND_MMCR3.
+
+* Delete RUD_VCPI selector as we don't need or use it.
+
+* Move the code which searches for available GDT entries to a
+  subroutine (FIND_GDTE).
+
+* Document this (as well as other changes which I forgot about) in
+  386SWAT.DOC.
+
+
+The following files are changed and why:
+
+386SWAT.DOC	 Document changes.
+
+VCPI.INC	 Define new function and subfunction to get SWAT
+		   selectors.
+
+MAKEFILE	 Define entry for and dependencies of new module.
+		 Note dependency of SWAT_DR2.ASM on SWAT_VCP.INC.
+		 Use $(MOPT) instead of $(AFLAGS) as we define the
+		   former locally, not the latter.
+
+SWAT_DR2.ASM	 Delete reference to RUD_VCPI as we don't need/use it.
+		 If 386MAX present, restore the first PDE from the
+		   VCPI inactive context.
+		 If there's a previous CR3-linear selector (either
+		   from a preceding SWAT or by finding it in the MM's
+		   GDT), use it instead of allocating a new selector.
+		 Move the code which searches for available GDT
+		   entries to a subroutine.
+		 If 386MAX present, restore the original first PDE.
+		 Define routine to find CR3-linear in the MM's GDT.
+		 In SET_RUDGDT, clear PL bits of incoming selector in
+		   case set.
+
+SWAT_DRV.ASM	 Define save area for preceding SWAT selectors.
+		 Set flag for 386MAX if present.
+		 If 386MAX present, call initialization routine.
+		 Get preceding SWAT selectors if present.
+
+SWAT_MAX.ASM	 Define new module for 386MAX-specific functions.
+		 Define routine to read MAX's first PDE.
+
+

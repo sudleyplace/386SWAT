@@ -1,0 +1,35 @@
+Implement Show PTE Command
+
+Strolling through a large set of Page Tables such as under Windows can
+be tiresome, hence there's a new command.  The SPTE command works
+exactly likely the PTE command (displaying the Linear address/PDE/PTE
+on the command line) as well as displaying the corresponding PTE (as
+if you had pressed F5 and scrolled down to the appropriate entry).
+
+At the same time, I allowed Ctrl-Up and -Down to scroll through the
+PDEs/PTEs one entry at a time (Up and Down scroll through one line at
+a time).
+
+386SWAT.DOC	Document previously omitted keystrokes.
+		Document new command.
+		Document previously omitted dot keywords.
+
+386SWAT.GRM	Document new command.
+		Document previously omitted dot keywords.
+
+MAKEFILE	Note dependency of SWAT_PTE.ASM on SWAT_COM.INC.
+
+SWAT.ASM	Allow Ctrl-Up and -Down on display of PDEs and PTEs.
+		Ensure PTE_START/PDE_START not negative by more than a
+		  line's worth.
+
+SWAT_CMD.ASM	Include SPTE command in parse table.
+
+SWAT_DTE.ASM	In DISP_PTE and DISP_PDE allow display on single
+		  PDE/PTE boundary.
+
+SWAT_HTX.ASM	Document new command.
+
+SWAT_PTE.ASM	Define routine for SPTE command.
+
+

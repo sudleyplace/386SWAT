@@ -1,0 +1,13 @@
+Fix Bug When Swapping INTs
+
+When we swap IDT entries (say when displaying the IDT via F4) so we
+see or act upon the global IDT entries, we don't swap INTs 74h and
+76h.  Now we do.
+
+SWAT_DTE.ASM	 Save and restore INTs 74h and 76h in SWAP_OLDINTS
+		   and REST_OLDINTS.
+
+SWAT_KEY.ASM	 When checking on other references to these
+		   interrupts, I made minor changes.
+
+

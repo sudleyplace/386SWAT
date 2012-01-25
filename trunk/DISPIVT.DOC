@@ -1,0 +1,41 @@
+Display Real Mode Interrupt Vector Table
+
+As it's a very common data structure to view, the keystroke Shift-F5
+now displays the RM IVT.
+
+SWAT Changes
+------------
+MAKEFILE	Note dependency of SWAT_DTE.ASM on SWAT_LC2.INC.
+
+386SWAT.DOC	Document s-F5 (as well as s-F4).
+		Change Operators to functions.
+
+SWAT_COM.INC	Define equate for use when displaying the RM IVT.
+
+MAXDEV.INC	Define equates for WKD (we'll need it in a later TWT)
+		  and Win386 services.
+
+SWAT.ASM	Define IVT data structures and actions for the new
+		  keystroke.
+
+SWAT_CMD.ASM	Define error message in case we're running under
+		  Windows and Win386 services aren't available.
+
+SWAT_DTE.ASM	Define routines to display the RM IVT.
+
+SWAT_HTX.ASM	Document new keystroke.
+		Document old keystrokes.
+		Document old dot commands.
+
+SWAT VxD Changes
+----------------
+SWAT_DBG.INC	Define equates for WKD (we'll need it in a later TWT)
+		  and Win386 services.
+
+SWATVER.ASM	Bump the version #
+
+SWATVXD.ASM	In SETUP_SWAT, check for and set bits for Win386
+		  services.
+		In System Critical Exit, clear Win386 services bit.
+
+

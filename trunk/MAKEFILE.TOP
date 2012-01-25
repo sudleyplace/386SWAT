@@ -1,0 +1,55 @@
+#' $Header:   P:/PVCS/386SWAT/MAKEFILE.TOV   1.4   30 Jul 1993 08:38:40   HENRY  $
+#
+# Top-level makefile for 386SWAT
+#
+# This makefile invokes the build makefiles for 386SWAT, MAPSSF,
+# and SWATRUN, copies the resulting binaries to $(REL)swat\$(VER),
+# and copies the appropriate disk makefile to $(REL)swat\$(VER).
+#
+
+!IF "$(REL)" == ""
+!ERROR REL must be specified in the environment (set REL=x:\apps\release\)
+!ENDIF
+
+!INCLUDE $(REL)makefile.inc
+
+# SW is defined for SWATVXD, but we'll use the environment variable.
+
+TARGET=$(REL)swat\$(VER)\ # Target directory for release files
+!IF "$(MAKEFLAGS)" != "Z             "
+MFLAGS=-$(MAKEFLAGS) /nologo
+!ELSE
+MFLAGS=/nologo
+!ENDIF
+
+BINDIR=$(TARGET)	# Override destination for included makefiles
+SYSDIR=$(TARGET)	# Override .SYS and .LOD destination
+
+ALL:
+	$(T)vdir -v $(TARGET) $(M) $(T)
+	$(COMSPEC) /c $(S)
+	cd $(S).
+	$(MAKE) $(MFLAGS) SYSDIR=$(TARGET)
+	$(COMSPEC) /c $(M)
+	cd $(M).
+	$(MAKE) $(MFLAGS) BINDIR=$(TARGET)
+	$(COMSPEC) /c $(SWATVXD)
+	cd $(SWATVXD).
+	$(MAKE) $(MFLAGS) BINDIR=$(TARGET)
+	$(COMSPEC) /c $(S)
+	cd $(S).
+	$(T)get -u -n swatsym.ext 386swat.doc 386swat.grm 386swat
+	$(T)xc /n/a swatsym.ext  $(TARGET)*.doc
+	$(T)xc /n/a 386swat.doc  $(TARGET)
+	$(T)xc /n/a 386swat	 $(TARGET)
+	$(T)xc /n/a 386swat.grm  $(TARGET)
+	$(T)xc /n/a swatdpmi.*	 $(TARGET)
+	$(T)xc /n/a hello_pm.*	 $(TARGET)
+	$(T)xc /n/a dpmitsr.*	 $(TARGET)
+	$(T)get -y -XO$(TARGET)makefile.dsk makefile.dsk
+	type <<$(TARGET)makedisk.bat
+nmake /f $(TARGET)makefile.dsk VER=$(VER) %1 %2 %3 %4 %5 %6
+<<KEEP
+	@echo To build the 386SWAT ZIP files, execute $(TARGET)makedisk
+
+

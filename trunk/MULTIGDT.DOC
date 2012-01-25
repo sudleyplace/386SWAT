@@ -1,0 +1,42 @@
+Handle Multiple GDTs When VCPI Debugging
+
+While tracking down a bug in the CDROM game The 11th Hour, I found
+that SWAT needed to handle intruding into multiple GDTs as they appear
+to use up to three different ones, alternating between two quite
+frequently.  We now support up to eight alternating GDTs.
+
+At the same time, I fixed a bug where we were not correctly
+recognizing whether or not we had already intruded into a GDT.	This
+had the effect of filling up the GDT with SWAT's TSS selectors which
+crashed the system in quick order.
+
+Finally, while running VCPITEST to see if I had broken anything in the
+process, I decided to remove the check for VMSINT=ON from the VCPI
+call DE01 (Get PM Interface) in order to allow Intrude SWAT to work
+with a cooperating VCPI client without having to set that variable.
+This means that Intrude SWAT will insert its PTEs into every such
+call, but that should be harmless.  The VMSINT=ON setting still
+controls whether or not SWAT intrudes into the VCPI call DE0C (Switch
+From VM To PM).
+
+Also, I changed all references to EPM_STR (defined in QMAX_VCP.INC) to
+VCPEPM_STR (defined in VCPI.INC), and deleted QMAX_VCP.INC from
+SWAT_VCP.ASM and MAKEFILE.  What with the bugs in MASM 5.10b, the
+fewer includes we use the better.
+
+MAKEFILE	Note lack of dependency of SWAT_VCP.ASM on
+		  QMAX_VCP.INC.
+
+SWAT_VCP.ASM	Define equate for # OLDVCP_GDT/CODESEL entries we
+		  support.
+		In DE01 call, delete test for VMSINT=ON.
+		Wherever OLDVCP_GDT or CODESEL is referenced, use
+		  INDVCP_GDT as the index.
+		Change all references to EPM_STR to VCP_EPM_STR.
+		In TRAP_EPM, fix calculation of selector and TSS base
+		  for comparison (we used to use the relative selector
+		  instead of the absolute selector, and then compared
+		  the CS|EIP TSS entry point instead of the TSS
+		  itself).
+
+

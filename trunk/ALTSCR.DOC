@@ -1,0 +1,13 @@
+ALTSCR.MDA						1-29-92
+
+The altscr profile option sets the ARG_ALTSCR bit if the user wants
+to use the alternate screen.  Previously, we checked the bit during
+our initialization and during SWATTER.	If the main video is CO80,
+this caused SWAT to start on the mono screen, and switch to the mono
+screen upon each entry into SWATTER.
+The new response to this falg is to have the initialization code
+check this bit, but not check this bit upon each entry into SWATTER.
+This allows the user to switch to the primary monitor, (via Alt-F7)
+and not have SWAT automatically switch bacck to the mono monitor.
+
+

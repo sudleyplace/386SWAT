@@ -1,0 +1,159 @@
+Implement VCPI-aware SWAT
+
+In order to allow SWAT to be used in the context of other memory
+managers so as to debug programs such as RAMexam, this TWT enables
+SWAT to use VCPI services to enter/exit PM.
+
+This change allows SWAT to work when installed after a VCPI host
+and/or XMS manager is already present in the system.  If there's
+already a VCPI host, we use it to enter/exit PM.  If there's already
+an XMS manager, we use to allocate memory for both SWAT's code/data as
+well as any symbols we might be loading via LOADSYM=.  In either
+context, we also allocate in extended memory following SWAT's
+code/data room for the PM IDT, stack, and TSS.
+
+If we're using VCPI services, we setup a CR3 table as well as the
+requisite number of PDIRs following it in low memory.  These table are
+then copied to extended memory during the initialization process.
+There are two separate entries from VM to PM via VCPI during
+initialization.
+
+If there is an XMS manager present, all memory allocations are done
+through it.  Otherwise, we allocate VCPI memory as needed from PM.
+
+The first time we enter PM via VCPI, we allocate memory (XMS or VCPI)
+and use it to copy the page tables we setup in low DOS into extended
+memory.  If there's no XMS manager present, we allocate memory via
+VCPI from PM a page at a time as needed.  If there is an XMS manager,
+we already allocated XMS memory before entering PM and we pick off 4KB
+pages as needed.  Finally, we copy SWAT's initialized code/data to
+extended memory along with the IDT and TSS.
+
+The second time we enter PM via VCPI, with all the page tables
+properly initialized, we call the PM initialization code of SWAT in PM
+(at INIT_PROT).
+
+All major memory managers are supported even if they have the
+equivalent of NOEMS in effect.
+
+
+Other miscellaneous changes are as follows:
+
+* In LOADSYM, if there's an XMS manager present, we use it to
+  allocate memory to hold the symbol data until SWAT gets into PM.
+
+* In LOADSYM, ensure that the size of the incoming symbols is at least
+  as big as SYMSIZE.  This way, we might not need a separate SYMSIZE
+  command in the profile, but at least we shouldn't truncate the file
+  unnecessarily.  Similarly, in FCN_SYMSIZE, we now use the larger of
+  the command line value and the locally stored value.	However, in
+  case someone specifically wants to limit the symbol size to the
+  command line value (and thus truncate the file), there is a new
+  switch (/XL) to LOADSYM which does not use the larger of the current
+  value and the symbol size as per the incoming file.
+
+* Define a new debugging function for SWAT which copies SWAT's PTEs to
+  a specified address.	Because we can't be sure that SWAT's PTEs are
+  contiguous (and even if we could, we don't have a mechanism to get
+  its starting physical address), this new function is useful to setup
+  a Page Table to cover SWAT's memory.  This feature also needs an
+  extension to the LIN2PPTE mechanism in case the PTEs to be copied
+  cross a 4MB boundary.  Also, becuase we need to detect whether or
+  not this feature is present without actually executing it, I have
+  changed the debugger version # returned by the debugger presence
+  detection code from 0.01 to 4.00 (using the same version # as is
+  displayed on the copyright line).
+
+* Because we now allocate a separate IDT, Stack, and TSS for VCPI or
+  XMS contexts, we no longer need to allocate room for a TSS in
+  DGROUP, thus we can delete code which calculates PDRVTSS.
+
+The following modules are changed and why:
+
+XMS.INC 	 Define a common structure for XMS Block Moves.
+
+SWAT_DRV.INC	 Define new CR3 selector in the GDT.
+		 Move equates for DEV_FLAG from SWAT_DRV.ASM to here.
+
+SWAT_DRV.ASM	 Define register save variables.
+		 Define VCPI Enter PM variables.
+		 Define PE_MASK used in CHECK_VMTF.
+		 Move DEV_FLAG equates from here to SWAT_DRV.INC.
+		 Move variables around for better alignment.
+		 Define local stack used for VCPI mode switch as we
+		   need one in the first megabyte and we don't have a
+		   selector setup for whatever stack is in effect when
+		   we gain control.
+		 Before LIDTDing, check for NORMLIDT (always set if we
+		   entered PM via VCPI).
+		 In RMDEV15, skip out if NORMLIDT in effect (no need
+		   to respecify IDTR).
+		 In RMDEV67, use a separate exit point if EMS (not
+		   VCPI) function so we can debug them without
+		   swallowing our tail with VCPI functions.
+		 In EPM, split cases if using VCPI services.
+		 In ERM, split cases if using VCPI services.
+		 In CHECK_VMTF, use PE_MASK instead of constant so we
+		   can set it to zero (to always intercept) if we're
+		   using VCPI services.
+		 In RMDEV09, skip out if NORMLIDT in effect (no need
+		   to respecify IDTR).
+		 Delete references to PDRVTSS.
+		 Define routine CHECK_XMS to see if there's an XMS
+		   handler.
+		 Define routine CHECK_VCPI to see if there's a VCPI
+		   host, and if present, set NORMLIDT.
+		 Define routine INIT_VCPI to initialize VCPI data and
+		   enter/exit PM for further initialization.
+		 Define routine ALLOC_XMS to allocate XMS memory (used
+		   in SWAT_FCN to allocate memory for symbol data,
+		   too).
+		 In CHECK_EXT, skip out if we're using VCPI services.
+		 In LOADUP, split cases if we're using an XMS manager
+		   w/o VCPI services.
+		 Define routine INIT_GDT to initialize the GDT for all
+		   cases.
+		 In PROT_INIT, skip out if we're using VCPI services.
+
+SWAT_FCN.ASM	 In FCN_NORMLIDT, set bit in DEV_FLAG for later
+		   testing when we don't have addressibility to
+		   AR2_FLAG.
+		 In FCN_LOADSYM, implement /XL switch to not use the
+		   larger of the file size and the current SYMSIZE.
+		 In FCN_LOADSYM, if there's an XMS manager present,
+		   use it to allocate extended memory and copy the
+		   symbol data via XMS Block Move.
+		 In FCN_LOADSYM, unless /XL is specified, use the
+		   larger of the file size and SYMSIZE.
+		 In FCN_SYMSIZE, use the larger of the input value and
+		   SYMSIZE.
+
+SWAT_FVM.ASM	 Expand stack for LIN2PPTE.
+
+SWAT_INI.ASM	 Delete calculation of PDRVTSS.
+
+SWAT_PTE.ASM	 Expand stack for LIN2PPTE.
+
+SWAT_VCP.ASM	 Return as the version # for DEF0 the same as is
+		   displayed on the copyright line.
+		 Delete comment which follows FORW_STR as it doesn't
+		   apply here.
+		 In our code to handle DEF4 (new CR3 and linear
+		   address), ensure that the offset in the 4KB page of
+		   our linear address doesn't change.
+		 Define new function DEF9 to copy SWAT's PTes to low
+		   memory.
+		 In LIN2PPTE and LIN2PPTEZ and all calls to the former
+		   subroutine, save an additional PTE so we can handle
+		   PTEs which span a 4MB boundary.
+		 Use GETLBASE (local LDT) instead of GETBASE (global
+		   LDT) when getting the base address of our CS and DS
+		   as they could just as well as be in a local LDT but
+		   never in a global LDT.
+		 Expand stack for LIN2PPTE.
+
+VERSBETA.ASM	 Start beta version numbers at zero.
+
+VERSION.ASM	 Increment major version number to 4.00.
+
+

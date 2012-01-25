@@ -1,0 +1,28 @@
+Allow trace over task switch.
+
+When we trace through an INT in PM or far JMP/CALL in PM which
+performs a task switch, we must handle it specially in order to retain
+control (and stop at the next instruction).  The several cases that
+can occur as are follows:
+
+1.  INT in PM via Task Gate:  set the debug bit in the TSS.
+
+2.  INT in PM via Trap/Interrupt Gate:	put INT 3 at start of
+    execution in the interrupt handler.
+
+3.  Trace over ARPL in VM:  handle as case 1 or 2 above with INT 06h.
+
+4.  Far JMP/CALL via TSS or Task gate:	handle as case 1 above.
+
+In each case, if we set the debug bit in the TSS, be sure to clear the
+trap flag in the caller's flags so that the EFL saved into the current
+TSS at the time of the task switch has TF clear.  That way, we won't
+automatically trace the second instruction upon returning to the
+current TSS.
+
+Another small feature is added in this TWT:  the install/restore Page
+Fault handler now saves and restores the original value of CR2 (the
+Page Fault linear address).  That way, we don't change that register
+if we're asked to display something which generates a Page Fault.
+
+

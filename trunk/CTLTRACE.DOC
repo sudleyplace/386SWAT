@@ -1,0 +1,24 @@
+Implement Commands to Trace From VM To PM
+
+Based upon a suggestion from a beta tester, two new keyboard commands
+are implemented (Ctrl-Padplus and Ctl-F11) which behave like the
+non-Ctl forms except when the current instruction is an INT xx or INTO
+in VM.	In the latter case, the effect is to trace from VM to PM,
+unless the CPU doesn't ordinarily go there.  This can happen on a CPU
+for which VME is in effect and for which this interrupt is not trapped
+in PM.	In this case, we trace the INT into VM just as the non-Ctl
+form would do.
+
+The following modules are changed and why:
+
+386SWAT.DOC	 Document new keyboard commands.
+
+SWAT_LC4.INC	 Define new flag for Ctl-Tracing.
+
+SWAT.ASM	 Define actions for new commands.
+		 Minor cleanup at SWATTER_TRACEARPL and
+		   SWATTER_TRACEINTFF.
+
+SWAT_HTX.ASM	 Document new keyboard commands.
+
+

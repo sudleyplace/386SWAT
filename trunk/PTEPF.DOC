@@ -1,0 +1,23 @@
+Avoid Page Fault on LIN2PPTE Accesses
+
+The LIN2PPTE subroutine translates a linear address to a pointer to
+the corresponding PTE according to a specific CR3.  Sometimes we need
+to read more than one PTE from the Page Directory which doesn't always
+work (because the subroutine doesn't know how many PTEs to map in the
+case we're not mapping relative to the current CR3).  A solution to
+this is to tell the subroutine how many PTEs are to be mapped in.
+
+This change also applies to LIN2PPDIR and the cleanup routine
+LIN2PPTEZ.
+
+SWAT_AFL.ASM	 Use new interface.
+
+SWAT_FVM.ASM	 Use new interface.
+
+SWAT_PTE.ASM	 Use new interface.
+
+SWAT_VCP.ASM	 Use new interface.
+		 Redefine LIN2PPTE, LIN2PPDIR, and LIN2PPTEZ to
+		   implement new interface.
+
+

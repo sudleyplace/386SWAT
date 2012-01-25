@@ -1,0 +1,62 @@
+Miscellaneous P5 Related Changes
+
+Some instructions new with the P5 use new opcodes as well as some need
+special handling.  In particular, the following changes are included
+in this TWT:
+
+* Although this isn't specifically P5-related, it turns out that SLDT,
+  STR, and SMSW are sensitive to the Operand Size Prefix (OSP).  The
+  documentation for these instructions says otherwise, but the true
+  arbiter is the CPU.  If an OSP is present with SLDT and STR, those
+  instructions zero-extend the value being stored to 32-bits and store
+  into the (now) 32-bit target.  If an OSP is present with SMSW, the
+  entire contents of CR0 are stored into the (now) 32-bit target.
+  This means that we should decode the target of these instructions as
+  a dword memory or R32 if OSP is present.  The technique used is to
+  define a secondary OSP flag which is set in the GRP6-7 processing
+  code if the 32-bit target is to be used.  The pseudo-code in
+  INT1_ESC.ASM tests for the secondary OSP flag instead of the primary
+  OSP flag.  This change affects INT1_FNS.INC, INT1_TAB.INC,
+  INT1_ESC.ASM, INT1_FNS.ASM, and INT1_GRP.ASM.
+
+* Previously, we disassembled the instructions whose opcodes are 0F 30
+  and 0F 32 as SLC0 and SLC1 because we had encountered them on an IBM
+  386 SLC CPU, but we didn't really know what they did.  After reading
+  the P5 spec, I found that they are opcodes to read and write
+  Model-Specific Registers.  Consequently, the disassembly of these
+  instructions is now RDMSR and WRMSR.	This change affects
+  INT1_ESC.ASM and INT1_TXT.ASM.
+
+* Other P5-specific instructions such as RDTSC, CPUID, and CMPXCHG8B
+  are also disassembled as appropriate.  Note that we need to define
+  action RM64 for CMPXCHG8B as its destination is a qword.  This
+  change affects INT1_TAB.INC, INT1_ESC.ASM, INT1_FNS.ASM, and
+  INT1_TXT.ASM.
+
+* The opcode 0F FF signals an Invalid Opcode.  It also is used by
+  Windows to switch control from PM PL3 to PL0.  Consequently, we
+  disassemble it as WIN06 just so it can be recognized more easily
+  when it occurs.  This change affects INT1_ESC.ASM and INT1_TXT.ASM.
+
+The following modules are changed and why:
+
+INT1_FNS.INC	 Define new flag for secondary OSPs.
+
+INT1_TAB.INC	 Define macros for IFOSP2, ELSEOSP2, and RM64.
+
+INT1_ESC.ASM	 Make GRP6 and GRP7 instructions sensitive to
+		   secondary OSP flag.
+		 Define disassembly action for WRMSR, RDTSC, RDMSR,
+		   CPUID, CMPXCHG8B, and WIN06.
+
+INT1_FNS.ASM	 Define actions for IFOSP2, ELSEOSP2, and RM64.
+
+INT1_GRP.ASM	 If primary OSP is present and the GRP6 opcode is SLDT
+		    or STR, set secondary OSP flag.
+		 If primary OSP is present and the GRP7 opcode is
+		    SMSW, set secondary OSP flag.
+
+INT1_TXT.ASM	 Define text macro for new and/or changed
+		   instructions.
+
+

@@ -1,0 +1,16 @@
+Make Device Driver SWAT Sensitive to PCI Extended Memory Function
+
+The recent change to 386MAX to support the PCI Extended Memory
+function call needs to be copied to device SWAT not only so it can
+detect how much extended memory is in the system, but also so it can
+lie to any subsequent program requesting the extended memory size
+through that interface.
+
+SWAT_DRV.ASM	Widen DEVEXTSIZE from word to dword.
+		In RMDEV15, return min(DEVEXTSIZE.ELO,0FFFFh) from
+		  function 88h, and return DEVEXTSIZE from function
+		  0DA88h.
+		In CHECK_EXT, see if the PCI Extended Memory Size
+		  function is supported.
+
+

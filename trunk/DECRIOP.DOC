@@ -1,0 +1,16 @@
+DECRTSS.MDA
+
+386SWAT modification, June 24, 1992.
+
+* Don't allow the IO Permission Bit Map to scroll out of range
+
+While displaying a TSS, Ctrl-Up and Ctrl-Down will scroll through the
+IO Permission Bit Map.
+
+I have placed an edge condition on Ctrl-Up, so we will not wrap when
+scrolling past line 0.
+Also, when the user scrolls to the bottom, the last line is saved, so
+that the user will not roll-over back to line 0.
+
+
+

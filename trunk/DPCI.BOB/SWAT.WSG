@@ -1,0 +1,22 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;;	Windows Symbol Group file format
+;;
+;;	This file may contain comments, like this line, by preceding each
+;;	line with a semicolon (;).  Comments may also appear at the end of
+;;	each line, since all input after the group name is ignored.
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; group mode	sel	group name
+
+  1000	P	6B8	PGROUP		; SWAT code
+  1001	P	6C0	DGROUP		; SWAT data
+  1002	P	0	WGROUP		; Windows segment
+
+; V86 mode segments
+  1010	V	*	RGROUP		; Device SWAT resident code
+  1010	V	*	NGROUP		; Non-resident code/data
+  1010	V	*	XGROUP		; More non-resident code/data
+
+

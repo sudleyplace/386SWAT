@@ -1,0 +1,6 @@
+This change adds VMMcalls new to Windows 3.10
+
+INT1_WIN.ASM is affected.
+
+WRL
+

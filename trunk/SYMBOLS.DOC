@@ -1,0 +1,106 @@
+Implement symbols in SWAT through a VCPI call.
+
+This TWT consists of the following changes:
+
+* Implement a new VCPI call with several subfunctions.
+* Implement SYMSIZE= command to set size of symbol table.
+* Allow GETBASE and friends to be called from VCPI without @BPBACK
+  structure having been setup.
+* Define and initialize SWATDATA (linear address of DGROUP) for use
+  in symbol table lookup.
+* Use GETLBASE in SWAT_INI in case we're using an LDT selector.
+* Ensure FORW_LDT is saved in SWAT.ASM and SWAT_VCP.ASM -- use it in
+  SWAT_MSC.ASM
+* Define Ctrl-F6 to display the symbol table and allow forward and
+  backward scrolling.
+* Create a new module (SWAT_XLT.ASM) to contain the translate table
+  for character types.
+
+The following modules are changed and why:
+
+MAKEFILE	 Define entries for SWAT_SYM.ASM and SWAT_XLT.ASM as
+		 well as SWAT_SYM.INC dependencies.
+		 Shorten LINK lines so they don't overflow screen
+		 lines.
+		 Change argument to TS to reference SWAT.LOD instead
+		 of 386SWAT.LOD as the latter hasn't been created as
+		 yet.
+		 Move SWAT.LOD and SWAT.PSS to 386SWAT.*.
+		 Append /I$(I) to ALLINC list to include INCDIR files.
+		 Remove $(@B) in .OBJ reference to reduce line length.
+
+SWAT.ASM	 Added support for Ctrl-F6.  Added processing of up,
+		 down, PgUp & PgDn while displaying symbol table.
+		 Delete unused instructions in scrolling section which
+		 were left over from a previous mechanism.
+		 Save LDTR into FORW_LDT for use with GETARWBASE.
+
+SWAT_ARG.ASM	 Define SYMSIZE keyword.
+
+SWAT_CMD.ASM	 Define CMD_TOKL (length of token in CMD_TOKN) for use
+		 here as well as argument to LCL_SYMSRCH.
+		 Define SYMBERR error message in case translation
+		 finds no symbols to match.
+		 Delete CHARXLAT and move to SWAT_XLT.ASM.
+		 Define TS command to translate symbols.
+		 Use CMD_TOKL in various places.
+		 Change GET_TOKN to check for symbols instead of just
+		 alphanumerics.
+		 Check for symbols in PARSE_EA.
+		 Delete IZITALPHANUM.
+
+SWAT_FCN.ASM	 Define FCN_SYMSIZE.
+
+SWAT_HLP.ASM	 Added Ctrl-F6 to help screen.
+
+SWAT_INI.ASM	 Add room for symbol table into uninitialized data.
+		 Define SWATDATA variable (linear address of DGROUP)
+		 needed by call to LCL_SYMSRCH in SWAT_CMD.ASM.
+		 Change calls to GETBASE to GETLBASE in case the
+		 selectors passed in the local LDT.
+
+SWAT_MSC.ASM	 Change GETARWBASE to use LDT value from FORW_LDT so
+		 we can call it from VCPI functions.
+
+SWAT_SYM.ASM	 The bulk of the changes ar here:
+		 The four subfunctions are handled by SYMAPPND,
+		 SYMSRCH, SYMTRANS, and SYMFLUSH.  LCL_SYMSRCH is
+		 broken out as a subroutine to SYMSRCH so it can be
+		 called from PARSE_EA in SWAT_CMD.ASM when searching
+		 for a symbol name.
+		 DISP_SYMTAB (invoked by Ctrl-F6) displays a portion
+		 of the symbol table.
+		 CMD_TRANSYM executes the translate symbols (TS)
+		 command.
+
+SWAT_VCP.ASM	 Handle new VCPI debugger call DEF6.
+		 Allow all VCPI debugger calls to be made from PM.
+		 Re-order VCPI debugger routines by subfunction
+		 number.
+
+SWAT_XLT.ASM	 Define CHARXLAT variable and routines which inquire
+		 of it.
+
+SWAT_COM.INC	 Added state equate for displaying symbol table.
+
+SWAT_SYM.INC	 Define symbol table structure SYM_STR for each entry.
+		 Note that the flag record are duplicated in MAPSSF.H
+		 and must be the same.
+		 Define symbol table translation structure.
+
+VCPI.INC	 Define new VCPI debugger call for symbol table
+		 management as well as its associated subfunctions.
+
+386SWAT 	 Include new profile option SYMSIZE=nnnnn.
+
+386SWAT.DOC	 Document new profile option SYMSIZE=nnnnn.
+
+386SWAT.GRM	 Indicate symbol as valid effective address.
+
+PVCS.LST	 Add entries for SWAT_SYM.ASV, SWAT_COM.INV, and
+		 SWAT_XLT.ASV.
+		 Alphabetize the list by extension and file name.
+
+SYMBOLS.TXT	 Document the DEF6 VCPI call.
+
+

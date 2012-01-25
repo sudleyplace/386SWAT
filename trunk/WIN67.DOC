@@ -1,0 +1,32 @@
+
+P:\TWT\SWAT\WIN67.WRL				10 June 1992
+
+The changes in this TWT are intended to make 386SWAT more useful within
+Windows.  Less whitespace is used when disassembling the WIN386 INT 20h
+dynalink comments.  This allows more significance in the service name.
+VxD services new to Windows 3.1 have been added.  WIN386 does not support
+INT 67h calls from ring-0.  Therefore, the SWATVXD must use a FAR CALL scheme
+to access the symbol services within 386SWAT.LOD.  The SWATINFO structure
+has a new field containing the offset to SWAT's LCL_INT67 procedure.
+This field is filled in by the INT 67h AX=DEF1h handler in SWAT_VCP.ASM.
+For this to work, changes are required in SWATVXD.  These have been in place
+for months.
+
+===============================================================================
+
+What's changed...
+
+SWAT_INF.INC		Bump the SWATINFO structure version # to 3.
+			Correct a typo in a comment.
+			Add the SWTINF_INT67 field to hold the offset of
+			  386SWAT's LCL_INT67 procedure.
+
+SWAT_VCP.ASM		Fill in SWTINF_INT67 with the offset of 386SWAT's
+			  LCL_INT67 procedure during processing of the DEF1
+			  function in INT 67h.
+
+INT1\INT1_WIN.ASM	Reduce the amount of whitespace used in the comments
+			  added to WIN386 INT 20h dynalink instructions.
+			Add VxD services new to Windows 3.1.
+
+

@@ -1,0 +1,9 @@
+Fix Bug When Displaying Symbol Names
+
+When we display symbol names at the top of a data screen, we're off by
+one in our calculations which can cause the name to fold to the next
+line.
+
+SWAT_MEM.ASM	Widen the static field DSYMBOL_NAME by one character.
+
+

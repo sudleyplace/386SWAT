@@ -1,0 +1,59 @@
+
+	    ______             ____  ______     _____  ______ 
+	   |  ____|           |  _ \|  ____|   / / _ \|  ____|
+	   | |__ _ __ ___  ___| |_) | |__     / / |_| | |__ 
+	   |  __| '__/ _ \/ _ \  _ <|  __|   / /|  _  |  __|
+	   | |  | | |  __/  __/ |_) | |____ / / | | | | |
+	   |_|  |_|  \___|\___|____/|______/_/  |_| |_|_|
+
+
+		    Avance Logic driver notes
+
+
+Notes:
+
+    This is based upon the stub driver implementation, with 
+    ALG-specific code added bit by bit.
+
+    Information on the Avance Logic range of cards is taken 
+    from the VGADOC package.
+
+    As far as I know, this driver should support the following 
+    cards:
+
+	ALG-2101, ALG-2201, ALG-2228, ALG-2301, ALG-2302
+
+    Some of these cards can provide hardware acceleration on
+    blits and lines, and a hardware cursor.  Support for these
+    features is not yet implemented into this driver.
+
+
+Special note for ALG-2101 and ALG-2302 users:
+
+    I'm not quite sure how to tell the difference between
+    ALG-2101 and ALG-2302; I have the latter but have found
+    no specific documentation about it.  The documented
+    detection routines return ALG-2101.  I have used an 
+    underdocumented register to try to tell the difference,
+    but this might not work.  If you have either of these
+    and the driver detects the wrong one, please let me know.
+    It won't affect the operation of the driver; it's just
+    nice when a program detects your hardware correctly.
+
+
+History:
+    13/04/98 -- first version; just a copy of the stub driver.
+
+    15/04/98 -- removed VESA code, replaced with hardware-
+		level code.
+
+    20/04/98 -- finished implementing DrawScan, started lying
+		about supporting hardware acceleration, tested with 
+		Allegro, corrected big bug in DrawScan.
+
+    01/11/98 -- Shawn Hargreaves removed hardware acceleration bodge: it 
+		now admits that it is a dumb framebuffer driver :-)
+
+
+Author:
+    George Foot <george.foot@merton.oxford.ac.uk>

@@ -1,0 +1,80 @@
+				   WDEB386 Initialization Sequence
+				   -------------------------------
+
+* VM - INT 68h: AH = 43 -- Debugger present check:	returning 0F386h
+				AH = 44 -- Prepare for PM operation:  returning
+						   address of PMINIT
+				AH = 48 -- Undefine RM segment symbols
+				AH = 4F -- Remove undefined segments from named
+						   module's symbols
+				AH = 50 -- Define segment/selector for symbols
+
+* Windows callback to address returned by INT 2Fh/1605h call, AX = 0
+(disable)
+
+* Windows enters PM
+
+* PMINIT:  Entry:  AL = 0 (low DOS) (Initialize the IDT)
+				   ES:EDI ==> PM IDT
+		   During: Set INT 41h address
+		   Return: Nothing
+
+* PM - INT 41h: AX = 4F -- Debugger identification (must respond with
+						   AX = F386)
+
+* VxDRefData:	AL = 0 (debug), FF (retail)
+
+* PMINIT:  Entry:  AL = 2 (low DOS) (Enable debug queries)
+		   During: Nothing
+		   Return: Nothing
+
+* PM - INT 41h: AX = F001 -- Conditional breakpoint (must handle --
+							 typically with IRETD -- or Windows
+							 crashes).
+
+* PM - INT 41h: AX = 70, BL = 4D (register .M command)
+
+If Win95/98
+
+* PMINIT:  Entry:  AL = 5 (low DOS) (Get debugger size and physical
+									 address)
+		   During: Calculate address and size
+		   Return: AL = 0 (don't call AL=1)
+				   ECX = debugger size in bytes
+				   ESI = starting physical address
+				   AL!= 0 (call ignored, AL = 1 then called)
+		   If AL = 0 in response to AL = 5 call,
+			  PMINIT:  Entry:  AL = 6 (low DOS) (Set debugger base/
+												 spare PTE)
+					   During: Save values
+					   Return: Nothing
+		   Else
+			  PMINIT:  Entry:  AL = 1 (low DOS) (Initialize paging)
+					   During: Setup SWAT in extended memory
+					   Return: Nothing
+			  PMINIT:  Entry:  AL = 3 (ext mem) (Set debugger spare
+												 PTE)
+					   During: Save values
+					   Return: Nothing
+		   Endif
+
+  PMINIT:  Entry:  AL = 4 (ext mem) (Enter exit VMM addresses)
+		   During: Save EnterVMM and ExitVMM addresses
+		   Return: Nothing
+  PMINIT:  Entry:  AL = 7 (ext mem) (Enable memory context functions)
+		   During: Nothing
+		   Return: Nothing
+
+Else (not Win95/98)
+
+* PMINIT:  Entry:  AL = 1 (low DOS) (Initialize paging)
+		   During: Setup SWAT in extended memory
+		   Return: Nothing
+  PMINIT:  Entry:  AL = 3 (ext mem) (Set debugger spare PTE)
+		   During: Save values
+		   Return: Nothing
+Endif
+
+* VM - INT 68h: AH = 47 -- Execute conditional breakpoint, printing 
+						   ASCIIZ string at ES:SI
+

@@ -1,0 +1,23 @@
+Allow SWAT to Auto-Repeat On Certain Machines
+
+Previously, we would re-enable the keyboard when we come up in case
+something had disabled it beforehand (there's nothing more frustrating
+than not to be able to type).  Unfortunately, re-enabling the keyboard
+has an unpleasant side effect on some machines:  it causes them to
+stop auto-repeating.
+
+With this change, if we come up without displaying a message
+(typically on a single-step or single-skip), we don't enable the
+keyboard as it should already be enabled.
+
+Note that messages such as "DRn trap" will cause us to continue to
+give the keyboard a kick in the pants and consequently we might stop
+autorepeating.
+
+Also, we don't re-enable the keyboard if we're on an XT.  Previously,
+we wouldn't re-enable if we were on an XT or MC system.  I can see no
+reason to favor MC systems anymore.
+
+This change affects SWAT.ASM only.
+
+

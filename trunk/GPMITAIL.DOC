@@ -1,0 +1,43 @@
+Fix Bug With VCPI Get Protected Mode Interface Calls
+
+In order for us to provide debugging services to VCPI clients, we need
+to insert our PTEs into the VCPI client's address space.  There are
+several contexts in which this might occur:
+
+1.  SWAT is loaded via LOAD= with 386MAX:  our PTEs are automatically
+    copied to the VCPI client's address space as part of 386MAX's
+    response to the Get Protected Mode Interface (GPMI -- DE01h) call.
+
+2.  SWAT is loaded as a VCPI client to a memory manager:  previously
+    we didn't handle this case.  Now we use the newly defined
+    RMDEV_GPMITAIL label in low DOS memory which this TWT defines an
+    return point in order to catch the tail of the GPMI call.  At this
+    point, we switch back to our code in extended memory, and copy our
+    PTEs to the end of the GPMI caller's PTE buffer.
+
+3.  SWAT intruded into a MM (possibly 386MAX):	previously we placed a
+    PM return address on the stack and passed control on to the MM.
+    This doesn't work with all MMs as some check the VM bit in the
+    flags when interpreting the segment registers saved on the stack.
+    Now we use the newly defined DEV_GPMITAIL label which this TWT
+    defines as a return point in order to catch the tail of the GPMI
+    call.  At this point, we switch back to our code in extended
+    memory, and copy our PTEs to the end of the GPMI caller's PTE
+    buffer.
+
+VCPI.INC	 Define a new function to handle GPMI tail returns
+		   from VM.
+
+SWAT_DRV.ASM	 Define DEV_GPMITAIL routine to handle return from
+		   GPMI call for intruded SWAT context.
+		 Define RMDEV_GPMITAIL routine to handle return from
+		   GPMI call for VCPI SWAT context.
+
+SWAT_VCP.ASM	 In LCL_INT67, check for @VCPI_GPMITAIL.
+		 In LCL_INT67_GPMITAIL, handle tail of GPMI call by
+		   copying our PTEs to the end of the caller's PTE
+		   buffer.
+		 Delete code to handle PM call as it can never happen
+		   (why did I put this there in the first place?).
+
+

@@ -1,0 +1,21 @@
+Fix Bug In PATH= Profile Routine
+
+When converting over to USE32 data, I missed a place where I should
+have cleared the high-order word of a 32-bit register.
+
+Also, in the process of debugging this problem, I put in several more
+STROUT messages.
+
+SWAT_DRV.INC	 Move STROUT macro from SWAT_DRV.ASM to a common
+		   include file.
+
+SWAT_DRV.ASM	 Define new message text.
+		 Move STROUT macro from SWAT_DRV.ASM to a common
+		   include file.
+		 Display more debugging messages.
+
+SWAT_FCN.ASM	 In FCN_PATH, widen register argument to U16_PATH_COM.
+
+SWAT_INI.ASM	 Display more debugging messages.
+
+

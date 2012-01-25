@@ -1,0 +1,20 @@
+SWAT\NMAC.MDA
+
+* Introduce the .NMAC dot command to address the next MAC entry
+
+The .NMAC dot command will allow one to walk the MAC chain.
+If a MAC entry is displayed at the top line of the data screen, the
+.NMAC command can be used as the effective address of the next MAC
+entry.
+
+
+Here's what's changed:
+
+SWAT_CMD.ASM	- Inlcude MAC.INC for MAC_NPARA structure member
+		- Include .NMAC in comment field of EA parser
+		- Add 'nmac' to list of command strings we handle specially
+		- Convert short jump to near jump
+		- Add code to calcualte the address of the next MAC entry
+
+386SWAT.GRM	- Add .NMAC dot command to list
+

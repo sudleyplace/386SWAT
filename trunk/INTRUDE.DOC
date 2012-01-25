@@ -1,0 +1,150 @@
+Allow SWAT To Intrude Into a Memory Manager's PL0 Context
+
+What with RAMexam needing to run under all other memory managers
+(MMs), we need a better mechanism for debugging it.  This TWT allows
+SWAT to intrude into another memory managers PL0 context while we're
+initializing as a VCPI client.	It can accomplish this trick with
+EMM386 from MSDOS 5.x or later, QEMM 7.0 (perhaps earlier, but not
+tested), NETROOM 6.x, and DRDOS 7.x (but not 6.x as there aren't
+enough GDT entries).  We need four GDT entries as well as an all
+memory selector (which we find in the MM's GDT) and the linear address
+of our XMS memory allocation in the MM's linear address space, and
+finally the MM's CR3 (which we find by calling back to the VCPI host
+with a CS at DPL/RPL 1 and check each GP Fault).
+
+This feature is enabled via the profile keyword INTRUDE.
+
+Because we don't want this feature spread outside the company, I've
+created a separate OEM directory for it.  There are now subdirectories
+BET (which has INTRUDE features enabled) and RET (which has INTRUDE
+features disabled).  When we create a version for local use, use the
+BET subdirectory.  When we create a version to be placed on the BBS,
+use the RET subdirectory.  Note that this same favor was not extended
+to the INT1 directory as there are no dependencies there as yet on BET
+vs.  RET.  When and if such a dependency arises, we can do that.  Thus
+for the moment, there's no need to create an extra BET subdirectory in
+your INT1 directory.
+
+When we're INTRUDEing, the device driver goes resident for a small
+size (about 200 bytes) so as to provide a device name of 386SWAT$ for
+the purpose of presence detection for SWATRUN, RAMexam, etc.
+
+
+NEWDIR.BAT	 Change default subdirectory from RET to BET.
+
+UDBIN2.BAT	 Change default subdirectory from RET to BET.
+
+UDLOCAL2.BAT	 Change default subdirectory from RET to BET.
+
+UDNET2.BAT	 Change default subdirectory from RET to BET.
+
+386SWAT 	 Document the new keyword.
+
+MAKEFILE	 Change default subdirectory from RET to BET.
+		 Define OEM variable for SWAT MASM calls.
+		 Note dependency of SWAT_FCN.ASM on SWAT_DRV.INC
+		   (missing from some previous TWT).
+		 Define dependency list for new module SWAT_DR2.ASM.
+
+SWAT_DRV.INC	 Define new DTEs for INTRUDE support.
+		 Define bit flag in DEVLOAD for INTRUDE support.
+		 Define bit flag in DEV_FLAG for INTRUDE support
+		   deleting unused flag for 386MAX.
+		 Define SETMSG macro to specify error messages.
+
+SWAT_ARG.ASM	 Include new keyword in parse table.
+
+SWAT_DR2.ASM	 Define new module for INTRUDEing.
+		 Define routine INTRUDE to handle intruding.
+		 Find the MM's CR3 (as a physical address) and then
+		   find it in the MM's linear address space (error if
+		   either address not found).
+		 Translate XMS memory physical address to MM linear
+		   address for later use (error if not found).
+		 Translate MM's GDT and IDT linear addresses to
+		   physical address so we can address them from our
+		   own linear address space.
+		 Ensure there are enough free GDT entries in the MM's
+		   GDT (error if not).
+		 Find and save the MM's all memory selector (error if
+		   not found).	They have to have one, don't they?  if
+		   this is a problem, we could allocate one more in
+		   the MM's GDT and set it up ourselves.
+		 Find the linear address of our XMS memory allocation
+		   in the MM's linear address space.
+		 Insert ourselves into the MM's GDT.
+		 Setup MD_PHYS for use in INIT_PROT.
+		 Call INIT_PROT.
+		 Clear flags in DEVLOAD.
+		 Define routine to find the MM's CR3 by calling it at
+		   PL1.
+		 Define routine to handle GP Faults used by the above
+		   routine.
+		 Define routine to find the MM's all memory selector.
+		 Define routine to find our XMS address in the MM's
+		   linear address space.
+		 Define routine to translate a MM-linear address to a
+		   physical address.
+		 Define routine to translate a physical address to a
+		   MM-linear address.
+		 Define routine to handle Page Faults used by the
+		   above routine.
+		 Define routine to set a DTE into the MM's GDT.
+
+SWAT_DRV.ASM	 Define save areas for GDTR and IDTR when INTRUDEing.
+		 Move subroutines DEV_STRA and DEV_INTR earlier in
+		   RGROUP so as to compact the code and data which
+		   needs to be resident for INTRUDE SWAT.
+		 Define additional data areas for INTRUDEing.
+		 Use table of memory managers for device name lookup.
+		 Use messages embedded in SETMSG macro calls instead
+		   of separate variables.
+		 Change message text for SWAT type to indicate which
+		   mode it's using (Real, Virtual, or Protected).
+		 In DEV_INTR_NR, after calling INIT_VCPI, if we're
+		   INTRUDEing, skip out.
+		 In DEV_INTR_NR, if we're INTRUDEing, skip call to
+		   SETINTS.
+		 In CHECK_VCPI, use table of device names to check
+		   for VCPI host.
+		 In INIT_VCPI, use SETMSG macro to display message on
+		   error.
+		 In INIT_VCPI, if we're INTRUDEing, setup various
+		   variables.
+		 In INIT_VCPI, if we're INTRUDEing, setup PL0 stack in
+		   the TSS which is used when searching for the MM's
+		   CR3.
+		 In INIT_VCPI, if there's a preceding SWAT, ask it to
+		   respecify its GDT entries as the linear address may
+		   have changed.
+		 In INIT_VCPI, after call to ALLOC_XMS and making room
+		   for other allocations, save physical address of XMS
+		   memory for later use.
+		 In INIT_VCPI, after entering PM for the first time,
+		   attempt to intrude into the MM's PL0 context.
+		 In INIT_VCPI, use seg DGROUP directly instead of
+		   PGROUP plus MD_DATA.
+		 In INIT_VCPI, after exiting PM the first time,
+		   display INTRUDE message (if any), and skip to end
+		   if we INTRUDEd.
+		 In INIT_VCPI, at the very end, if we're INTRUDEing,
+		   display message text.
+		 In ALLOC_XMS, use SETMSG macro to display messages on
+		   error.
+		 In ALLOC_XMS, if no error, clear DRV_ERRMSG variable.
+		 In INIT_GDT, if we're INTRUDEing, setup PL1 stack
+		   which is used when searching for the MM's CR3.
+
+SWAT_FCN.ASM	 Define action routine for INTRUDE keyword.
+
+SWAT_INI.ASM	 In INIT_PROT, if we're INTRUDEing, use linear address
+		   of the IDT from other variable (to address the MM's
+		   IDT).
+		 In SETUP, if we're INTRUDEing, save our CS selector
+		   in the MM's GDT in LCLINTxx_FVEC.FSEL variables
+		   instead of our CS for later interception.
+		 In SETUP, if we're INTRUDEing, don't save VCPI
+		   code/data values.  Instead, wait for the next time
+		   when we have the correct information.
+
+

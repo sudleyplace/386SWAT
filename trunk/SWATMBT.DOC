@@ -1,0 +1,30 @@
+Add MultiConfig recognition to 386SWAT.PRO
+
+386SWAT now recognizes [section_name] syntax similar to
+386MAX.PRO and EXTRADOS.PRO.  INCLUDE= is not supported.
+
+Files affected:
+
+MAKEFILE	Assemble and link QMAX_MBT.
+
+		List dependency for QMAX_MBT.OBJ.
+
+SWAT.ASM	Change XCODE alignment from para to byte for consistency
+		with QMAX_MBT.
+
+SWAT.WSG	Coalesce all useful real mode init segments
+		into one group number to save TS commands.
+
+SWAT_ARG.ASM	Change XCODE alignment.
+
+		Ignore MultiConfig sections in the profile
+		other than our own.
+
+		Add comments and public to define additional entry
+		point for SKIP_EOL.
+
+SWAT_INI.ASM	Change XCODE alignment.
+
+SWAT_SEG.INC	Change XCODE alignment.
+
+

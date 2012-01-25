@@ -1,0 +1,58 @@
+
+	     ______             ____  ______     _____  ______ 
+	    |  ____|           |  _ \|  ____|   / / _ \|  ____|
+	    | |__ _ __ ___  ___| |_) | |__     / / |_| | |__ 
+	    |  __| '__/ _ \/ _ \  _ <|  __|   / /|  _  |  __|
+	    | |  | | |  __/  __/ |_) | |____ / / | | | | |
+	    |_|  |_|  \___|\___|____/|______/_/  |_| |_|_|
+
+
+		    Cirrus 54x driver implementation notes.
+
+Pattern fills may be improved quite a lot for cards which supports starting
+on different place of pattern than upper left corner (now I always assume 
+accelerator can't do that so whenever upper left corner changes I change the 
+pattern). I also don't understand the notation of raster operations cirrus
+supports and so SetMix isn't probably implemented properly.
+
+Because of lack of precise specification of right input data to functions, some
+of them may be implemented wrong.
+
+Optimization with -O3 helps a bit, also port accesses are on RING 3 quite slow
+so checking is the content of registers changed helped quite a bit. I expect
+there might be quite a lot of problem with newer cirruses now, definitely 
+should work with 5426,5428,7541 and 7543.
+
+***Note: Now also tested with a 5446 (rev A) and modified to work 
+	(Keir Fraser, email: kaf24@cam.ac.uk)
+  I have had some problems with the memory-mapped IO, specifically when the 
+  registers are mapped to low memory (0xb8000). If you are having problems 
+  getting the driver to work, you can disable MMIO by uncommenting the 
+  DISABLE_MMIO line at the top of driver.c.  You should also contact me at 
+  the email address given above to look for a more permanent solution!
+
+Supported functions:
+
+      WaitTillIdle()
+      SetMix()
+      Set8x8MonoPattern()
+      Set8x8ColorPattern()
+      Use8x8ColorPattern()
+      DrawScan()
+      DrawPattScan()
+      DrawColorPattScan()
+      DrawRect()
+      DrawPattRect()
+      DrawColorPattRect()
+      BitBlt()
+      SrcTransBlt()
+      SetCursor
+      SetCursorPos
+      SetCursorColor
+      ShowCursor
+      SrcTransBltSys()
+      BitBltSys()
+      PutMonoImage()
+
+Author: Michal Mertl (Czech Republic)
+Email: mime@eunet.cz

@@ -1,0 +1,92 @@
+Add Debugging Displays To SWAT During Initialization
+
+To help me figure out why SWAT wasn't installing under Win95, I made
+several changes:
+
+* Add some debugging displays (ala Shift-MAX).
+
+* If there are no VCPI services (DEBUG=NOVCPI in MAX), fail
+  gracefully.
+
+* Ensure interrupts are re-enabled upon returning from VCPI/PM.
+
+* Ensure that the B-bit is set in our stack selector.
+
+* Avoid calling CHECK_I92 if we're in VM as it can reboot the system
+  (learned the hard way).
+
+* Put in a check to avoid calling OLDINT67_VEC if it's zero (who can
+  argue with that?).
+
+* Avoid a bug in MASM 5.10b which generates a word fixup when it
+  should generate a dword fixup.  Any questions on why I want to write
+  my own assembler?
+
+* In anticipation of using /Ml with MASM (which requires exact case
+  match), use the proper case when calling macros.
+
+
+The following modules are changed and why:
+
+SWAT_ARG.ASM	 Add a line display for each keyword processed from
+		   the command line or profile.
+		 In anticipation of using /Ml with MASM, use correct
+		   case when calling macros.
+
+SWAT_DRV.ASM	 Check for one of the shift keys held down at start of
+		   initialization.
+		 Display a message before calling key initialization
+		   routines.
+		 Display an error message if anytime we allocate
+		   memory via MAPSEG_NXT, it exceeds the highest
+		   available paragraph.
+		 In CHECK_VCPI, if there are no VCPI services and
+		   we're in VM, fail the routine.
+		 In anticipation of using /Ml with MASM, use correct
+		   case when calling macros.
+		 In INIT_VCPI, upon returning from PM via VCPI,
+		   re-enable interrupts.
+		 In INIT_VCPI, ensure the B-bit is set in the stack
+		   selector to avoid bug when intruding into MM which
+		   switches to a big stack above 64KB.
+		 In CHECK_MODEL, avoid calling CHECK_I92 if we're in
+		   VM (in which case we don't need its result) as it
+		   can reboot the system.
+		 In INIT_GDT, ensure the B-bit is set in the stack
+		   selector.
+		 In SET_DEVGDT, ensure we clear the PL bit of the
+		   incoming selector.
+
+SWAT_DRV.INC	 Define @DEV_MAX flag which we'll need in a later TWT
+		   but I don't want to change this module just for
+		   that.
+		 In XVCPICALL macro, if OLDINT67_VEC is zero, don't
+		   call it.
+
+SWAT_FCN.ASM	 Display an error message if anytime we allocate
+		   memory via MAPSEG_NXT, it exceeds the highest
+		   available paragraph.
+		 In anticipation of using /Ml with MASM, use correct
+		   case when calling macros.
+
+SWAT_INI.ASM	 Define a DD to hold offset WTAIL as MASM 5.10b
+		   doesn't generate the proper fixup for LEA r32,WTAIL
+		   (it uses a word instead of dword fixup).
+		 In anticipation of using /Ml with MASM, use correct
+		   case when calling macros.
+		 In SETUP, save value for SWATCODE for later use.
+		 In SETUP, check for error from call to GETLBASE on
+		   the extra (third) selector as it might be invalid.
+		 In INIT_VIRT, call XVCPICALL instead of VCPICALL to
+		   handle MMs which fail VCPI calls with out-of-range
+		   EMS functions (such as SWAT uses).
+		 Define high-water mark of available low DOS memory
+		   (MAPSEG_LST).
+		 Check for any shift key held down.
+		 Display a message before calling key initialization
+		   routines.
+		 In INIT_REAL_TSS loop, delete obsolete line to zero
+		   the high-order word of .PTSS_Ixx -- this is left
+		   over from when SWAT was a USE16 program.
+
+

@@ -1,0 +1,15 @@
+Fix DF Bug in LCL_INT67
+
+If certain functions in our INT 67h handler are called with DF
+pointing down, we fail.  This change corrects that by saving the flags
+on the stack at the start and restoring them when we exit.
+
+The following modules are changed and why:
+
+SWAT_COM.INC	 Change SETDATA macro to save flags if second
+		   parameter is specified.
+
+SWAT_VCP.ASM	 Save flags at start of INT 67h handler, clear DF, and
+		   restore the flags when we exit.
+
+

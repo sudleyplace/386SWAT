@@ -1,0 +1,19 @@
+Fix Bug in SWAT Not Restoring INT 24h Handler
+
+When SWAT is processing the profile, it fails to restore the original
+INT 24h handler because it doesn't handle reentrancy.  In particular,
+when the profile is read in, the code save the address of the old INT
+24h vector into OLDINT24_VEC, and then installs its own handler.  When
+LOADSYM=, or VIDEO= is specified, the function to handle it also saves
+the address of the old INT 24h handler into OLDINT24_VEC (thus
+clobbering the original address from DOS) and installs its own
+handler.  When FCN_PRO terminates it restores the INT 24h handler from
+OLDINT24_VEC which has been clobbered.
+
+This change pushes OLDINT24_VEC before calling INT24 and pops it after
+calling REST24.  Also, some paths through LOADSYM, don't call INST24
+but do call REST24; that's changed to always call them in pairs.
+
+This change affects SWAT_FCN.ASM only.
+
+

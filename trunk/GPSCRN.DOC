@@ -1,0 +1,16 @@
+Support GPSKIP=CRn
+
+* Allow new GPSKIP option.
+
+* In anticipation of using /Ml with MASM (which requires exact case
+  match), use the proper case when calling macros.
+
+SWAT_GPS.INC	 Define flag for GPSKIP=CRn.
+
+SWAT_FCN.ASM	 Define entry for GPSKIP=CRn.
+
+SWAT_VCP.ASM	 Test for GPSKIP=CRn.
+		 In anticipation of using /Ml with MASM, use correct
+		   case when calling macros.
+
+

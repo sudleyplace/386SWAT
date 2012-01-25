@@ -1,0 +1,32 @@
+Extend PTE Command to Alternate CR3s
+
+With this change, the PTE command can take an optional physical
+translation parameter so as to translate PTEs w.r.t. other memory
+manager's page tables.  The new syntax is
+
+PTE addr P exp
+PTE exp  P exp
+
+where the value to the right of the 'P' is the alternate CR3 to use in
+translation.
+
+386SWAT.GRM	 Document PTE command extensions.
+
+SWAT_PTE.ASM	 Define additional variables to hold offset and CR3.
+		 Define additional command line text to display.
+		 Check for optional physical translation marker and
+		   value.
+		 If we're using optional physical translation, don't
+		   worry if paging isn't enabled as yet.
+		 Use LIN2PPDIR to address the first level PDIR
+		   corresponding to the linear address to translate.
+		 Display trailing text if using optional physical
+		   translation.
+
+SWAT_VCP.ASM	 In LIN2PPTE, use XCHG instead of read/write.
+		 Use 32-bit register when setting @PTE_URP (we're
+		   USE32 now).
+		 Define new routine LIN2PPDIR to address a first level
+		   PDIR.
+
+

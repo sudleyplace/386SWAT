@@ -1,0 +1,9 @@
+Fix Bug With Debugger Fill PTE Function
+
+Some time ago, I introduced a bug when changing the way the fill PTE
+function call works.  In particular, the # incoming PTEs is zeroed
+before being read, not after.  How embarassing!
+
+SWAT_VCP.ASM	 Read and then zero the # incoming PTEs.
+
+

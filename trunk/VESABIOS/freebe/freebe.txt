@@ -1,0 +1,407 @@
+
+             ______             ____  ______     _____  ______ 
+            |  ____|           |  _ \|  ____|   / / _ \|  ____|
+            | |__ _ __ ___  ___| |_) | |__     / / |_| | |__ 
+            |  __| '__/ _ \/ _ \  _ <|  __|   / /|  _  |  __|
+            | |  | | |  __/  __/ |_) | |____ / / | | | | |
+            |_|  |_|  \___|\___|____/|______/_/  |_| |_|_|
+
+
+               The free VBE/AF driver project, version 1.1
+
+                  http://www.talula.demon.co.uk/freebe/
+
+
+                "The nice thing about standards is that
+               there are so many of them to choose from."
+
+
+
+======================================
+============ Introduction ============
+======================================
+
+   VBE/AF is a low level driver interface for accessing graphics hardware. 
+   It provides all the same features as VESA 3.0 (access to linear 
+   framebuffer video memory, high speed protected mode bank switching, page 
+   flipping, hardware scrolling, etc), and adds the ability to use 2D 
+   hardware acceleration in an efficient and portable manner. An /AF driver 
+   is provided as a disk file (vbeaf.drv), and contains clean 32 bit machine 
+   code which can be called directly by a C program. If implemented 
+   correctly, these drivers have the potential to be binary portable across 
+   multiple operating systems, so the same driver file can be used from DOS, 
+   Windows, Linux, etc.
+
+   FreeBE/AF is an attempt to implement free VBE/AF drivers on as many cards 
+   as possible. This idea came about on the Allegro mailing list, due to the 
+   need for a dynamically loadable driver structure that could support 
+   hardware acceleration. VBE/AF seemed to fit the bill, and Allegro already 
+   had support for the SciTech drivers, so it seemed like a good idea to 
+   adopt this format for ourselves. The primary goal is to make these 
+   drivers work with Allegro, so the emphasis will be on implementing the 
+   functions that Allegro actually uses, but we encourage other developers 
+   to join us in taking advantage of this excellent driver architecture.
+
+   This project currently provides fully accelerated drivers for a handful 
+   of chipsets, plus a number of dumb framebuffer implementations based on 
+   the video drivers from older versions of the Allegro library. It has also 
+   defined a few extensions to the stock VBE/AF API, which allow Allegro 
+   programs to use these drivers in a true protected mode environment 
+   without having to resort to the nearptr hack, and provide a number of 
+   hook functions that will be needed to remain compatible with future 
+   generations of the SciTech drivers.
+
+   The current status of the VBE/AF standard is somewhat confused. It was 
+   designed by SciTech Software (http://www.scitechsoft.com/), who provide 
+   commercial VBE/AF drivers for a wide range of cards as part of their 
+   Display Doctor package. It was originally going to be released as a VESA 
+   standard, but the VESA people seriously messed this up by charging 
+   exorbitant sums of $$$ for copies of the spec. As a result, very few 
+   people bothered to support these drivers, and the FreeBE/AF project was 
+   only made possible by the information available in the SciTech MGL 
+   library source code, and the helpfulness of Kendall Bennett (the designer 
+   of the spec) himself. Unfortunately SciTech have now abandoned VBE/AF 
+   themselves, replacing it with an equivalent but non-public API called 
+   Nucleus, which is only available under NDA. SciTech will continue to 
+   provide VBE/AF drivers for the cards which they already support, but 
+   will not adding any new ones in the future, so this project is now the 
+   only active source of VBE/AF driver implementations.
+
+   At present, the Allegro (http://www.talula.demon.co.uk/allegro/) and MGL 
+   (http://www.scitechsoft.com) libraries are the only major packages which 
+   can take advantage of accelerated VBE/AF drivers. As such, this project 
+   is starting to look more like a implementation of video drivers 
+   specifically for the Allegro library, rather than a potential 
+   industry-wide standard :-) But it doesn't have to be this way! VBE/AF is 
+   technically an excellent design: efficient, easy to write and use, and 
+   highly portable. If you are writing graphics code, and getting frustrated 
+   by the many limitiations imposed by VESA, why not think about using 
+   VBE/AF instead? Even better, if you have a card that our project doesn't 
+   yet support, why not add a new driver for it? This can be a lot of fun, 
+   and we would be delighted to offer any help or advice that you might need.
+
+
+
+===============================
+============ Usage ============
+===============================
+
+   Each driver is located in a different subdirectory. Run "make" to compile 
+   them, choose the one you want, copy the vbeaf.drv file from this 
+   directory to c:\, and you are ready to go!
+
+   The stub directory contains a generic non-accelerated VBE/AF driver. This 
+   is not useful in any way, because it simply sits on top of your existing 
+   VESA driver and emulates a few "hardware" drawing operations with very 
+   slow software implementations. The stub is intended as a starting point 
+   for people who want to make drivers for a specific card, and should not 
+   be used directly.
+
+   To recompile FreeBE/AF, you need a working copy of djgpp. Run "make" to 
+   build all the available drivers, or "make dir/vbeaf.drv" to compile a 
+   specific driver (replacing {dir} with the directory name, eg. "make 
+   stub/vbeaf.drv"). To build the install.exe program for a binary 
+   distribution, run "make all" (this requires you to have the Allegro 
+   library installed, and the allegro/tools/ directory in your path). This 
+   documentation is converted from the custom ._tx format into ASCII and 
+   HTML by the Allegro makedoc program: run "make docs" to do this, after 
+   putting the makedoc utility somewhere in your path.
+
+   FreeBE/AF only supports the VBE/AF 2.0 API. It is not backward compatible 
+   with the assembler VBE/AF 1.0 interface, and programs that try to use 
+   those obsolete functions will not work correctly.
+
+
+
+============================================
+============ Supported Hardware ============
+============================================
+
+   Not all VBE/AF drivers provide the complete set of possible features. 
+   Some may be written in a 100% clean and portable manner, allowing them to 
+   be used on any platform, but others make use of the video BIOS in order 
+   to set the initial video mode: this makes them a lot easier to write, but 
+   means that it can only be used under DOS. Some of the drivers, in 
+   particular the ones based on the old Allegro library chipset support, 
+   don't support any hardware accelerated drawing at all: these are still 
+   usefull because they provide high speed protected mode bank switching and 
+   can work around the bugs in some manufacturer's VESA implementations, but 
+   are obviously not nearly as cool as a fully accelerated driver.
+
+   This table lists the currently available FreeBE/AF drivers, and what 
+   features they each provide:
+   
+   ATI 18800/28800
+   Uses BIOS
+   Banked modes only
+   Supports farptr extension
+   Dumb framebuffer
+   
+   ATI mach64
+   Uses BIOS
+   Banked and linear modes
+   No FreeBE/AF extensions
+   Hardware accelerated
+   
+   Avance Logic ALG-2101, ALG-2201, ALG-2228, ALG-2301, ALG-2302
+   Uses BIOS
+   Banked modes only
+   No FreeBE/AF extensions
+   Dumb framebuffer
+   
+   Cirrus 54xx (not 546x). Should be ok with 5426, 5428, 7541, 7543
+   Uses BIOS
+   Banked and linear modes
+   No FreeBE/AF extensions
+   Hardware accelerated
+   
+   Matrox Millenium, Mystique, Millenium II
+   Uses BIOS
+   Banked and linear modes
+   Supports farptr and config extensions
+   Hardware accelerated
+   
+   Paradise
+   Uses BIOS
+   Banked modes only
+   Supports farptr extension
+   Dumb framebuffer
+   
+   S3
+   Uses BIOS
+   Banked modes only
+   Supports farptr extension
+   Hardware accelerated
+   
+   Trident TGUI 9440. Doesn't work under Windows!
+   100% portable
+   Banked and linear modes
+   No FreeBE/AF extensions
+   Hardware accelerated
+   
+   Trident
+   Uses BIOS
+   Banked modes only
+   Supports farptr extension
+   Dumb framebuffer
+   
+   Tseng ET3000/ET4000/ET6000
+   Uses BIOS
+   Banked modes only
+   Supports farptr extension
+   Dumb framebuffer
+   
+   Video-7
+   Uses BIOS
+   Banked modes only
+   Supports farptr extension
+   Dumb framebuffer
+   
+   stub driver (for testing and development purposes only)
+   Uses BIOS
+   Banked and linear modes
+   Supports farptr and config extensions
+   Slow software emulation of hardware drawing functions
+
+
+
+======================================
+============ Contributing ============
+======================================
+
+   If you want to add a new driver, follow these steps:
+
+      md cardname
+      copy stub\*.* cardname
+      edit makefile
+      { add a new entry to the DRIVERS variable at the top of the file }
+      cd cardname
+      edit drvhdr.c
+      { replace "stub driver implementation" with your driver name }
+      edit driver.c
+      { fill in the blanks, replacing the VESA calls with chipset-specific }
+      { code, and fleshing out the accelerated drawing functions }
+      edit notes.txt
+      { describe anything interesting about your driver, most importantly }
+      { listing what drawing functions it supports in hardware }
+      cd..
+      done!
+
+   The makefile requires each driver to provide a drvhdr.c file, which will 
+   be linked into the drvgen.exe utility and used to generate the VBE/AF 
+   header. You must also provide a notes.txt, which will be displayed by the 
+   installation program, but everything else is entirely up to you. Any C 
+   source files placed into your driver directory will automatically be 
+   compiled and linked into the driver binary, so you can organise your code 
+   in whatever style you prefer.
+
+   Because the VBE/AF drivers are output as relocatable binary modules, they 
+   cannot use any C library functions. There are a few utility functions in 
+   helper.c, but these will not work on any platforms other than DOS+DPMI, 
+   so it would be better to avoid using them if you can manage without.
+
+   A great deal of hardware information can be found in the VGADOC package 
+   (ftp://x2ftp.oulu.fi/pub/msdos/programming/docs/vgadoc4b.zip) and the 
+   XFree86 sources (http://www.xfree86.org/). If this isn't enough, try 
+   asking the manufacturer for more details.
+
+
+
+===============================
+============ Files ============
+===============================
+
+   freebe.txt        - ASCII format documentation
+   freebe.html       - HTML format documentation
+   freebe._tx        - custom format documentation source file
+   makefile          - script for building the drivers
+   vbeaf.h           - VBE/AF structures and constants
+   start.s           - driver relocation code
+   helper.c          - debugging trace printf() and VESA helper routines
+   drvgen.c          - modified version of DXEGEN, for building vbeaf.drv
+   drv.ld            - linker script
+   install.c         - installation program for binary distributions
+
+   stub/vbeaf.drv    - example driver, using VESA to access the hardware
+   stub/driver.c     - main implementation file for the example driver
+   stub/drvhdr.c     - VBE/AF header structure for the example driver
+   stub/notes.txt    - more information about the example driver
+
+   ati/              - ATI 18800/28800 driver, based on old Allegro code
+   avance/           - Avance Logic driver, by George Foot
+   cirrus54/         - Cirrus 54x driver, by Michal Mertl
+   mach64/           - ATI mach64 driver, by Ove Kaaven
+   matrox/           - Matrox driver, by Shawn Hargreaves
+   paradise/         - Paradise driver, based on old Allegro code
+   s3/               - S3 driver, by Michal Stencl
+   tgui/             - Trident TGUI 9440 driver, by Salvador Eduardo Tropea
+   trident/          - Trident driver, based on old Allegro code
+   tseng/            - Tseng driver, based on old Allegro code
+   video7/           - Video-7 driver, based on old Allegro code
+
+
+
+===================================
+============ Copyright ============
+===================================
+
+   As the name implies, FreeBE/AF is free. Both the driver binaries and 
+   sources may be distributed and modified without restriction. If you find 
+   any of this stuff useful, the best way to repay us is by writing a new 
+   driver for a card that isn't currently supported.
+
+   Disclaimer: no warranty is provided with this software. We are not to be 
+   held liable if it fries your monitor, eats your graphics card, or roasts 
+   your motherboard.
+
+
+
+=================================
+============ Credits ============
+=================================
+
+   The DRVGEN utility is based on the djgpp DXEGEN system, by Charles 
+   Sandmann (sandmann@clio.rice.edu) and DJ Delorie (dj@delorie.com).
+
+   Linking/relocation system and ATI mach64 driver by Ove Kaaven
+   (ovek@arcticnet.no).
+
+   VBE/AF framework, stub driver, Matrox driver, most of the old Allegro 
+   chipset drivers, conversion from Allegro to VBE/AF format, and 
+   installation program by Shawn Hargreaves (shawn@talula.demon.co.uk).
+
+   Cirrus 54x driver by Michal Mertl (mime@eunet.cz).
+
+   Trident TGUI 9440 driver by Salvador Eduardo Tropea (set-soft@usa.net).
+
+   Avance Logic driver by George Foot (george.foot@merton.oxford.ac.uk).
+
+   Fixes to the Cirrus 5446 MMIO routines by Keir Fraser (kaf24@cam.ac.uk).
+
+   Tseng ET6000 support by Ben Chauveau (bendomc@worldnet.fr).
+
+   Paradise driver by Francois Charton (deef@pobox.oleane.com).
+
+   Tseng ET4000 15/24 bit support by Marco Campinoti (marco@etruscan.li.it).
+
+   Trident driver improved by Mark Habersack (grendel@ananke.amu.edu.pl).
+
+   Video-7 fixes by Markus Oberhumer (markus.oberhumer@jk.uni-linz.ac.at).
+
+   S3 driver improved by Michael Bukin (M.A.Bukin@inp.nsk.su).
+
+   Video-7 driver by Peter Monks (Peter_Monks@australia.notes.pw.com).
+
+   S3 hardware acceleration by Michal Stencl (stenclpmd@ba.telecom.sk).
+
+   Website logo by Colin Walsh (cwalsh@nf.sympatico.ca).
+
+   More graphics hardware support by [insert your name here] :-)
+
+   VBE/AF itself is the brainchild of SciTech software, and in particular 
+   Kendall Bennett (KendallB@scitechsoft.com).
+
+   The Video Electronics Standards Association does _not_ deserve any 
+   mention here. The absurd prices they charge for copies of the /AF 
+   specification have prevented it from being widely supported, and I think 
+   this is a great pity. Long live freedom!
+
+
+
+=================================
+============ History ============
+=================================
+
+   30 March, 1998 - v0.1.
+      First public release, containing an example driver implementation that 
+      runs on top of VESA.
+
+   31 March, 1998 - v0.11.
+      Added support for multi-buffered modes.
+
+   5 April, 1998 - v0.2.
+      Added an accelerated Matrox driver.
+
+   8 April, 1998 - v0.3.
+      Added accelerated drivers for ATI mach64 and Cirrus 54x cards, plus 
+      minor updates to the Matrox driver.
+
+   12 April, 1998 - v0.4.
+      Proper installation program, more drawing functions implemented by the 
+      stub and Matrox drivers, improved ATI driver, compiled with PGCC for a 
+      5% speed boost.
+
+   26 April, 1998 - v0.5.
+      More accelerated features in the Cirrus and ATI drivers. Fixed bugs in 
+      the Matrox driver. Added an option to disable hardware emulation in 
+      the stub driver, which produces a non-accelerated, dumb framebuffer 
+      implementation. The init code will now politely fail any programs that 
+      try to use VBE/AF 1.0 functions, rather than just crashing.
+
+   10 June, 1998 - v0.6.
+      Fixed scrolling problem on Millenium cards.
+
+   1 November, 1998 - v0.7.
+      Added drivers for Trident TGUI 9440 and Avance Logic cards, and 
+      improved the build process.
+
+   14 December, 1998 - v0.8.
+      Bugfixes to the Matrox Millenium II and Cirrus drivers. Converted all 
+      the old Allegro library chipset drivers into non-accelerated VBE/AF 
+      format, adding support for ATI 18800/28800, Paradise, S3, Trident, 
+      Tseng ET3000/ET4000/ET6000, and Video-7 boards. Designed and 
+      implemented an API extension mechanism, providing the ability to use 
+      these drivers in a true protected mode environment, a more rational 
+      relocation scheme, and various hooks that will later be needed for 
+      supporting the SciTech Nucleus drivers.
+
+   20 December, 1998 - v0.9.
+      Bugfixes. Added a config mechanism, allowing the install program to 
+      optionally disable some features of a driver.
+
+   3 January, 1999 - v1.0
+      Bugfixes.
+
+   27 March, 1999 - v1.1
+      Added acceleration support to the S3 driver, plus some bugfixes.
+

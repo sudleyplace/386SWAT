@@ -1,0 +1,5 @@
+Allow trace over IRET/IRETD if NT set (thus causing a task switch).
+Upon detecting this case, we set both the debug bit in the
+appropriate TSS as well as a local flag to clear that bit the next
+time (if it was clear in the first place).
+

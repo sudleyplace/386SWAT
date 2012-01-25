@@ -1,0 +1,22 @@
+Implement More keywords For GPSKIP
+
+Two additional instructions which can generate GP Faults are included
+in the list of ones we may wish to skip:  IN from an immediate I/O
+port and IN from the I/O port in DX.  For example, these might be used
+on a MicroChannel system with I/O port 92h (which MAX traps).
+
+The following modules are changed and why:
+
+386SWAT 	 Document additional optional parameters to GPSKIP
+		   keyword.
+
+SWAT_GPS.INC	 Define additional flag bits.
+
+SWAT_FCN.ASM	 Define additional instruction names.
+
+SWAT_VCP.ASM	 Delete unneeded code to set SIRB entries for Pentium
+		   systems (MAX does this now).
+		 In our GPSKIP handler, check for additional
+		   instructions.
+
+

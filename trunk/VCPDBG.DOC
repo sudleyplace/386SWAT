@@ -1,0 +1,21 @@
+Fix Bug in VCPI Debugging Support
+
+VCPI debugging was broken in a previous TWT.  In particular, the
+VCPICODE and VCPIDATA values were not setup at the proper time.  The
+point at which they were being setup was prior to when another
+variable (SWATDATA) had been initialized and so those values were not
+correctly set.	Also, the VCPDTE_STR wasn't updated to reflect the DTE
+for PGROUP2.
+
+At the same time two other bugs were fixed:
+
+* In SEL2GDT, if we passed in an LDT selector the TI bit was cleared
+  just before it was tested (and cleared).
+
+* In INIT_PROT, we must clear the value of PCUR_VM_HANDLE in case
+  there's an old value lurking around.  If we don't, when Windows is
+  brought up a second time, SWAT can get confused.
+
+These changes affect SWAT_INI.ASM and SWAT_VCP.ASM.
+
+

@@ -1,0 +1,9 @@
+Ensure Default Options Set If No Profile
+
+If the user omits a profile on the SWAT device line, we skip out
+before setting default options.  Now we don't.
+
+SWAT_ARG.ASM	 In CHECK_ARGS, move setting of default options to
+		   before we check for the profile.
+
+

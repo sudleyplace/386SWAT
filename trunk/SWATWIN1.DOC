@@ -1,0 +1,6 @@
+This change adds SWATVXD services to the Windows dynalink list.
+
+INT1_WIN.ASM is affected.
+
+WRL
+

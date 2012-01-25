@@ -1,0 +1,34 @@
+Fix bug in SWAT LS command
+
+If the LS command is used when PL0 DPMI services are not enabled,
+SWAT will generally hang on a GP fault within MAX.  It is also
+possible for the system to run out of file handles, since this
+bug causes the file referenced by LS not to be closed.
+
+The .XBDA and .XBDA2 commands generate effective addresses for
+the XBDA and the secondary XBDA formed by (XBDA+[XBDA:B4):0.
+
+The ] operator is added as a byte extract, similar to [ for word
+extract and { for dword extract.
+
+Files affected:
+
+SWAT_CMD.ASM	Add error message for missing XBDA segment at 40:E.
+
+		Add .XBDA and .XBDA2 symbols.
+
+		Handle byte extraction.
+
+		Add procedure to skip expressions or tokens.
+
+SWAT_SYM.ASM	Add optional postfix sign operator to description
+		in comment.
+
+		Strip out postfix operator so as not to confuse parser.
+		We also continue to handle postfix operators separated
+		from the segment expression by white space.
+
+		Fix bug where we try to free handle -1 and don't free
+		valid handles.
+
+

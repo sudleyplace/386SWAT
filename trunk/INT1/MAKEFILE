@@ -1,0 +1,98 @@
+#
+# Makefile for int1.exe
+#
+#' $Header:   P:/PVCS/386SWAT/INT1/MAKEFILE.__V   1.4   20 Sep 1994 16:59:00   BOB  $
+#'
+#' $Log:   P:/PVCS/386SWAT/INT1/MAKEFILE.__V  $
+#' 
+#'    Rev 1.4   20 Sep 1994 16:59:00   BOB
+#' Convert The rest of SWAT Over to USE32 Data
+#' For more details, see DATA32B.DOC.
+#'
+#'    Rev 1.3   09 May 1994 10:10:04   BOB
+#' Shrink The Low DOS Memory Load Size
+#' For more details, see OVERLAY.DOC.
+#'
+#'    Rev 1.2   12 Dec 1991 17:33:36   HENRY
+#' Added INT1_STB for compilation of standalone INT1.EXE
+#'
+#'    Rev 1.1   20 Jun 1991 08:17:14   HENRY
+#' Added header comments
+#
+
+S=$(SWTDIR)		# Directory where 386SWAT source files are located
+I=$(INCDIR)		# Generic include directory
+O=RET\			# Directory for .OBJ, .MAP, and .ARF files
+Q=$(MAXDIR)		# Directory for 386MAX
+
+ALLINC=$(O);$(S);$(I);$(Q) # SET INCLUDE= search path
+
+# default options for MASM
+MOPT=$(ASMOPT) /mu /p /r /t /w1
+
+# Define macro LSTMAC so that we can tack it onto the end of ANY
+# masm command line, whether it is defined or empty.
+!IFDEF LST
+LSTMAC=,$(LST)\ \
+
+!ELSE
+LSTMAC=
+!ENDIF
+
+# Define modules needed by INT1.EXE
+OBJS=	$(O)INT1.OBJ		 $(O)INT1_ESC.OBJ	 $(O)INT1_EXA.OBJ\
+	$(O)INT1_FNS.OBJ	 $(O)INT1_FOP.OBJ	 $(O)INT1_GRP.OBJ\
+	$(O)INT1_MSC.OBJ	 $(O)INT1_STB.OBJ	 $(O)INT1_TAB.OBJ\
+	$(O)INT1_TXT.OBJ	 $(O)INT1_WIN.OBJ
+
+# implicit translation rules
+.asm{$(O)}.obj:
+	 @ff /, $*.asm > $(O)dirntry.tmp
+	 @copy $(I)semicol.txt+$(O)dirntry.tmp $(O)dirntry.inc >NUL
+	 set INCLUDE=$(ALLINC);$(INCLUDE)
+	 masm $(@B) $(MOPT),$(O)$(LSTMAC);
+	 @dispobj $*/w
+	 @ff $*/,/#
+
+
+$(O)INT1.EXE:	 $(OBJS)	MAKEFILE
+	link @<<$(O)int1.arf
+$(OBJS: =+^
+)
+		$*
+		$* /map
+		/line ;
+<<KEEP
+
+$(O)INT1.OBJ:	 INT1.ASM
+
+$(O)INT1_ESC.OBJ: INT1_ESC.ASM	INT1_TAB.INC	INT1_FNS.INC		       \
+						$(S)SWAT_SEG.INC
+
+$(O)INT1_EXA.OBJ: INT1_EXA.ASM
+
+$(O)INT1_FNS.OBJ: INT1_FNS.ASM			INT1_FNS.INC	INT1_WIN.INC   \
+		 $(S)SWAT_COM.INC		$(S)SWAT_SYM.INC	       \
+		 $(Q)QMAX_FIL.INC		$(S)SWAT_LCL.INC	       \
+						$(S)SWAT_SEG.INC
+
+$(O)INT1_FOP.OBJ: INT1_FOP.ASM			INT1_FNS.INC
+
+$(O)INT1_GRP.OBJ: INT1_GRP.ASM			INT1_FNS.INC		       \
+						$(S)SWAT_SEG.INC
+
+$(O)INT1_MSC.OBJ: INT1_MSC.ASM			INT1_FNS.INC		       \
+						$(S)SWAT_SEG.INC
+
+$(O)INT1_STB.OBJ: INT1_STB.ASM
+
+$(O)INT1_TAB.OBJ: INT1_TAB.ASM	INT1_TAB.INC	INT1_FNS.INC		       \
+						$(S)SWAT_SEG.INC
+
+$(O)INT1_TXT.OBJ: INT1_TXT.ASM
+
+$(O)INT1_WIN.OBJ: INT1_WIN.ASM					INT1_WIN.INC   \
+		 $(S)SWAT_OVL.INC		$(S)SWAT_SEG.INC
+
+
+

@@ -1,0 +1,32 @@
+Validate Back Link In Operand Analysis Display for IRET/D
+
+On occasion, I've had the system go poof on an IRET/D when the NT bit
+was set (and I didn't notice that) and the back link TSS was invalid
+for some reason (either bad TSS selector, or something was wrong with
+the TSS, such as the CR3 value was invalid).  This TWT checks for that
+condition and reports it as part of the operand analysis display for
+the IRET/D instructions.
+
+At the same time in DISP_OPER, I defined and set variables which hold
+the width and limit of the effective address values for use in a later
+TWT (GP Faults in Autofault).
+
+MAKEFILE	 Note dependency of SWAT_OPR.ASM on SWAT_CMD.INC.
+
+SWAT_AGR.ASM	 In SELOFF2ADDR, catch invalid selectors at various
+		   stages so as to return CF=1 on error.  We need this
+		   for the back link checking to work.
+
+SWAT_MSC.ASM	 Define GETLIMIT routine to return selector limit.
+		 In GETARWBASE, catch zero selector as error.
+
+SWAT_OPR.ASM	 Define and set EA1WID, EA2WID, EA1LIM, and EA2LIM.
+		 Fix bug in OPCOD1 table for computing length of 0EAh
+		   opcode (far jump immediate).
+		 Define messages for back link errors.
+		 In DISP_REF, if VM=0 and NT=1 on an IRET/D, check the
+		   back link and display it for operand analysis.
+		 In GETILEN, check the DC/COD/B-bits in the incoming
+		   DS to set $OSP and $ASP appropriately.
+
+

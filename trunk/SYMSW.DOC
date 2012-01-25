@@ -1,0 +1,16 @@
+Fix Bug in LOADSYM Keyword
+
+Because of a parsing error in FCN_LOADSYM, if the LOADSYM keyword is
+not followed by =filename.ext, any following switches are ignored.
+This change allows LOADSYM and /H to work together.
+
+Also, a minor change to the overall parsing corrects a problem in
+which we did not allow a /switch to immediately follow a keyword.
+This change allows LOADSYM/H to be parsed correctly.
+
+SWAT_ARG.ASM	 Allow slash as valid keyword terminator.
+
+SWAT_FCN.ASM	 In FCN_LOADSYM, if no =filename.ext, check for
+		   switches anyway.
+
+

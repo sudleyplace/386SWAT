@@ -1,0 +1,61 @@
+Check error returns on GETBASE calls
+
+These are miscellaneous small (but useful) changes.  Included
+in this grab bag is one new mechanism that I think may be useful
+for debug message logging in a variety of environments.  A special
+code sequence beginning CD 03, with a signature value in EAX, signals
+SWAT to skip the code sequence, log a message, and take optional action
+based on BL.  The only real advantage of this over other methods of
+error logging is that it works in all environments and requires no
+setup code.
+
+Files affected:
+
+SWAT.ASM
+	Add code to check for special sequence for passing messages up
+	to SWAT.  This is an unlikely code sequence as it involves a
+	CD 03 (as opposed to the single-byte CC) and some other
+	conditions as well.  Currently this provides a simple way
+	of communicating with SWAT in all environments (DOS, Win16,
+	and Win32).
+
+	If we're in Windows, force use of an available DR? register for
+	single-skip breakpoints.  This is mainly useful when stepping
+	over functions in Win32 applications that may return after the
+	application's code has been swapped out and reloaded from the
+	COFF image (thus clobbering any Int3 breakpoints we might have
+	set).  I'm not actually sure whether the code is getting discarded
+	and reloaded from image (as Unix does) or whether it's getting
+	discarded rather than paged out, then paged back in.
+
+SWAT_BLK.ASM
+	Define @MAX_INSTR_LEN to the maximum length of a disassembled
+	instruction or label's text (including operands, targets, comments,
+	etc.)  Note that this is not used in defining the size of buffers,
+	as we'll use the larger NCOLS (80) value.  We do use the smaller
+	value when limiting the length of text we display.
+
+	In source browser mode, also check for .CPP files.
+
+SWAT_CMD.ASM
+	When evaluating expressions, check for errors in getting a selector's
+	base and use the default of 0.	This happens to work in Win32 (where
+	getting a selector's base also happens to frequently be a problem).
+	When GETBASE fails the value in EAX is undefined, and this used
+	to cause some odd results when calculating linear addresses (say,
+	when setting a breakpoint using an expression involving a selector).
+
+SWAT_SYM.ASM
+	Limit length of symbol names displayed.
+
+	When searching for symbols matching a given linear address, give
+	preference to non-line number symbols.	This usually allows us
+	to see a function name rather than just module#line_number.
+
+INT1\INT1_FNS.ASM
+	Check symbol length when building disassembly text.  Eventually
+	we should probably make a bigger buffer and figure out alternative
+	ways to display it, but currently I don't have anything else to
+	suggest.  At least this way we don't hose the register display.
+
+

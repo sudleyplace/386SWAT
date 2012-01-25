@@ -1,0 +1,17 @@
+Miscellaneous Opcode Changes
+
+* Disassemble IBM SLC chip opcodes 0F30h and 0F32h as SLC0 and SLC1.
+  This change affects INT1_ESC.ASM and INT1_TXT.ASM.
+
+* Fix bug in floating point disassembly of undefined opcodes D9D1
+  through D9DF.  These opcodes are marked as undefined in the Intel
+  literature, however the latter eight are mapped to FSTP ST(i).  The
+  first seven are undefined and were not properly disassembled as
+  such.  Brett Salter pointed out these discrepancies.	This change
+  affects INT1_FOP.ASM only.
+
+* Disassemble F1 opcode as ICE 01 as it signals INT 01h and is defined
+  for use in conjunction with an In-Circuit Emulator.  This change
+  affects INT1_TAB.ASM and INT1_TXT.ASM.
+
+

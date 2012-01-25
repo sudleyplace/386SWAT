@@ -1,0 +1,20 @@
+Reorganize INT1.EXE makefile
+
+INT1.EXE is a standalone program for testing SWAT disassembly.	It
+uses .OBJ files common to SWAT.
+
+References to data and code within SWAT (but not in INT1.EXE) were
+handled by placing them within IFNDEF INT1_DEF blocks, where it was
+assumed that when INT1.EXE was compiled INT1_DEF would be defined.
+This was an erroneous assumption, since the idea is to NOT recompile
+the .OBJ files for INT1.EXE and SWAT.
+
+Besides reorganizing the INT1.EXE makefile, this TWT also introduces
+a new file to INT1.  INT1_STB.ASM contains stub code for 2 procedures
+referenced in INT1_FNS.ASM, as well as needed data references.
+
+Files affected:
+INT1_STB.ASM	(new file) Contains data and procedural stubs to
+		satisfy the linker for INT1.EXE.
+MAKEFILE	Reorganized; new; improved.
+

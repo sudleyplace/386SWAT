@@ -1,0 +1,30 @@
+
+	     ______             ____  ______     _____  ______ 
+	    |  ____|           |  _ \|  ____|   / / _ \|  ____|
+	    | |__ _ __ ___  ___| |_) | |__     / / |_| | |__ 
+	    |  __| '__/ _ \/ _ \  _ <|  __|   / /|  _  |  __|
+	    | |  | | |  __/  __/ |_) | |____ / / | | | | |
+	    |_|  |_|  \___|\___|____/|______/_/  |_| |_|_|
+
+
+		    Tseng driver implementation notes.
+
+
+
+   This is a software-only driver for the Tseng ET3000, ET4000, and ET6000 
+   chipsets, based on the native Tseng drivers from old versions of the 
+   Allegro library. It has no support for linear framebuffers or accelerated 
+   drawing operations. As such it is useful primarily because it is faster 
+   than the VESA 1.x bank switching mechanism, and as a workaround for the 
+   many bugs in common VESA driver implementations.
+
+   This code is not portable to any platforms other than DOS+DPMI, because 
+   it uses BIOS calls to set the initial video mode.
+
+   Any volunteers to add hardware accelerator support? That would be very 
+   welcome if you want to do it :-)
+
+
+   By Shawn Hargreaves (shawn@talula.demon.co.uk)
+   Truecolor support added by Marco Campinoti (marco@etruscan.li.it)
+   ET6000 support contributed by Ben Chauveau (bendomc@worldnet.fr)

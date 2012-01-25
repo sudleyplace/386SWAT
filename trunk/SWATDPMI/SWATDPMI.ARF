@@ -1,0 +1,3 @@
+	 SWATDPMI
+	 SWATDPMI.exe
+	 SWATDPMI.map /line /map /cparmaxalloc:0x800 ;

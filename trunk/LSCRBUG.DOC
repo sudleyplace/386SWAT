@@ -1,0 +1,29 @@
+Fix Bug In Last Screen Number Display
+
+When converting SWAT to USE32, I missed an instance where in DD2DEC,
+we LEA an address from the stack (off of EBP) into a 16-bit register.
+This has the effect of storing the decimal display into the address
+modulo 64KB.  To fix this, I widened the incoming address from ES|DI
+to ES|EDI.  This entailed other changes, and pretty soon you're
+talking five modules.
+
+P87_DISP.ASM	 In GET_SCR_OFF, widen the output from 16- to 32-bits,
+		   and all associated changes.
+		 In FMTSUB, widen input from 16- to 32-bits.
+		 In FMTDIG, widen all inputs from 16- to 32-bits.
+		 In DD2DEC, widen input from 16- to 32-bits.
+
+SWAT.ASM	 Widen LSCR_CNT from word to dword and relocate for
+		   better alignment.
+		 Widen NLSTBUF from word to dword.
+		 Widen PLSTBUF_IND from word to dword.
+		 Widen input address to DD2DEC from 16- to 32-bits.
+
+SWAT_FBR.ASM	 Delete unused extrn.
+
+SWAT_FCN.ASM	 Widen NLSTBUF from word to dword.
+
+SWAT_INI.ASM	 Widen PLSTBUF_IND from word to dword.
+		 Widen NLSTBUF from word to dword.
+
+
