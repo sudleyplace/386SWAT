@@ -1,0 +1,15 @@
+AutoFault for GP Faults
+
+The Autofault facility has been extended to GP Faults.	This means
+that an attempt is made to interpret each GP Fault intercepted by SWAT
+in a short sentence.  Type Shift-F4 to see the last Autofault error
+message.  Because GP Faults are many and varied, some case will be
+missed (marked as unknown) or mistaken.  Please notify the author as
+you encounter such cases with the exact circumstances of the GP Fault
+so they may be corrected.
+
+SWAT_AFL.ASM	For TSS Faults, split out RM case as unknown.
+		For TSS Faults, split out VM vs PM cases.
+		For GP Faults, split cases based upon the instruction.
+
+

@@ -1,0 +1,9 @@
+Fix Bug With Mis-aligned Stack In GP Fault Handler
+
+If the user hooks GP Faults, the handler in LCL_INT0D uses a stack
+structure which is missing one word in the middle.  It's amazing it
+has worked at all so far.
+
+SWAT_INT.ASM	Insert proper line into stack structure.
+
+

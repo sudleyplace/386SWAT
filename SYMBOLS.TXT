@@ -1,0 +1,150 @@
+		    SWAT SYMBOLS TABLE MANAGEMENT
+
+
+The interface to SWAT symbols is through INT 67h calls.  Note that
+these calls are valid in both VM and PM.  In particular, the following
+calls are recognized:
+
+様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様
+
+Append symbols to the table
+
+Symbol names already in the table are replaced with the incoming
+offset, segment/selector, flags, and group #.  Symbol names when
+compared are case-insensitive; when displayed they are case-sensitive
+in the same case as they were entered.
+
+On entry:
+
+AX	 =	 DEF6
+BL	 =	 00
+ECX	 =	 # symbols to append
+DS:ESI	 ==>	 table of symbols to append in the following format:
+
+SYM_STR  struc
+
+SYM_FVEC df	 ?		; 32-bit offset and segment/selector
+SYM_FLAG dw	 ?		; Flags (see SYMFL_REC below)
+SYM_GRP  dw	 ?		; Group # for translation
+SYM_NAMLEN db	 ?		; Length in bytes of the symbol name
+
+; The symbol's name appears next (case-sensitive)
+
+SYM_STR  ends
+
+SYM_NAME equ	 SYM_NAMLEN.LO[type SYM_NAMLEN] ; Offset of symbol name
+
+SYMFL_REC record $SYMFL_VM:1,$SYMFL_TYP:5,$SYMFL_RSV:10
+
+@SYMFL_VM equ	 mask $SYMFL_VM ; 1 = symbol is for VM
+				; 0 = ...	    PM
+				; The above flag is meaningful for _DAT and _LN
+				; types only.
+@SYMTYP_DAT equ  0		; Code or data
+@SYMTYP_LN  equ  1		; Line number record constructed by MAPSSF
+@SYMTYP_ABS equ  2		; ABS record
+@SYMTYP_SWT equ  3		; Symbol is for SWAT internal use
+
+
+On exit:
+
+AH	 =	 00 If successful.
+	 =	 88 If not enough room (symbol table full).
+		    Some symbols from the input table may have been
+		    appended to the table.
+ECX	 =	 # symbols appended (even if AH <> 0)
+
+様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様
+
+Search for a symbol name
+
+Perform a case-insensitive table lookup for a symbol.
+
+On entry:
+
+AX	 =	 DEF6
+BL	 =	 01
+DS:ESI	 ==>	 length-name format of symbol name
+
+On exit:
+
+AH	 =	 00 If successful.
+	 =	 A0 If not found.
+CX	 =	 seg/sel
+EDI	 =	 offset
+DX	 =	 flags
+SI	 =	 group #
+
+
+様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様
+
+Symbol Translation
+
+Translate a symbol's flags, segment/selector, and base based upon its
+existing segment/selector and group #.
+
+On entry:
+
+AX	 =	 DEF6
+BL	 =	 02
+DS:ESI	 =	 SYMTRAN_STR
+
+SYMTRAN_STR struc
+
+SYMTRAN_OSEL dw  ?		; Old segment/selector
+SYMTRAN_OGRP dw  ?		; Old group #
+SYMTRAN_NFLAG dw ?		; New flags
+SYMTRAN_NSEL dw  ?		; New segment/selector
+SYMTRAN_NBASE dd ?		; New base (to be added to all offsets)
+
+SYMTRAN_STR ends
+
+On exit:
+
+AH	 =	 00 If successful.
+	 =	 A0 If no matching entries.
+
+様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様
+
+Symbol Table Flush.
+
+Flush the symbol table.
+
+
+On entry:
+
+AX	 =	 DEF6
+BL	 =	 03
+
+On exit:
+
+AH	 =	 00
+
+
+様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様様
+
+Append symbols without duplicate checking
+
+Add symbols to the table, assuming there are no duplicate names.  This
+service is otherwise identical to BL=0; it would normally be used to
+load extremely large symbol tables, after first flushing the symbol
+table (BL=3) to ensure that existing symbols will be overwritten rather
+than duplicated.
+
+
+On entry:
+
+AX	 =	 DEF6
+BL	 =	 04
+ECX	 =	 # symbols to append
+DS:ESI	 ==>	 table of symbols to append (see format of SYM_STR above)
+
+On exit:
+
+AH	 =	 00 If successful.
+	 =	 88 If not enough room (symbol table full).
+		    Some symbols from the input table may have been
+		    appended to the table.
+ECX	 =	 # symbols appended (even if AH <> 0)
+
+

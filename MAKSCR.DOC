@@ -1,0 +1,10 @@
+Fix MAKEFILE Bug
+
+The module SWAT_SCR.ASM has an unnecessary extrn and is missing some
+dependencies in MAKEFILE.
+
+MAKEFILE	 Note dependencies for SWAT_SCR.ASM.
+
+SWAT_SCR.ASM	 Delete unnecessary extrn.
+
+

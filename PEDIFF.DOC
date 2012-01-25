@@ -1,0 +1,10 @@
+Fix Bug In Device SWAT PE Bit Difference
+
+With device SWAT we clear PE bit if the VM bit is set as we're not
+really in PM.  In DISP_BLK3 when we display CR0 (and whether or not it
+changed from the last time) we mistakenly tested the VM bit in a copy
+of CR0, but of course the VM bit is in EFL.  This TWT fixes that.
+
+SWAT_BLK.ASM	 In DISP_BLK3, test VM bit in EFL, not CR0.
+
+

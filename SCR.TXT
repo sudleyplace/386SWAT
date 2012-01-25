@@ -1,0 +1,18 @@
+TDB=xxxx ModName=cccccccc NextTDB=xxxx hInst=xxxx hModule=xxxx ParentTDB=xxxx
+PDB=xxxx TDBSig=cc MinVer=xxxx Flag=WIN32 ...
+SS|SP=xxxx:xxxx NumEvents=xxxx Priority=xx MsgQueue=xxxx
+ErrMode=xxxx (...)
+UserSignal=xxxx:xxxx GlobNotify=xxxx:xxxx
+INT00=xxxx:xxxx INT02=xxxx:xxxx INT04=xxxx:xxxx INT06=xxxx:xxxx
+INT07=xxxx:xxxx INT3E=xxxx:xxxx INT75=xxxx:xxxx
+CompatFlag=xxxxxxxx
+TIB=xxxx LaTIB=xxxxxxxx
+hTask16=xxxx CodeAlias=xxxx InitDLL=xxxx:xxxx
+DTA=xxxx:xxxx CurDrv=xx
+CurDir16=..............
+CurDir32=...............
+........................
+
+
+
+

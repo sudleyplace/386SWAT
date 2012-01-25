@@ -1,0 +1,25 @@
+Set the GD Bit In DR7
+
+Because some programs get a kick out of resetting the debug registers
+which we've carefully setup, this change has SWAT automatically set
+the Global Debug (GD) bit in DR7 on startup so that we can stop such
+programs before they can do any harm.  Perhaps it doesn't surprise you
+that Windows is the chief reason for this feature.
+
+The profile keyword NOGD negates this behavior in case there's a
+problem.
+
+MAKEFILE	Note dependency of SWAT_FCN.ASM on SWAT_LC4.INC.
+
+386SWAT 	Document new keyword.
+
+SWAT_LC4.INC	Define bit for new keyword.
+
+SWAT_ARG.ASM	Include new keyword in parse table.
+
+SWAT_FCN.ASM	Define action routine for new keyword.
+
+SWAT_INI.ASM	In INIT_PROT, set GD bit in DR7 unless asked not to
+		  (NOGD), or it's already set.
+
+

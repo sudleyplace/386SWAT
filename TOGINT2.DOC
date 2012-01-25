@@ -1,0 +1,15 @@
+Fix Bug In TOGINT
+
+The change which put in the TOGINT feature contained a bug where the
+stack would get out of synch under device SWAT.  Also, I found yet
+another LINKer bug.  With this one, in a group bigger than 64KB (in
+this case PGROUP), any segment fixup beyond 64KB is applied to the
+address modulo 64K.  There was one such fixup in TOGGLE_TRP.
+
+SWAT_TOG.ASM	 Define data item to hold seg PGROUP as the fixup in
+		   TOGGLE_TRP is beyond 64KB.
+		 Include additional ASSUMEs for TOGGLE_TRP.
+		 Fix bug where the call to TOGGLE_TRP and the
+		   definition of the stack is mismatched.
+
+

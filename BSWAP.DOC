@@ -1,0 +1,18 @@
+Ignore Invalid Opcode From VM If Caused By BSWAP
+
+Because some VM programs attempt to execute the 486-only BSWAP
+instruction to detect if they are running on a 486, we need to ignore
+it if SWAT is trapping Invalid Opcodes (INT 06h) via TRAPINV.  This is
+a nicety to avoid bringing up SWAT when running Lotus 1-2-3 version
+3.10 (one of the culprits).
+
+SWAT_INT.ASM	 Rewrite INT 06h interrupt handler to detect this
+		   case.
+
+386.INC 	 Insert if @WordSize where necessary to allow the
+		   macro to work in both USE16 and USE32 cases.
+		 Define new macros PUSHW, POPW, and POPD.
+
+OPCODES.INC	 Define equates for high and low opcodes for BSWAP.
+
+

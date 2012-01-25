@@ -1,0 +1,17 @@
+Parse I/O Command line Instructions as LVALs
+
+For greater generality, the command line I/O instructions now allow an
+LVAL instead of just an atom.  Also, the IMR command line action
+displays the original values not the ones set by SWAT.
+
+386SWAT.DOC	 Note change to I/O command line of atom to VAL.
+
+386SWAT.GRM	 Note changes to I/O command line of atom to LVAL.
+
+SWAT_HTX.ASM	 Note change to I/O command line of atom to VAL.
+
+SWAT_IOP.ASM	 In INPUT_ACTIMR, return master and slave PIC values
+		   active outside SWAT, not the ones SWAT sets up.
+		 Change all PARSE_ATOMs to PARSE_LVAL.
+
+

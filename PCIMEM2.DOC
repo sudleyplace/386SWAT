@@ -1,0 +1,13 @@
+Make Device Driver SWAT Sensitive to Another Extended Memory Function
+
+The recent change to 386MAX to support the 0E801h Extended Memory
+function call needs to be copied to device SWAT not only so it can
+detect how much extended memory is in the system, but also so it can
+lie to any subsequent program requesting the extended memory size
+through that interface.
+
+SWAT_DRV.ASM	In RMDEV15, return DEVEXTSIZE from function 0E801h.
+		In CHECK_EXT, see if the new Extended Memory Size
+		  function is supported.
+
+

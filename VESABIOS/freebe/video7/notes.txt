@@ -1,0 +1,30 @@
+
+	     ______             ____  ______     _____  ______ 
+	    |  ____|           |  _ \|  ____|   / / _ \|  ____|
+	    | |__ _ __ ___  ___| |_) | |__     / / |_| | |__ 
+	    |  __| '__/ _ \/ _ \  _ <|  __|   / /|  _  |  __|
+	    | |  | | |  __/  __/ |_) | |____ / / | | | | |
+	    |_|  |_|  \___|\___|____/|______/_/  |_| |_|_|
+
+
+		  Video-7 driver implementation notes.
+
+
+
+   This is a software-only driver for Video-7 chipsets, based on the native 
+   Video-7 driver from old versions of the Allegro library. It only supports 
+   256 color modes, and has no support for linear framebuffers or 
+   accelerated drawing. As such it is useful primarily because it is faster 
+   than the VESA 1.x bank switching mechanism, and as a workaround for the 
+   many bugs in common VESA driver implementations.
+
+   This code is not portable to any platforms other than DOS+DPMI, because 
+   it uses BIOS calls to set the initial video mode.
+
+   Any volunteers to add hardware accelerator support? That would be very 
+   welcome if you want to do it :-)
+
+
+   By Peter Monks (Peter_Monks@australia.notes.pw.com)
+   Scrolling fixed by Markus Oberhumer (markus.oberhumer@jk.uni-linz.ac.at)
+   VBE/AF conversion by Shawn Hargreaves (shawn@talula.demon.co.uk)

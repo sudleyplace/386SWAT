@@ -1,0 +1,25 @@
+Add .VM addresses for Windows debugging
+
+Especially when debugging calls from a Windows app down to
+a VM interrupt handler, it is sometimes useful to know where
+we'll come back to in Windows on the other side of the ARPL
+wall.  .VMRET will often work if the call was made via DPMI
+SIMVMI (function 0300) or an INT instruction emulated by the
+DPMI host (Windows).
+
+Files affected:
+
+386SWAT.DOC
+386SWAT.GRM
+	Documented new features.
+
+SWAT.WSG
+	Change default selectors for SWAT.
+
+SWAT_CMD.ASM
+	Handle .VM, .VMSTK, and .VMRET when evaluating effective address.
+
+SWAT_HTX.ASM
+	Add help text for new features.
+
+

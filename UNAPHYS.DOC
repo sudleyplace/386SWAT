@@ -1,0 +1,37 @@
+Allow unassemble of physical addresses
+
+The unassemble command is extended to allow an optional trailing P and
+further optional value for CR3 in a manner identical to the way we
+allow data display of physical addresses.  The new unassemble command
+syntax is
+
+Ux opt_addr		x î {<empty>, 16, 32}
+Ux addr P		x î {<empty>, 16, 32}
+Ux addr P atom		x î {<empty>, 16, 32}
+
+At the same time, a bug in page up of instructions is fixed.
+
+386SWAT.GRM	 Note support of Ux with physical translation.
+
+SWAT.ASM	 In GET_LASTILEN, handle physical unassemble.
+		 In GET_LASTPLEN, fix bug in reference to EBP on the
+		   stack.
+		 In GET_LASTPLEN, handle physical unassemble.
+		 In SET_CURINSTR, clear @MODE_PHYS flag.
+
+SWAT_BLK.ASM	 Define PHYOFF as place to display "PHYSICAL via CR3"
+		   message if appropriate.
+		 Save value for PHYOFF.
+		 In DISP_BLK4, handle physical unassemble.
+		 In DISP_BLK4, display "PHYSICAL via CR3" message.
+
+SWAT_MEM.ASM	 In HDR_PHYS, strip out display code to subroutine.
+		 Define HDR_PHYS_SUB to do the actual display,
+		   callable from DISP_BLK4.
+
+SWAT_UNA.ASM	 Define UNACR3 as CR3 to use in physical memory
+		   translation.
+		 In CMD_UNASM, parse physical address translation
+		   command line.
+
+

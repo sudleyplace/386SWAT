@@ -1,0 +1,13 @@
+Fix Bug In GETILEN
+
+When I changed SWAT over to USE32, I missed a routine (GETILEN) which
+calculates the length of an instruction.  That routine assumed that
+the D-bit in the code segment which contains the instruction is clear.
+Of course, it's now set for SWAT.  This change tests for the D-bit and
+operates appropriately.  At the same time, I widened that routine's
+input and output registers all to 32-bits.
+
+SWAT_OPR.ASM	 Make sensitive to D-bit in code segment.
+		 Widen input and output registers to 32-bits.
+
+

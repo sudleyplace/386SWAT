@@ -1,0 +1,19 @@
+Fix Bug With DEBUG=PMI And Device SWAT
+
+If we're loading as Device SWAT at startup, INIT_PROT is called at the
+point where SWAT is a temporary VCPI client of the MM.	Thus the
+active IDT is that of the VCPI client and INIT_PROT is setting up the
+MM's IDT where the VCPI client has calculated the IDT's linear address
+in the VCPI client's linear address space.
+
+All this is background to say that we can't signal an INT 01h if
+DEBUG=PMI is specified because the active IDT (that of the VCPI
+client) does not have its IDT entries setup for debugging unless
+there's a preceding SWAT in the picture.  This changes enforces that
+condition.
+
+SWAT_INI.ASM	In INIT_PROT, don't signal an INT 01h if DEBUG=PMI is
+		  specified if we're Device SWAT without a preceding
+		  SWAT.
+
+

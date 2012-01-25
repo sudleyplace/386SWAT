@@ -1,0 +1,21 @@
+Fix Bug When Testing For Extended Memory
+
+Due to an oversight, when I put in the code to determine the amount of
+extended memory using the INT 15h/0E801h call, I put it in after the
+INT 15h/0DA88h, instead of before.  Because of a bug in Phoenix 4.04
+BIOSes, which crash on the 0DA88h call, the order is important.
+
+Also, when setting up the IDT entry for VCPI debugging using TSSes, we
+used to set the offset to -1 (because the IDT selector is a TSS and
+the offset isn't used).  For convenience, I'm now setting the
+low-order byte of the offset to the interrupt #.  That way, when
+looking at the IDT in memory (not via F4) it's easy to tell which
+interrupt it covers.
+
+SWAT_DRV.ASM	Reverse the order of INT 15h calls which request the
+		  amount of extended memory.
+
+SWAT_VCP.ASM	In SETTSS, set the low-order byte of the IDT entry
+		  offset to the interrupt #.
+
+

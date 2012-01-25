@@ -1,0 +1,31 @@
+* Avoid Crash If Preceding INT 67h Vector Is Zero
+
+When SWAT installs as a device driver and hooks INT 67h (to monitor
+VCPI and local SWAT functions), it's possible that the preceding
+interrupt vector is 0:0.  In that case, if an INT 67h call comes along
+which is not one of ours, it can be fatal.  This happens with IBM's
+PC-DOS 6.3 which notes that the INT 67h vector is non-zero (it points
+to SWAT), but doesn't bother to look for the EMMXXXX0 device name.
+
+This change tests for that condition and, if present, installs a local
+INT 67h handler preceding SWAT's handler which returns an error code
+to the INT 67h call.
+
+Also included are some minor changes to MAKEFILE.
+
+MAKEFILE	 Use $(1) instead of INT1\ to parallel later use.
+		 Avoid problem with MASM where it fails to find
+		   include files after invalid (to it) path in the
+		   INCLUDE environment variable.  In particular, it
+		   doesn't like "." as a path.
+		 Use separate entry for $(I01DIR).ASM to .OBJ files
+		   to allow more flexibility in processing separate
+		   INT1\ sub-directory entries.
+		 Fix bug in reference to INT1_xxx.INC include entries.
+
+SWAT_DRV.ASM	 Define label for failing INT 67h calls.
+		 At the end of SETINTS, check for preceding INT 67h
+		   vector being 0:0.  If so, save address of a local
+		   INT 67 handler as the preceding entry.
+
+

@@ -1,0 +1,20 @@
+Skip Over Additional Debug Faults With DR7.GD=1
+
+If we're trying to keep the debug registers to ourselves by setting
+DR7.GD=1, there are some additional cases where SWAT references the
+debug registers which we should allow to work.	These cases occur when
+a program uses the VCPI debug interface to request certain functions
+and we call the READ_CR3 subroutine in the process of flushing the
+TLB.
+
+At the same time, a NEWDIR bug in MAKEFILE is fixed where we reference
+an incorrect directory for 386MAX .OBJ files.
+
+MAKEFILE	 Use OEM directory under $(SWTDIR) to get 386MAX .OBJ
+		   files.
+
+SWAT.ASM	 Skip over debug fault if it's in READ_CR3.
+
+SWAT_MSC.ASM	 Make public the ending address of READ_CR3.
+
+

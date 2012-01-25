@@ -1,0 +1,22 @@
+Use Monochrome Adapter If Present
+
+Rather than switch to the mono adapter every time I startup the
+system, I thought it easier to implement a keyword to do the same.
+With this keyword (MONO) present, if a monochrome adapter is present
+in the system, it becomes the initial display screen for SWAT.
+
+386SWAT 	 Document the new keyword.
+
+386SWAT.DOC	 Document the new keyword.
+
+SWAT_LCL.INC	 Define a bit for the new keyword.
+
+SWAT_ARG.ASM	 Define an entry in the parse table.
+
+SWAT_FCN.ASM	 Define the action routine for the new keyword.
+
+SWAT_INI.ASM	 If both adapters and the new keyword are present, use
+		   the monochrome adapter as the initial display
+		   screen.
+
+

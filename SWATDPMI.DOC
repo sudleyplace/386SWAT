@@ -1,0 +1,70 @@
+Debugging DPMI applications with 386SWAT
+
+SWATDPMI.ASM is a sample DPMI application that copies code
+and data into extended memory, then executes code in extended
+memory.  It also provides more examples of DPMI services than
+HELLO_PM.ASM.
+
+SWATDPMI illustrates debugging with dynamic selectors, as well
+as use of the .WSG file mechanism.  If the selectors to be used
+for each group or segment are known in advance, the translations
+may be specified in the .WSG file.
+
+In SWATDPMI.WSG, we specify translations for our two dynamic
+selector segments.  However, the linear addresses for the bases
+of these two selectors will not be known until after the extended
+memory has been allocated, the selectors have been allocated,
+and the base and limit for each selector have been set.
+
+Let's take a walk through a debugging session with SWATDPMI.
+First, we build SWATDPMI.EXE and SWATDPMI.SSF:
+
+nmake /f SWATDPMI.MAK
+
+From the DOS prompt, load SWATDPMI.EXE for debugging:
+
+swatrun /o swatdpmi
+
+You should now have a SWAT screen displayed with the "Start:"
+label in SWATDPMI.ASM highlighted.  Using the grey '-' key (or
+F12), single-skip down about 12 lines to the CALL PM_init line.
+
+Single skip over the call to PM_init.  Notice that you will come
+back in protected mode at privilege level 3.  All of our symbols
+in low DOS are valid, because the linear addresses have not changed.
+However, all segment:offset values are displayed as selector|offset.
+The '|' symbol is used in 386SWAT to denote a selector.
+
+Trace down to the CALLF Dword ptr [Ext_mainp] line using the grey
+'+' key (or F11).  This is where we jump to the code we copied
+into extended memory in PM_init.  Trace into this call using grey '+'.
+
+No symbols will be displayed now.  On the fourth line of the
+disassembly screen, the base of CS is shown as an address in
+extended memory.  Trace down to the LEA EDX,[02B4].  Both CS and
+DS are now loaded with selectors pointing to extended memory
+(look at the CS=selector|base-limit-ARW display).
+
+Use the 386SWAT TS command to re-translate all symbols.  Since
+the selectors used in the .WSG file for CODE (C7) and EDATA (CF)
+are now valid, line numbers and other symbols now appear.  If
+we did not correctly specify the selector values in the .WSG file,
+we could change the selectors using the TS command.
+
+For example, if the new CODE selector was D7 and the new EDATA
+selector DF, these two commands:
+TS * 100 * D7
+TS * 101 * DF
+will translate all selectors with group ID 100 to D7, and all selectors
+with group ID 101 to DF.
+
+In our current example, it is only necessary to type
+TS
+at the SWAT command line, and all symbols will be retranslated.
+
+SWATDPMI provides a working example of dynamic selector allocation
+and usage, as well as calling XMS services from protected mode via
+far call translation.  Allocating a UMB for the HPDA might be a
+useful strategy for a DPMI TSR.
+
+

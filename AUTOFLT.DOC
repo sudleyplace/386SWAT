@@ -1,0 +1,71 @@
+Implement AUTOFAULT Feature
+
+After staring at a TSS fault for the longest time (and finally
+figuring out that the NT bit was set incorrectly for an IRETD), I
+decided to let the computer find this error for me.  With this
+feature, when a TSS, Stack, GP, or Page Fault occurs, SWAT figures out
+why and displays a message to that effect.
+
+The previous AUTOFAULT message can be displayed by pressing Alt-F4.
+
+For the moment, only TSS faults are handled, but the entire mechanism
+is present.
+
+In order to trap TSS faults, a new keyword (TRAPTSS) is defined along
+with the machinery needed to put it into effect.  As this fault cannot
+occur in RM/VM, there is no corresponding RMDEV0A handler, although
+there is a @TRP_I0A entry so we can display the intercept state
+correctly along with other intercepted interrupts.
+
+
+386SWAT 	 Document new keyword.
+
+MAKEFILE	 Define dependencies for new routine.
+		 Respecify Set INCLUDE after call to MASM to make more
+		   convenient grabbing lines from the screen
+		   w/TALLSCREEN.
+
+SWAT_AR2.INC	 Define static flag for TRAPTSS.
+
+SWAT_DRV.INC	 Use record structure for TRP_FLAG.
+		 Define @TRP_I0A flag.
+
+SWAT_LC3.INC	 Define dynamic flag for TRAPTSS.
+
+SWAT_LC4.INC	 Define flags for AUTOFAULT checking and message
+		   display.
+
+SWAT.ASM	 Define key Alt-F4 to display last AUTOFAULT message.
+		 Set AFLCHK flag if no fault message.
+		 If AUTOFAULT not already checked, check for it.
+		 If AUTOFAULT message to be displayed, do so.
+
+SWAT_AFL.ASM	 New routine to check for AUTOFAULTs.
+
+SWAT_AGR.ASM	 Define routine SEL2TSS to convert a selector to a TSS
+		   selector as appropriate.
+
+SWAT_ARG.ASM	 Define parse entry for TRAPTSS.
+
+SWAT_DRV.ASM	 Set TRP_FLAG is TRAPTSS is specified.
+
+SWAT_FCN.ASM	 Define action routine for TRAPTSS.
+
+SWAT_INI.ASM	 Initialize/uninitialize INT 0Ah handler if TRAPTSS is
+		   specified.
+
+SWAT_INT.ASM	 Fix bug in LCL_INT06 handler (use near jump instead
+		   of far jump to avoid segment fixup).
+		 Define INT 0Ah variables.
+		 Define LCL_INT0A handler.
+
+SWAT_OPR.ASM	 Define and set EA1TSEL as target selector of
+		   effective address for use in TSS autofault
+		   detection.
+
+SWAT_SCR.ASM	 Define screen message to display if INT 0Ah
+		   intercepted.
+
+SWAT_TOG.ASM	 Define TOGINT0A entry.
+
+

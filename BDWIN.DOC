@@ -1,0 +1,11 @@
+Re-enable Debug Register Linear Address
+
+When we use BDn+, it's possible that the linear address has been
+overwritten especially if we've gone into and out of Windows which
+zeroes the debug registers upon termination.  This change resets the
+linear address at BDn+ time.
+
+SWAT_DBG.ASM	 In CMD_BDENA, reset the linear address into the
+		   appropriate debug register.
+
+

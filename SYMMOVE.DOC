@@ -1,0 +1,11 @@
+Fix Bug When Moving Symbols to Extended Memory
+
+Some BIOSes require that the BIOS-reserved fields used in a BIOS block
+move be initialized to zero.  When we move symbols to extended memory
+(via the LOADSYM= command), we allocate room for the BIOS block move
+DTE on the stack where the data might be zero.	This chaneg fixes
+that.
+
+This change affects SWAT_FCN.ASM only.
+
+

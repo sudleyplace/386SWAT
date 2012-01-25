@@ -1,0 +1,41 @@
+; WSG file for SWATDPMI protected mode symbols
+
+; Note that the following selector values will not be valid until
+; we have entered protected mode via the PM entry point.  Others
+; will not be valid until later in the code.
+
+; The 386SWAT ts command may be used to re-translate selectors
+; on the fly.  For example:
+; ts
+; after both selectors have had their bases set up would cause
+; them to be re-translated according to the current LDT.
+
+; Comments are begun with ';' as in assembler.
+
+; The ID is a 16-bit value specified in hex which may be used with
+; the TS command within SWAT for retranslation.
+
+; Mode is P for protected mode, V for V86 mode, or D for delete.
+
+; The specified segment or selector replaces that in the map file.
+
+; If a group!segment name is specified, translation occurs only for
+; the specified segment within a group.  If only the group name is
+; specified, all symbols within that group (except those specified
+; in a group!segment translation) will be translated.
+
+; ID	mode	sel	group name
+
+  0100	P	C7	PGROUP!CODE	; Code in extended memory
+  0101	P	CF	PGROUP!EDATA	; Data in extended memory
+  0102	D	0	PGROUP!ZDATA	; How to delete symbols in a segment
+
+; These lines are provided as additional examples.  We don't need to specify
+; any selectors for low DOS, since the segment values at startup time are
+; automatically converted to selectors with the same base by the DPMI host.
+; 0103	P	9F	NGROUP		; How to specify a selector for an
+;					; entire segment
+; 0104	P	8F	NGROUP!NCODE	; Code in low DOS
+; 0105	P	9F	NGROUP!NDATA	; Data in low DOS
+
+

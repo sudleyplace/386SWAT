@@ -1,0 +1,161 @@
+Convert The rest of SWAT Over to USE32 Data
+
+This should be the bulk of it, other than the inevitable set of fixes
+for bugs I've introduced.
+
+I have not tested these changes with the remote debugging part of
+SWAT.  I have tested them with all sorts of disassembly, as well as
+VCPI and Windows debugging.
+
+LINK:
+
+LINK.EXE:	 Now called FLINK.EXE -- you fill in the first letter.
+		 Fix bug of spurious fixup overflow, although other
+		   valid fixup overflows might now be suppressed as
+		   well.
+
+
+INCLUDE:
+
+MASM.INC	 Define LOG2 macro to convert mask to highest bit
+		   index.  Use this macro when shifting a register
+		   to the right to convert it to an item index to be
+		   used with scaled indexing.
+
+
+INT1:
+
+MAKEFILE	 Note dependency of most .ASM files on SWAT_SEG.INC.
+
+INT1_FNS.INC	 Widen data field for USE32 use.
+
+INT1_TAB.INC	 Widen data fields for USE32 use.
+
+INT1_WIN.INC	 Widen data fields for USE32 use.
+
+INT1_ESC.ASM	 Widen data fields for USE32 use.
+
+INT1_FOP.ASM	 Widen data fields for USE32 use.
+
+INT1_GRP.ASM	 Widen data fields for USE32 use.
+
+INT1_MSC.ASM	 Widen data fields for USE32 use.
+
+INT1_TAB.ASM	 Widen data fields for USE32 use.
+
+INT1_TXT.ASM	 Widen data fields for USE32 use.
+
+INT1_WIN.ASM	 Widen data fields for USE32 use.
+
+
+SWAT:
+
+MAKEFILE	 Allow local INT1 directory.
+		 Note dependency of most .ASM files on SWAT_SEG.INC.
+		 Use FLINK instead of LINK to link SWAT's .OBJs.
+		 Use /D switch in FIXOVL for wider format.
+
+PDTGRP.INC	 Change USE16 to USE32 to match the change in SWAT.ASM.
+
+POP87.INC	 Widen data fields for USE32 use.
+
+SWAT_CMD.INC	 Widen data fields for USE32 use.
+
+SWAT_COM.INC	 Widen data fields for USE32 use.
+
+SWAT_INF.INC	 Define additional fields needed for SWATVXD.
+
+SWAT_OVL.INC	 Widen data fields for USE32 use.
+
+SWAT_REM.INC	 Widen data fields for USE32 use.
+
+SWAT_SEG.INC	 Widen data fields for USE32 use.
+		 Define additional segments.
+
+SWAT_VCP.INC	 Widen data fields for USE32 use.
+
+P87_DISP.ASM	 Widen data fields for USE32 use.
+
+P87_TABS.ASM	 Widen data fields for USE32 use.
+
+POP87.ASM	 Widen data fields for USE32 use.
+
+SWAT.ASM	 Widen data fields for USE32 use.
+		 Include additional fields in SWATINFO_STR for
+		   SWATVXD.ASM.
+
+SWAT_AFL.ASM	 Widen data fields for USE32 use.
+
+SWAT_AGR.ASM	 Widen data fields for USE32 use.
+
+SWAT_ARG.ASM	 Widen data fields for USE32 use.
+
+SWAT_BLK.ASM	 Widen data fields for USE32 use.
+
+SWAT_CMD.ASM	 Widen data fields for USE32 use.
+
+SWAT_DBG.ASM	 Widen data fields for USE32 use.
+
+SWAT_DR2.ASM	 Widen data fields for USE32 use.
+
+SWAT_DRV.ASM	 Widen data fields for USE32 use.
+
+SWAT_DTE.ASM	 Widen data fields for USE32 use.
+
+SWAT_FBR.ASM	 Widen data fields for USE32 use.
+
+SWAT_FCN.ASM	 Widen data fields for USE32 use.
+
+SWAT_FVM.ASM	 Widen data fields for USE32 use.
+
+SWAT_GOT.ASM	 Widen data fields for USE32 use.
+
+SWAT_HEX.ASM	 Widen data fields for USE32 use.
+
+SWAT_HLP.ASM	 Widen data fields for USE32 use.
+
+SWAT_HTX.ASM	 Widen data fields for USE32 use.
+
+SWAT_INI.ASM	 Widen data fields for USE32 use.
+
+SWAT_INT.ASM	 Widen data fields for USE32 use.
+
+SWAT_IOP.ASM	 Widen data fields for USE32 use.
+
+SWAT_KEY.ASM	 Widen data fields for USE32 use.
+
+SWAT_KTB.ASM	 Widen data fields for USE32 use.
+
+SWAT_MEM.ASM	 Widen data fields for USE32 use.
+
+SWAT_MSC.ASM	 Widen data fields for USE32 use.
+
+SWAT_OPR.ASM	 Widen data fields for USE32 use.
+
+SWAT_PTE.ASM	 Widen data fields for USE32 use.
+
+SWAT_REG.ASM	 Widen data fields for USE32 use.
+
+SWAT_REM.ASM	 Widen data fields for USE32 use.
+
+SWAT_SCR.ASM	 Widen data fields for USE32 use.
+
+SWAT_SIG.ASM	 Widen data fields for USE32 use.
+
+SWAT_SRC.ASM	 Widen data fields for USE32 use.
+
+SWAT_SYM.ASM	 Widen data fields for USE32 use.
+
+SWAT_TOG.ASM	 Widen data fields for USE32 use.
+
+SWAT_UNA.ASM	 Widen data fields for USE32 use.
+
+SWAT_VCP.ASM	 Widen data fields for USE32 use.
+
+SWAT_VID.ASM	 Widen data fields for USE32 use.
+
+SWAT_WIN.ASM	 Widen data fields for USE32 use.
+
+SWAT_XLT.ASM	 Widen data fields for USE32 use.
+
+

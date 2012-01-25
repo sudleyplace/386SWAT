@@ -1,0 +1,11 @@
+UNREAL Command
+
+Implement UNREAL command to allow debugging of Unreal Mode.  This mode
+is a variant of Real Mode in which segment registers (CS, DS, ES, FS,
+GS, or SS) can access all of the 4GB address space.  That is, instead
+of the normal 64KB length of a segment, the length is 4GB.  This
+command can enable all or just some of the registers for Unreal Mode.
+See SWATCMD.HTM for more details.
+
+
+

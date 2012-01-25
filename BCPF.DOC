@@ -1,0 +1,31 @@
+Fix Bug Of Page Fault In BC Processing
+
+If one is swatting along in (say) a DPMI client whose code is in
+extended memory, and single-skip over a call which terminates the
+client (like I did with MS Link), and then brings up SWAT, the code
+breakpoint set by the single-skip (or equivalently any outstanding BC
+statements in extended memory) can signal a Page Fault if the same
+page mapping is no longer in effect.  This TWT corrects that.
+
+At the same time, I incorporated the single-skip breakpoint data
+values into the BC breakpoint values as they are handled very
+similarly.
+
+SWAT.ASM	 Move single-skip breakpoints into BC data.
+
+SWAT_DBG.ASM	 Define single-skip breakpoints in BC data.
+		 In INST_BCVAL and REST_BCVAL handle potential Page
+		   Faults when installing/restoring the breakpoints.
+		 Convert the above routines over to USE32 data.
+
+SWAT_GOT.ASM	 Enable goto BP as we use the same values as for
+		   single-skip.
+
+SWAT_OPR.ASM	 Define new OPCOD2 table values for Pentium
+		   instructions (mostly just GRP9 instructions).
+		 In OPR_INT0E, remove assumption of DS=ES=DGROUP on
+		   entry.
+		 In INST_OPR0E and REST_OPR0E, remove assumption of
+		   ES=DGROUP on entry (it's actually not used).
+
+

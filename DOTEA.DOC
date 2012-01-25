@@ -1,0 +1,38 @@
+Implement .EA Keyword
+
+One of the other addresses which appear on the screen which I
+sometimes need but don't want to type in is the Effective Address from
+the operand analysis display.  This TWT makes that address available
+through the .EA keyword.
+
+As it turns out, nothing is simple.  There are times when there are
+two effective address present in the operand analysis display such as
+for a POP into memory (the source and target addresses are displayed)
+as well as for a string move or compare.  Thus is born .EA2 which
+picks up the other one.  For the moment, the main benefit comes from
+just .EA as I'll need to make some changes to handle the double EA
+cases.	They don't always get stored (or displayed) in a logical way.
+
+The following modules are changed and why:
+
+386SWAT.GRM	 Note new dot command which returns an effective
+		   address.
+
+SWAT_CMD.ASM	 Define error message text for when there's no
+		   effective address to display.
+		 Switch order of SIGINT in CMDARG_MAC so it's
+		   alphabetical.
+		 Include ea and ea2 in list of dot commands.
+		 Define action routines to handle .EA and .EA2.
+		 Fix bug in .XBDA and .XBDA2 error processing (didn't
+		   go to PARSE_EA_ERR which sets @LC2_MSG).
+
+SWAT_OPR.ASM	 Define variables for EA1 and EA2 addresses.
+		 At start of DISP_OPER, mark both EAs as invalid.
+		 After processing EA2, copy variables to EA2xxxx and
+		   mark EA1xxxx variables as invalid (DISP_REF always
+		   fills in the EA1xxxx variables).
+		 If we're not just computing EAs, save values for the
+		   EA1xxxx variables.
+
+

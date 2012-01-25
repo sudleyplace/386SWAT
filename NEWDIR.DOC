@@ -1,0 +1,36 @@
+Change MAKEFILE to Support Creation of New Directory
+
+This change to MAKEFILE allows one to create a new directory easily by
+calling the batch file NEWDIR.BAT, just as was done for 386MAX.
+
+To create a new TWT directory, first define a SET statement in your
+environment for TWTEXT (e.g., Set TWTEXT=BOB).	Typically, this
+statement should be placed in your AUTOEXEC.BAT file.
+
+Next, type
+
+P:\386SWAT\NEWDIR dirname [oem [flags]]
+
+where DIRNAME is the name (without extension) of the directory to be
+created locally as well as in P:\TWT using the extension found in
+TWTEXT (e.g., BOB).  OEM is an optional subdirectory name (default =
+BCF) to be created on the local drive.	FLAGS are optional flags to be
+passed to NMAKE.  This batch file copies all files necessary to start
+a TWT onto your local hard disk.
+
+MAKEFILE is changed as follows:
+
+* A new variable NEWDIR is defined (default value N) to control
+  whether or not we execute MASM or copy .OBJ files.  This variable is
+  set to Y in the NEWDIR batch file to create a new TWT directory.
+
+* The variable $(NEWDIR) is tested in appropriate places to be
+  sensitive to whether or not we're creating a TWT directory.
+
+* New pseudo-target NEWDIR is created if NEWDIR=Y is specified on the
+  command line.  This target is used to copy auxiliary files to the
+  local TWT directory.
+
+This change affects MAKEFILE and NEWDIR.BAT.
+
+

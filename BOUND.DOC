@@ -1,0 +1,13 @@
+Include Bound Interrupt (INT 05h) in List of VCPI Interrupts
+
+Along with many other interrupts, we now have the ability to trap
+Bound Interrupts (INT 05h) when debugging on the other side of the
+VCPI wall.  At the same time, I fixed a bug in the VCPI 486 Alignment
+Check (INT 11h) interrupt handler.  It had previously and mistakenly
+assumed that it could use the common code at TSS_INTCOM.  However,
+that code should be used for only those exceptions which can overlay
+hardware interrupts (typically 08h-0Fh).
+
+This change affects SWAT_VCP.ASM and 386SWAT.
+
+

@@ -1,0 +1,84 @@
+Miscellaneous Changes
+
+1.  Display appropriate comment on DPMI interrupt lines.  This also
+    involves defining a new segment to hold the DPMI function values
+    (as words).
+
+2.  For display of PTEs, note the PDE which contains the top line of
+    the display as well as the range of linear addresses covered by
+    the top line.
+
+3.  For display of PDEs, note the range of linear addresses covered by
+    the top line.
+
+4.  Display display of PTEs and PDEs, handle not present entries by
+    displaying "????????".
+
+5.  Change the initial mask for memory display to allow 32-bit values.
+
+6.  Change the number of entries displayed in dword format to eight by
+    squeezing the entries together.  Note that the previous width can
+    be obtained via the dd/4 command.
+
+7.  Save the previous d?/?? value for later use separately for each
+    width.
+
+8.  If the selector passed to any routine which calls GETARWBASE is
+    not present, return with CF=1 to indicate an error.  This change
+    is needed by WINSWAT to avoid displaying an incorrect label for
+    not present selectors.  As it turns out, without this change and
+    with the new KRNL386, USER, GDI symbol display in WINSWAT the
+    label displayed for not present selectors is that of the Windows
+    routine BOZOSLIVEHERE.
+
+9.
+
+
+SWAT_SEG.INC	Define new segment to hold word values for WINBASE
+		  tables.
+
+SWAT_DAT.ASM	Change MEMCNT from dword to array of dwords so we can
+		  save a separate value for each width.
+
+SWAT_DTE.ASM	For display of PTEs, note the PDE which contains the
+		  top line of the display as well as the range of
+		  linear addresses covered by the top line.
+		For display of PDEs, note the range of linear
+		  addresses covered by the top line.
+
+SWAT_MEM.ASM	Change the initial mask for memory display to allow
+		  32-bit values.
+		Change MEMCNT from dword to array of dwords so we can
+		  save a separate value for each width.
+		Change the number of entries displayed in dword format
+		  to eight by squeezing the entries together.  Note
+		  that the previous width can be obtained via the dd/4
+		  command.
+		Delete code to save new width into MEMCNT as we now
+		  use the previous value.
+		Define routine to get and display a dword.
+
+SWAT_MSC.ASM	If the selector passed to any routine which calls
+		  GETARWBASE is not present, return with CF=1 to
+		  indicate an error.
+
+SWAT_SCR.ASM	When displaying PTEs and PDEs, handle not present
+		  entries by displaying "????????".
+		Define routine to display an ASCIIZ line of a specific
+		  length.
+
+INT1_WIN.INC	Define additional pointer to table of word values.
+
+INT1_FNS.ASM	In @PTR16@16 and @PTR16@32, save the selector and
+		  offset for later use.
+		In @INTMSG, display appropriate comment for DPMI
+		  interrupt functions.
+
+INT1_WIN.ASM	Expand strucs to include table of word values
+		  (functions) for comment lines.
+		Delete extraneous WINMAC entries in INTER21 as the
+		  code which checks the function # against the table
+		  length will catch this.
+		Define DPMI function call table entries.
+
+

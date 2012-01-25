@@ -1,0 +1,26 @@
+
+ALL:	 EPM.EXE
+
+EPM.OBJ:	 EPM.ASM      \
+		 386.INC      \
+		 8255.INC     \
+		 8259.INC     \
+		 ALLMEM.INC   \
+		 ASCII.INC    \
+		 BIOSCONF.INC \
+		 CMOS.INC     \
+		 CPUFLAGS.INC \
+		 DOSCALL.INC  \
+		 DPMI.INC     \
+		 DTE.INC      \
+		 IOCTL.INC    \
+		 MASM.INC     \
+		 OPEN.INC     \
+		 PSP.INC      \
+		 PTR.INC      \
+		 VCPI.INC     \
+		 XMS.INC
+
+EPM.EXE:	 EPM.OBJ
+
+

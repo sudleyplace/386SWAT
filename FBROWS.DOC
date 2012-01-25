@@ -1,0 +1,60 @@
+Design for file browser:
+
+SYM_FNAME[0] determines whether buffer contents are valid or not.
+
+FBROWS_FPTR is the offset within file of the beginning of buffer
+FBROWS_FLEN is the number of bytes in buffer which are valid
+
+FBROWS_BUFOFF is the word offset of the buffer (must be near addressable).
+FBROWS_BUFLEN is the word buffer length in bytes.
+
+*_SLINE is the screen start in lines from beginning of file
+*_CLINE is the highlighted line       "
+*_NUMLINES is the number of lines to display (22)
+*_SOFF is the word offset within DGROUP of last SLINE displayed.
+*_COFF is the word offset within DGROUP of CLINE (used for display only).
+
+ADJUST_CLINE takes a signed argument in AX which is added to CLINE.
+If the new CLINE is out of the current screen range, begin
+  Count lines from SOFF
+  If the current line begins within range of valid buffer contents, begin
+    If it ends within range, begin
+	Save offset as COFF
+	Seek back or forwards to set new SOFF, and adjust SLINE
+    end else (not in range) if not EOF (FBROWS_FLEN <> FBROWS_BUFLEN) and
+    not BOF (FBROWS_FPTR == 0), begin
+	If DOS busy, display message and truncate, else begin
+	    Seek to new FBROWS_FPTR such that FBROWS_BUFLEN/2 bytes maximum
+	    will be read into buffer.
+	    Move existing buffer data into place.
+	    Read file data in to form a contiguous block.
+	    Adjust FBROWS_FPTR and FBROWS_FLEN.
+	end.
+    end else (not in file) truncate.
+  end else (not in buffer) if not (EOF or BOF), begin
+	If DOS busy, display message and truncate, else begin
+	    Seek to new FBROWS_FPTR such that FBROWS_BUFLEN/2 bytes maximum
+	    will be read into buffer.
+	    Move existing buffer data into place.
+	    Read file data in to form a contiguous block.
+	    Adjust FBROWS_FPTR and FBROWS_FLEN.
+	end.
+  end else (not in file) truncate.
+end else (in screen range) adjust CLINE.  Find new COFF.
+
+When displaying file contents, we check first for the validity of the
+buffer.  If SYM_FNAME[0] != 0, it's valid; display the name, FBROWS_CLINE
+and (FBROWS_COFF - FBROWS_BUFOFF + FBROWS_FPTR), and continue.
+
+Starting at FBROWS_SOFF, we display lines, continuing until
+1. <current location> - FBROWS_BUFOFF > FBROWS_FLEN (EOF/truncated)
+2. FBROWS_NUMLINES (22) lines have been displayed
+
+We count line numbers within the file starting from FBROWS_SOFF.  If we
+match FBROWS_COFF, display line highlighted.
+
+-----------------------------------------------
+
+Down arrow, page down, and LI n adjust FBROWS_SLINE.  Symbol references
+set FBROWS_CLINE and force FBROWS_SLINE to be readjusted by adding 0 to it.
+

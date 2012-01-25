@@ -1,0 +1,27 @@
+Make INTRUDE The Default Option
+
+Now that INTRUDE is reasonably well debugged, I'm making it the
+default option so users don't need to remember to use it (which has
+happened several times).  This will reduce the number of tech support
+questions I get from users of SWAT on the Internet.  In case the user
+needs to use the VCPI client version of SWAT, the disabling option
+VCPISWAT is defined.
+
+
+386SWAT 	 Define new headers for each section:  Recommended,
+		   Default, and All options.
+		 In the All Options section, precede every line with a
+		   semicolon so it's easier to distinguish which lines
+		   are active and which ones are inactive.
+		 Document new disabling option, VCPISWAT.
+
+386SWAT.DOC	 Document VCPISWAT keyword.
+
+SWAT_ARG.ASM	 Define new keyword VCPISWAT.
+		 Minor changes to comments.
+		 Call FCN_INTRUDE in the default option section as
+		   it's now the default.
+
+SWAT_FCN.ASM	 Define action routine for VCPISWAT.
+
+

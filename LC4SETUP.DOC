@@ -1,0 +1,16 @@
+Fix Bug When Intruding
+
+If we intrude into another memory manager's PL0 context, and the first
+entry into SWAT after that is into a VCPI client's context, then some
+of SWAT's local variables are mis-set.  To avoid this, we need to call
+SETUP one more time.  The simplest way is to clear the
+setup-has-been-done bit after intruding because some of the variables
+have been changed at that point.
+
+MAKEFILE	 Note dependency of SWAT_DR2.ASM on SWAT_LC4.INC.
+
+SWAT_DR2.ASM	 Clear LC4_SETUP after INIT_PROT (which sets that
+		   bit).  The subsequent selector changes require
+		   another call to SETUP.
+
+

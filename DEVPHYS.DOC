@@ -1,0 +1,32 @@
+Fix Bug In Physical Display/Unassemble In Device SWAT
+
+If paging isn't enabled (all through device SWAT, and through start of
+386MAX initialization), if one displays data or disassembles
+instructions using physical translation (e.g., D F000:0 P), SWAT
+misbehaves.  This corrects that problem.
+
+At the same time, I changed the grammar for the D and U commands to
+accept an expression after the physical translation marker instead of
+just an atom (which is limited to a constant or register) so it can be
+more general.  For example, when debugging VCPI programs, when a mode
+switch from VM to PM is requested, ESI contains the linear address of
+the Enter PM structrue whose first dword is the incoming CR3.  It is
+convenient to display data or disassemble instructions in the VCPI
+context using a physical translation of "P {0|ESI" rather than have to
+remember and type in the actual incoming CR3 value.
+
+The following modules are changed and why:
+
+386SWAT.GRM	 Note new grammar for D and U commands.
+
+SWAT_DAT.ASM	 Document and change the grammar for D command.
+		 When doing physical translation, if paging isn't
+		   enabled, turn off physical translation flag (it's
+		   one-to-one anyway).
+
+SWAT_UNA.ASM	 Document and change the grammar for U command.
+		 When doing physical translation, if paging isn't
+		   enabled, turn off physical translation flag (it's
+		   one-to-one anyway).
+
+

@@ -1,0 +1,11 @@
+Fix Bug in Goto Function
+
+When using the goto function (Shift-F1) on a rel8 or rel16 instruction
+(such as Jcc rel8), I forgot that the byte/word in the instruction is
+sign-extended (not zero-extended) before it is added to the offset of
+the next instruction to get the address of the target instruction.
+This TWT fixes that.
+
+This change affects SWAT_AGR.ASM only.
+
+

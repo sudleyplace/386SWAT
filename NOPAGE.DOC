@@ -1,0 +1,23 @@
+Allow Physical Display Without Paging
+
+Even if paging isn't enabled, it's convenient to allow display and
+unassembly of physical data via a specified CR3, particuarly under
+Windows.  With a few minor tweaks, this is possible.
+
+SWAT_DAT.ASM	 Delete code which disallows this feature when
+		   displaying data via D command.
+
+SWAT_MEM.ASM	 In DISPPHYS, handle case where paging isn't enabled.
+		 Convert some 16-bit code to 32-bit (CX->ECX,
+		   LOOPS->LOOP).
+		 In DISPVIRT (inverse to DISPPHYS), handle case where
+		   paging isn't enabled.
+
+SWAT_UNA.ASM	 Delete code which disallows this feature when
+		   unassembling code via U command.
+
+SWAT_VCP.ASM	 In LIN2PPTE, LIN2PPDIR, and LIN2PPTEZ (inverse to
+		   the preceding two routines), handle case where
+		   paging isn't enabled.
+
+

@@ -1,0 +1,55 @@
+Convert Data Segment to USE32, Part A
+
+As we're nearing the 64KB limit of a USE16 data segment, drastic
+measures are required.	This is the first of many such TWTs the
+ultimate goal of which is to convert all SWAT PM data to USE32
+segments.  At that point, who knows what LINKer bugs we'll run into
+(remember the problems when converting SWAT's code to USE32?), but
+we'll be better off trying.  Subsequently, I'll do this module by
+module.
+
+Principally, I need to move the BIN2xxxx procedures to use ES:EDI
+instead of ES:DI, so that's a large focus of this TWT.  More to
+follow.
+
+There's also some miscellaneous stuff included:
+
+* Correct errors and update old conventions in 386SWAT.DOC.
+
+* In CMD_CHAR in SWAT_CMD.ASM, set ESI to point to the command line so
+  all command line routines can reference the command line via ESI.
+
+
+386SWAT.DOC	 Correct errors and update old conventions.
+
+SWAT.ASM	 Update input to BIN2xxx to use EDI instead of DI.
+
+SWAT_CMD.ASM	 Set ESI instead of SI before calling any command line
+		   function.
+		 In ENDOF_CMDLINE, return EDI instead of DI.
+
+SWAT_DBG.ASM	 Update input to BIN2xxx to use EDI instead of DI.
+
+SWAT_DTE.ASM	 Update input to BIN2xxx to use EDI instead of DI.
+
+SWAT_ENT.ASM	 Update input to BIN2xxx to use EDI instead of DI.
+
+SWAT_FBR.ASM	 Delete unreferenced items.
+
+SWAT_HEX.ASM	 Update input to BIN2xxx to use EDI instead of DI.
+
+SWAT_IOP.ASM	 Update input to BIN2xxx to use EDI instead of DI.
+
+SWAT_MEM.ASM	 Update input to BIN2xxx to use EDI instead of DI.
+
+SWAT_MSC.ASM	 Update input to BIN2xxx to use EDI instead of DI.
+
+SWAT_PTE.ASM	 Update input to BIN2xxx to use EDI instead of DI.
+
+SWAT_REM.ASM	 Delete unreferenced items.
+
+SWAT_SRC.ASM	 Update input to BIN2xxx to use EDI instead of DI.
+
+SWAT_SYM.ASM	 Update input to BIN2xxx to use EDI instead of DI.
+
+

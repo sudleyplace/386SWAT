@@ -1,0 +1,8 @@
+Allow Decode of INT Instructions In Shift-F1
+
+This change allows one to use Shift-F1 browsing with INT instructions
+from either VM or PM.
+
+This change affects SWAT_AGR.ASM only.
+
+

@@ -1,0 +1,28 @@
+Handle New Windows Keyboard Keys
+
+The Microsoft Natural keyboard contains three new keys:
+
+* Left Windows key
+* Right Windows key
+* Application key
+
+These keys have new scan codes which our keyboard handler now
+recognizes, although we don't do much with them as yet.  The left and
+right Windows keys are meant to be modifiers just as Shift, Ctl-, and
+Alt-keys are modifiers.  The Application key is meant to be an actual
+keystroke, so I've assigned arbitrary key codes to it in its
+Unshifted, Shift-, Ctl-, and Alt-states.
+
+For the moment, until someone can think of something better, the
+Application key invokes the Help menu.
+
+
+SWAT.ASM	Add support for AWIN to invoke Help window.
+
+SWAT_KEY.ASM	Handle left and right Windows keys as new modifiers.
+
+SWAT_KT2.ASM	Include new keys in international tables.
+
+SWAT_KTB.ASM	Include new keys in default table.
+
+

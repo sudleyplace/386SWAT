@@ -1,0 +1,15 @@
+Fix Bug In LDT Display If Small Limit
+
+When intruding into other memory manager's (and they're a strange
+world), I found that one of them (NETROOM, I think) uses an LDT limit
+of one (which means there's really no LDT).  However, our LDT display
+code checks for a limit of zero to detect no LDT.  This change now
+check for a limit less than the size of one DTE.  At the same time, I
+rounded down the length for both GDT and LDT display to a DTE boundary
+as I'm getting gun shy.
+
+SWAT_DTE.ASM	 Round down GDT length to DTE boundary.
+		 Check for at least one DTE before displaying LDT.
+		 Round down LDT length to DTE boundary.
+
+

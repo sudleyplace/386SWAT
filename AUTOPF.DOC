@@ -1,0 +1,19 @@
+Extend Autofault to Page Faults
+
+The autofault feature now handles Page Faults.
+
+The following modules are changed and why:
+
+386SWAT.DOC	 Document how autofault works.
+
+386.INC 	 Define Page Fault error code record.
+
+SWAT_AFL.ASM	 Extend autofault to Page Faults.
+
+SWAT_HLP.ASM	 Document both Autofault and Bookmarks in the help
+		   screen.
+
+SWAT_HTX.ASM	 Document both Autofault and Bookmarks in the help
+		   screen.
+
+

@@ -1,0 +1,20 @@
+Fix bug in dot command parsing.  When presented with a dot command
+(.GDT, .IDT, etc.), the PARSE_EA routine doesn't handle the following
+syntax correctly.  In particular, it tests for the special cases (such
+as EOL), but fails to handle trailing arithmetic correctly.  For
+example, although D .DATA+3 is displayed correctly, it is actually
+evaluated as D .DATA++3.  Moreover, D .DATA~3 (a monadic function with
+no dyadic meaning) does not signal an error because it is evaluated as
+D .DATA+~3.  This change to the grammar corrects this problem by
+breaking out the artihmetic function checks into a separate routine
+and calling from both PARSE_EXPR and PARSE_EA.
+
+An additional pseudo-rule is used to handle the case of a dot command
+followed by an dyadic arithmetic symbol as follows:
+
+dotcmd ? exp
+    ð S.dotcmd : O.dotcmd ? exp 	for VM addresses
+    ð S.dotcmd | O.dotcmd ? exp 	... PM ...
+			where ? is a dyadic arithmetic function
+
+

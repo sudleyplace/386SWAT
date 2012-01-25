@@ -1,0 +1,124 @@
+More Miscellaneous Changes to SWAT
+
+* Allow addresses as well as expressions as a result of the Hex
+  arithmetic command.  If an address is the result, it is displayed as
+  ssss:oooooooo or ssss|oooooooo depending upon VM or PM.  This change
+  affects 386SWAT.GRM and SWAT_HEX.ASM.
+
+* Define L. and P. to produce linear and physical addresses
+  respectively from effective addresses.  This change affects
+  386SWAT.GRM and SWAT_CMD.ASM.
+
+* Separate out hooked interrupts from VCPI and non-VCPI debugging.
+  Previously, the two were confusingly intertwined.  In particular,
+  although the TRAPxxxx keywords in the profile would control non-VCPI
+  hooked interrupts and VMSINT=xx,...  would control VCPI hooked
+  interrupts, the same flag bits in LCL_FLAG were set to indicate
+  which interrupts were active.  Moreover, the save area for the old
+  interrupt handler address was the same between the two modes.  This
+  change separates the two modes in both of the above areas.  The
+  dword variable TSSINT_FLAG marks which interrupts are hooked when
+  debugging VCPI apps and the fwords/bytes OLDTSSINTxx_FVEC and _ARB
+  save the old VCPI interrupt handler addresses.  This change affects
+  SWAT.ASM, SWAT_INT.ASM, and SWAT_VCP.ASM.
+
+* Fix bug in restore of PTEs in physical memory display.  In effect,
+  we would not restore the last PTE when displaying physical memory
+  which would make a difference only were we to be debugging SWAT (and
+  thus be re-entrant).	This change affects SWAT_MEM.ASM only.
+
+* Install INT 07h interrupt handler as an interrupt gate (not a TSS)
+  when debugging VCPI apps.  This handler is needed in case the VCPI
+  app uses any floating point instructions to test and clear the TS
+  bit in the MSW.  When we switch tasks (because we use TSSs to
+  install out VCPI interrupt handlers), the TS bit is set every time a
+  task switch occurs.  This handler is needed to clear TS (via the
+  CLTS instruction) if it's set and re-execute the instruction.  If TS
+  is not set, we continue with the next handler in sequence.  We
+  cannot use a TSS for this handler as the IRETD back to the
+  instruction will perform another task switch and then set TS again.
+  This change affects SWAT_VCP.ASM only.
+
+* Support decoding of additional instructions for Shift-F1 processing.
+  The Goto/Return mechanism of Shift-F1/F2 allows one to follow the
+  flow of code without having to execute it or type in addresses.
+  Moreover, it allows one to return to previous points again without
+  having to remember and type in addresses.  This change adds decoding
+  of more JMP and CALL instructions.  In particular, the instructions
+
+  JMP/CALL Word  ptr CS:[disp16] (a near jump/call)
+  JMP/CALL Dword ptr CS:[disp16] (a far  jump/call)
+
+  as well the corresponding 32-bit forms are now decoded.  These forms
+  are commonly used in interrupt handlers as they transfer control to
+  the next handler in sequence.  Note that the CS override is
+  important as it is the only register whose value we know at any
+  point.  Also, for obvious reasons, we require Disp16/32 so that we
+  can find the source of the new IP.  At the same time, support was
+  put in for disassembly of call gates which point to a code selector
+  and offset in the DTE.  This change affects SWAT_AGR.ASM and
+  SWAT_MSC.ASM.
+
+
+386SWAT.GRM	 Note that the Hex arithmetic command now accepts
+		   addresses as well as expressions.
+		 Note that the L. and P. prefixes produce values.
+		 Note that the .PMIxx and .VMIxx built-in keywords
+		   produce PM and VM effective addresses.
+
+MAKEFILE	 Note dependency of SWAT_HEX.ASM on SWAT_CMD.INC.
+
+SWAT.ASM	 Separate out hooked interrupts depending upon whether
+		   or not we're in VCPI mode.  When we toggle the
+		   interrupt hooked state (say via c-F1) we consult a
+		   flag value which is also dependent upon the VCPI or
+		   non-VCPI debugging state.
+
+SWAT_AGR.ASM	 Implement decoding of near/far JMP/CALL with CS
+		   override and immediate displacement.
+		 Strip off OSP and CS prefixes up front.
+		 Set flag values in DX for USE32 state of the
+		   instruction as well as presence of CS override.
+		 Handle Group 5 instructions (near/far JMP/CALL).
+		 Ensure CS override.
+		 Ensure MOD and RM bits are for Disp16/32.
+		 Ensure /2 through /5 Group 5 type for near/far
+		   JMP/CALL.
+		 Split cases based upon Near (Ev)/Far (Ep).
+		 Fix bug in decoding of far pointers not setting PM
+		   flag if appropriate.
+		 Chcek for PM selector being a call gate in which case
+		   we extract the corresponding code selector and
+		   offset.
+
+SWAT_CMD.ASM	 Define actions for L. and P. prefixes.
+
+SWAT_HEX.ASM	 Allow addresses as well as expressions as the result
+		   of hex arithmetic.
+
+SWAT_INT.ASM	 Define save areas for OLDINTxx_FVEC (previously
+		   defined in SWAT_VCP.ASM to overlay another area).
+
+SWAT_MEM.ASM	 Fix bug in restore of PTEs in physical memory
+		   display.
+
+SWAT_MSC.ASM	 Define routines to extract selector and offset from a
+		   call gate DTE.
+
+SWAT_VCP.ASM	 Define @TSS_INTS text macro for all VMSINT
+		   interrupts.
+		 Define TSSINT_FLAG dword to mark which interrupts in
+		   @TSSINTS are hooked when debugging VCPI apps.
+		 Define save area for old INT 07h interrupt handler
+		   address and A/R byte.
+		 Change other references to VCPI interrupts to use
+		   @TSSINTS.
+		 Initialize TSSINT_FLAG to zero at each GPMI call.
+		 Set all TSS interrupts in subroutine call rather than
+		   just 0Dh and 0Eh.
+		 Install INT 07h handler after installing TSS
+		   interrupt handlers.
+		 Define local INT 07h handler.
+		 Mark VCPI interrupt handler as intercepted in SETTSS.
+
+

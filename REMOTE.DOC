@@ -1,0 +1,207 @@
+Add remote debugging to SWAT
+
+Two SWAT sessions can connect to each other in a master/slave relationship.
+The master acts as a terminal for the slave.  Debugging on the slave is
+essentially normal, except that the screen is sent to the master, and
+keys typed on the master end are processed as normal keyboard input.
+
+A chat screen allows conversation and debugging when setting up a
+connection.  The serial port parameters (port, port base, IRQ, and
+speed) may be specified from the command line or via the SETCOM=
+profile option.  The PORTINIT profile option may be used to pass
+an initialization string to a modem to set auto-answer mode.
+
+An error log has been added.  Ctrl-F10 allows one to view the SWAT
+error log output.  Currently, this is used to display internal progress
+messages for debugging remote communications.
+
+Two new VCPI calls have been added.  One allows messages to be dumped
+to the error log.  The other allows command lines to be executed.  This
+is primarily useful for setting breakpoints in a batch file.
+
+While remote debugging is active, files may be uploaded and downloaded
+if both the master and slave are in a position to use DOS file services
+(i.e. not in DOS already) and PL0 DPMI services are enabled via LOADSYM.
+
+The APPKEY command allows editing of the application keystroke buffer.
+This is intended to facilitate unattended remote debugging.
+
+Files affected:
+
+386SWAT 	Document new keywords.
+
+386SWAT.DOC	Document new features.
+
+MAKEFILE	Add new dependencies.
+
+		Add source module (SWAT_REM.ASM).
+
+SWAT.ASM	Add error log browser to state machine.
+
+		Add function keys for CHAT and REMDBG features.
+
+		Move ZTAIL from PGROUP to PGROUP2.  This is used
+		to mark the beginning of DGROUP.  The code is already
+		in place to convert the segment:offset to a 32-bit
+		linear offset.
+
+		When messages are saved, dump them to the error log
+		as well.
+
+		On entry to SWATTER, after all the essential housekeeping,
+		check for serial port initialization, PORTINIT initialization,
+		and commands sent via VCPI interface.  Note that the
+		master may trigger a remote interrupt by sending the
+		magic cookie 'SWT!' then sending a break signal.  Before
+		calling SWATTER, the @LC3_PORTINIT bit is set so that
+		SWAT will come up ready to initialize master/slave
+		debugging.
+
+		SAVE_SCR now takes an additional parameter specifying
+		which screen buffer to use - VIDBASE_FVEC or ACTBASE_FVEC.
+		VIDBASE_FVEC may point to a RAM buffer as opposed to
+		the actual screen regen buffer, whereas ACTBASE_FVEC always
+		points to the regen buffer.  When the screen contents
+		are saved on entry to SWATTER, we want to save the actual
+		regen buffer.
+
+SWAT.WSG	Translate PGROUP2.
+
+		Preserve V86 mode segments.  Note that RGROUP is relocated,
+		and will need to have the fixup thrown away.  For example:
+		ts * 1010 v (s..vmi01)
+
+SWAT_A20.ASM	When checking for pending hardware interrupts before
+		entering protected mode, ensure that we ONLY let IRQ1 and
+		IRQ0 through the door, since we terminate IRQ3/IRQ4 only
+		after entering protected mode.
+
+SWAT_ARG.ASM	Check for PORTINIT specified without a SETCOM to enable
+		a serial port.
+
+SWAT_CMD.ASM	Tattle on CMD_* procedures that clobber the command
+		line terminator.  Also make sure that Ctrl-Bksp resets
+		the terminator to 0.
+
+SWAT_COM.INC	Add new display state definition for error log display.
+
+SWAT_DRV.ASM	Hook interrupts 0Bh (IRQ3) and 0Ch (IRQ4) for remote
+		debugging.  Note that we'll see whether Int 0Ch is a
+		hardware interrupt or a stack fault after we're in
+		protected mode.
+
+		Initialize real mode GDT entry for PGROUP2 selector.
+
+SWAT_DRV.INC	Define additional GDT entry for PGROUP2 selector.
+
+SWAT_FCN.ASM	Process new profile options.
+
+SWAT_FVM.ASM	Set address of regen buffer in ACTBASE_FVEC.  Copy it
+		to VIDBASE_FVEC only if video is not disabled for
+		remote debugging with the slave in graphics mode.
+
+SWAT_HLP.ASM	Add help text for new function keys.
+
+SWAT_INI.ASM	Add kluge to INIT_PROT to set up selector for PGROUP2.
+
+		Install IDT handlers for IRQ3 and IRQ4.  Note that these
+		stay in place so we may remotely interrupt the slave.
+
+		Add communications ring buffer (16K), screen transmit
+		delta buffer (4K), alternate display buffer (4K) and
+		error log (LOGSIZE) to uninitialized data.
+
+SWAT_INT.ASM	Add IRQ3 and IRQ4 handlers to our IDT.
+
+		In LCL_INT0C, pass control to our IRQ4 handler if it's
+		not a stack fault.
+
+SWAT_INT.INC	Add flags for IRQ14 and IRQ15 not trapped.
+
+SWAT_KEY.ASM	Add local handlers for IRQ14 and IRQ15.
+
+		Decrement timeout counter on our timer tick interrupt
+		handler.
+
+		Move reboot code into a separate command so we can
+		reboot the slave system when remote debugging either
+		by sending a special packet or by entering "REBOOT."
+
+SWAT_LC3.INC	Add new flags.
+
+SWAT_LOG.INC	(New) Define macros for sending immediate strings to
+		the error log.
+
+SWAT_REM.ASM	(New) Define IRQ3 and IRQ4 handlers.
+
+		Define code to chain to a previous IRQ handler.  Note
+		that we need to do this for IRQ3 and IRQ4 when serial
+		port is not in use.
+
+		Add code to display output to a predefined window with
+		scrolling (used by CHAT).
+
+		Add processing code for slave (REMOTE_ACT).  This is
+		called in GETKEY, with priority given to keys entered
+		on the slave machine's keyboard.
+
+		Add code to initialize serial port UART for communications.
+		The parsing and initialization are separated so that
+		the parameters specified in the profile don't take
+		effect until INIT_VIRT, when we have all our IRQ handlers
+		in place to field the interrupts that will happen when
+		we start poking the UART.
+
+		Add CHAT feature.
+
+		Add file upload/download to master terminal program.
+
+		Add master terminal program.  Note that this could be
+		implemented separately and run as a standalone program.
+
+		Add error log display functions.
+
+		Check for remote interrupt magic cookie in IRQ handlers.
+		Note that we only check for SWT! when a BREAK is received,
+		so we aren't constantly checking in our hardware interrupt
+		handler.  We can't rely on BREAK for a remote interrupt,
+		however, since it's indistinguishable from an error.  My
+		thanks to whoever designed all these buggy UARTs...
+
+		Add code to switch to alternate video buffer.  This is
+		useful for remote debugging with the slave system in
+		graphics mode.
+
+		Add code to parse SETCOM command so serial port may be
+		initialized from the command line.
+
+		Add APPKEY feature to edit application keystroke buffer.
+
+		Add code to display error log.
+
+SWAT_REM.INC	(New) Define structures for packets used in remote debugging
+		and file transfer.
+
+SWAT_SEG.INC	Add PGROUP2.
+
+SWAT_SER.INC	(New) Define equates for UART initialization and ports.
+
+SWAT_VCP.ASM	Add new VCPI subfunctions to dump string to error log
+		and execute a SWAT command.
+
+		In Set Host Features call, which is used internally only
+		in INIT_VIRT, perform any SETCOM and PORTINIT initialization
+		specified in the SWAT profile.
+
+SWAT_VID.ASM	Add pointer for actual screen regen buffer.
+
+		Add argument to SAVE_SCR to indicate whether actual or
+		current screen pointer should be used.
+
+		Skip reprogramming of CRT controller if remote debugging
+		with alternate screen buffer.
+
+VCPI.INC	Add new subfunctions for message logging and command
+		execution.
+
+

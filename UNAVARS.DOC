@@ -1,0 +1,7 @@
+For consistency, use UNAOFF, and UNASEL instead of INSTR_FVEC, and
+UNABASE instead of INSTR_BASE.	Also, FIRST_INSTR is set in DISPINSTR
+only and elsewhere is used as an input variable.  Its new definition
+is as UNABASE + UNAOFF.  Changes to FIRST_INSTR are now done to
+UNAOFF.
+
+

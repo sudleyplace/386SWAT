@@ -1,0 +1,28 @@
+Handle Page Up With Symbols Active
+
+When PgUp on the instruction screen is encountered, we didn't use to
+calculate the size of the previous page correctly if it included one
+or more symbols.  In particular, we would page back more lines than
+necessary; the amount was off by the same number of lines as there
+were symbols.
+
+This TWT takes into account the presence of symbols in the previous
+page and pages back only as far as necessary.  In particular (with two
+exceptions), PgUp and PgDn are inverses of each other.	The first
+exception is when we page back beyond offset 0 (we don't wrap).  The
+second exception is when the previous page would start with an
+instruction for which there is a label.  Because we don't display the
+instruction without the label, we page back an extra line to include
+the label display.
+
+This change affects SWAT.ASM only.
+
+At the same time, I corrected a bug in DISPINSTR where we calculated
+the value of INSTRCNT (the number of instructions disassembled)
+incorrectly if the last line was labeled.  Moreover, this variable is
+misnamed as it is actually the number of lines in the disassembly
+window and has been renamed to reflect that meaning.
+
+This change affects SWAT_BLK.ASM only.
+
+

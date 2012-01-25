@@ -1,0 +1,15 @@
+Allow Fill Command On Physical Memory
+
+The Fill (F) command used to change data in memory now allows an
+optional trailing P also optionally followed by a CR3, just as the
+Unassemble and other commands allow.
+
+386SWAT.DOC	Document changes to grammar.
+
+386SWAT.GRM	Document changes to grammar.
+
+SWAT_ENT.ASM	Extend Fill command to physical memory.
+
+SWAT_HTX.ASM	Document changes to grammar.
+
+

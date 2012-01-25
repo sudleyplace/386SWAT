@@ -1,0 +1,20 @@
+Fix Bug When Using TSS For Faults
+
+A previous TWT changed a local routine to be more self-sufficient by
+setting DS within the routine instead of relying upon the caller to
+set this register.  Alas, that was a mistake as in some cases we rely
+upon the Invisible Descriptor Cache, particularly when we're accessing
+selector values in the caller's LDT.  This TWT fixes that to use two
+routines, one which assumes the global DS has been set, one which
+does not.
+
+At the same time, I fixed a problem with device SWAT where software
+INTs 01h, 02h, 03h, and 68h are not being enabled if VME is.
+
+SWAT_VCP.ASM	Enable appropriate software INTs if VME is enabled.
+		Use SEL2BASE_DS where DS is already set to AGROUP.
+		Change routine SEL2BASE to call SEL2BASE_DS.
+		Define routine SEL2BASE_DS to obtain selector base
+		  assuming DS addresses AGROUP.
+
+

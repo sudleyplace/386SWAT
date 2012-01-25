@@ -1,0 +1,23 @@
+Handle Invalid Symbol Selectors
+
+If we upload symbols with an invalid selector (say, the *.WSG file is
+for another context -- DPMI vs. VCPI vs. RM), the call to GETBASE
+returns an error along with EAX=-1.  If this value is used for the
+linear address, the symbol is marked as invalid and the address hash
+code gets confused.  This change checks for the above eventuality and
+sets the pseudo-linear address to zero to avoid this problem.  BTW,
+the symptom is that (say) SWATRUN hangs when uploading symbols if it
+has two or more symbols with the same (invalid) linear address, e.g.
+300|0.
+
+At the same time, I upgraded the grammar for LS and PS to accept lvals
+instead of just atoms, thus allowing a wider variety of ways of
+specifying the arguments to these commands.  Others in this same vein
+to follow.
+
+386SWAT.GRM	 Note upgraded grammar.
+
+SWAT_SYM.ASM	 Upgrade parsing of atoms to lvals.
+		 In UPDATE_ADDRHASH, handle invalid selector.
+
+

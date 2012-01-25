@@ -1,0 +1,25 @@
+Reduce Erroneous Selection of IRET in ROM
+
+When we are asked to trace an INT instruction in VM, we need to find
+an IRET instruction (which we look for in the system ROM) in order to
+trace over it to set the TF at the first instruction in the interrupt
+handler.
+
+When we search for the IRET in system ROM, we used to search from
+F000:0 upwards, however, we might be fooled if 386MAX has recovered
+the address space at F000:0 and we happen to also find an IRET in the
+recovered memory.  This change searches from the top of the system ROM
+downwards in order to avoid that problem.
+
+Also, the order in which the TF is set in the return flags is changed
+to avoid generating a spurious INT 01h upon return from the interrupt
+handler.
+
+SWAT.ASM	 At SWATTER_TRACEINTFF, use shorter instruction.
+		 At SWATTER_INT1, search from top to bottom for IRET
+		   in system ROM.
+		 At SWATTER_INT_XIRET, set TF after saving return
+		   flags on VM stack to avoid spurious INT 01h upon
+		   return.
+
+

@@ -1,0 +1,157 @@
+Miscellaneous Changes to SWAT
+
+* Change BTx instructions to display bit mask for immediate values.
+  In particular, the operand analysis display for BTx r/m16,r16
+  is extended to BTx  r/m16,imm8 (as well as the r/m32 forms).	This
+  change affects INT1_ESC.ASM, INT1_FNS.ASM, INT1_GRP.ASM,
+  SWAT_OPR.ASM, and INT1_FNS.INC.
+
+* Handle ring transitions from privilege levels above 0 to PL0.  This
+  change is needed for DPMI support.  This change affects SWAT.ASM and
+  SWAT_OPR.ASM.
+
+* When displaying physical addresses in the first megabyte via
+  Seg:Off, if the display wraps at 64KB, we fail with a page fault
+  (which is handled by displaying question marks).  By saving and
+  restoring one additional PTE in DISPPHYS, this problem is solved.
+  This change affects SWAT_MEM.ASM only.
+
+* Note that EAX is clobbered by the IDTMAC macro.  This change affects
+  SWAT.ASM, SWAT_CMD.ASM, SWAT_INI.ASM, and SWAT_REG.ASM.
+
+* Implement built-in command line keywords .PMIxx and .VMIxx to
+  extract the PM and VM interrupt handlers for interrupt xxh.  This
+  change affects SWAT_CMD.ASM only.
+
+* Display TI and PL bits in selector.  This change affects
+  SWAT_CMD.ASM, SWAT_DTE.ASM, and SWAT_OPR.ASM.
+
+* Ensure our hooked interrupts are within IDT limit.  In particular,
+  if we come up under Windows in a VM, interrupts 00h through 5Fh only
+  are defined.	We must be careful not to blast in any of our
+  interrupts (such as INT 67h) if they are beyond the IDT limit.  This
+  change affects SWAT_INT.INC, SWAT_INI.ASM, and SWAT_KEY.ASM.
+
+* Let Windows handle the invalid opcode 0F FF if we're in PM as that's
+  another of its mode-switching tricks.  This change affects
+  SWAT_INT.ASM only.
+
+* Define general routines to swap and restore locally hooked
+  interrupts from the IDT.  In particular, when we display the IDT, we
+  want to display the entries before we became active.	This change
+  affects SWAT_CMD.ASM and SWAT_DTE.ASM.
+
+* Display call gate DTEs in a manner which separates the parm count
+  and selector fields.	This change affects SWAT_DTE.ASM only.
+
+* Handle Page Faults in data search command.  In particular, if a
+  search match occurs in the first few bytes of memory (starting at
+  0:0), the context displayed to the left of the match wraps to be
+  negative (that is, just below 4GB) which might signal a Page Fault).
+  This change affects SWAT_SRC.ASM only.
+
+* In ENABLE_IRQS, in case we need to clear IRQ1 with a specific EOI,
+  we must clear the keyboard command from the 8042 with a read from
+  I/O port 60h.  This change affects SWAT_KEY.ASM only.
+
+
+INT1_FNS.INC	 Define save area for immediate value to be used in
+		   BTx immediate display.
+		 Define separate width bit definitions for BT with
+		   either register or immediate operand.
+
+INT1_ESC.ASM	 Set DWIDTH value to BTREG as per split of BT values
+		   in INT1_FNS.INC.
+
+INT1_FNS.ASM	 Initialize save area for immediate value in OPER_STR.
+		 Fix bug in @PTR16@16 and @PTR16@32 when INT1_DEF is
+		   not defined (wrong registers used).
+		 Save immediate values in @IMM8, @IMM8D, @IMM8W,
+		   @IMM16, and @IMM32.
+
+INT1_GRP.ASM	 Change @GRP8 to support BTx immediate when operand
+		   analysis is in effect.
+
+SWAT_INT.INC	 Define flags to indicate which interrupts we've
+		   hooked so we can restore those and only those.
+
+SWAT.ASM	 Delete comment relating DI_STR to FORW_STR as they
+		   are no longer related.
+		 Separate parts of DI_STR based upon under what
+		   circumstances they are valid.
+		 Clear DR6 after skipping over a BC breakpoint.
+		 Handle ring transitions upon entry to SWATTER in PM
+		   based upon RPL of caller's CS.
+		 Delete unneeded commented out code.
+		 Replace tests of NT bit in RETFL with @LC2_TSS which
+		   is set in SWAT_VCP.
+		 Rename labels with NT to TSS as that's more
+		   appropriate.
+		 Note that EAX is clobbered by the IDTMAC macro.
+		 Avoid tracing into INT 01h and INT 03h in PM.
+		 Handle ring transitions upon exit from SWATTER in PM
+		   based upon RPL of caller's CS.
+		 In CHECK_JMPRET, handle OSP up front so we don't need
+		   individual checks.
+		 In CHECK_JMPRET, remove individual checks for OSP
+		   instructions.
+
+SWAT_CMD.ASM	 Precede STOS with S16 macro.
+		 Note that EAX is clobbered by the IDTMAC macro.
+		 Implement built-in keywords .PMIxx and .VMIxx.
+		 Swap and restore locally hooked interrupts when
+		   reading .PMIxx values.
+		 In PARSE_EA, don't lose the PL bits for display
+		   purposes.
+
+SWAT_DTE.ASM	 Modify SWAPIDT macro to save the old value onto the
+		   stack-based structure.
+		 Modify RESTIDT macro to restore the old value from
+		   the stack-based structure.
+		 Define SWAP_OLDINTS and REST_OLDINTS to swap and
+		   restore all locally hooked interrupts.
+		 In DISP_DTE, don't clear the TI bit before displaying
+		   the corresponding selector.
+		 In DISP_DTE, display call gate DTEs in a manner which
+		   separates the parm count and selector fields.
+
+SWAT_INI.ASM	 Save maximum interrupt number based upon IDT limit.
+		 Note that EAX is clobbered by the IDTMAC macro.
+		 Ensure locally hooked interrupt are within IDT limit.
+
+SWAT_INT.ASM	 If we're inside Windows in PM and the Invalid Opcode
+		   0F FF occurs, pass it on to Windows.
+
+SWAT_KEY.ASM	 Ensure locally hooked interrupt are within IDT limit.
+		 Clear IRQ1 command before sending specific EOI.
+		 In HOUSE_DOG, use more descriptive equate when
+		   referencing the high-order bit of System Control
+		   Port B on a MC system.
+		 Fix bug in WAITIBUF_CLR with register assumes.  No
+		   data references used the incorrect assumes.
+		 In WAITIBUF_CLR, wait for memory refresh on MC
+		   systems before reading keyboard status.
+		 In KEY_INT08, use more descriptive equate when
+		   referencing the high-order bit of System Control
+		   Port B on a MC system.
+
+SWAT_MEM.ASM	 Save and restore one additional PTE in case of 64KB
+		   wrap in display of physical addresses.
+
+SWAT_OPR.ASM	 Define test values for BTREG and BTIMM.
+		 Define action routines for BTREG and BTIMM.
+		 Check for both BTREG and BTIMM before calling BTDISP.
+		 Display SS:SP for IRET if ring transition in PM.
+		 Fix bug in comment (No ==> Yes).
+		 Display SS:ESP for IRETD if ring transition in PM.
+		 Change BTDISP to handle BTx r/m16,imm8.
+		 In INST_OPR0E and REST_OPR0E, use DTR_STR instead of
+		   constant 6.
+		 In CHECK_PMTSS, don't lose the PL bits for display
+		   purposes.
+
+SWAT_REG.ASM	 Note that EAX is clobbered by the IDTMAC macro.
+
+SWAT_SRC.ASM	 Handle Page Faults in data search command.
+
+

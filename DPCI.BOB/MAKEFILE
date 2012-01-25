@@ -1,0 +1,416 @@
+#
+# makefile for 386SWAT
+#
+#' $Header:   P:/PVCS/386SWAT/MAKEFILE.__V   1.64   27 Aug 1998 13:03:38   BOB  $
+#
+#
+
+SYSNAME=386SWAT
+NEWDIR=N
+E=$(RXMDIR)		# Path for RAMEXAM
+Q=$(MAXDIR)		# Path for 386max
+!IF EXIST(INT1)
+1=INT1\ 			# Path for INT1 source
+1O=$(1)RET\		# Path for INT1 .OBJ files
+P1=$(1);$(I01DIR)	# Search path for INT1 include files
+!ELSE
+1=$(I01DIR)		# Path for INT1 source
+1O=$(I01DIR)RET\	# Path for INT1 .OBJ files
+P1=$(1) 			# Search path for INT1 include files
+!ENDIF
+I=$(INCDIR)		# Path for include files
+R=					# Generic source directory
+S=$(SWTDIR)		# Local project source directory
+M=P:\386SWAT\		# Main project source directory
+P=$(R);$(S);$(M)	# Search sequence for source
+
+# define OEM-specific directories
+OEM=BET 			# Default build type
+BIN=$(OEM)\		# directory for .lod and .pss
+O=$(OEM)\			# OEM .obj's and temporary .inc's
+
+# Which linker to use
+LINK=qlink
+
+# default include path for MASM
+ALLINC=$(R);$(O);$(P1);$(I);$(S);$(Q)
+
+# default options for MASM
+MOPT=$(ASMOPT) /ml /p /r /t /w1
+
+# Define macro LSTMAC so that we can tack it onto the end of ANY
+# masm command line, whether it is defined or empty.
+!IFDEF LST
+LSTMAC=,$(LST)\ \
+
+!ELSE
+LSTMAC=
+!ENDIF
+
+# Define all .OBJ's
+OBJS=	$(O)SWAT.OBJ	\
+	$(O)SWAT_A20.OBJ\
+	$(O)SWAT_AFL.OBJ\
+	$(O)SWAT_AGR.OBJ\
+	$(O)SWAT_ARG.OBJ\
+	$(O)SWAT_BLK.OBJ\
+	$(O)SWAT_CMD.OBJ\
+	$(O)SWAT_DAT.OBJ\
+	$(O)SWAT_DBG.OBJ\
+	$(O)SWAT_DTE.OBJ\
+	$(O)SWAT_DR2.OBJ\
+	$(O)SWAT_DRV.OBJ\
+	$(O)SWAT_ENT.OBJ\
+	$(O)SWAT_FBR.OBJ\
+	$(O)SWAT_FCN.OBJ\
+	$(O)SWAT_FVM.OBJ\
+	$(O)SWAT_GOT.OBJ\
+	$(O)SWAT_HEX.OBJ\
+	$(O)SWAT_HLP.OBJ\
+	$(O)SWAT_HST.OBJ\
+	$(O)SWAT_HT2.OBJ\
+	$(O)SWAT_I41.OBJ\
+	$(O)SWAT_I68.OBJ\
+	$(O)SWAT_INI.OBJ\
+	$(O)SWAT_INT.OBJ\
+	$(O)SWAT_IOP.OBJ\
+	$(O)SWAT_KEY.OBJ\
+	$(O)SWAT_KT2.OBJ\
+	$(O)SWAT_KTB.OBJ\
+	$(O)SWAT_MAC.OBJ\
+	$(O)SWAT_MAX.OBJ\
+	$(O)SWAT_MEM.OBJ\
+	$(O)SWAT_MSC.OBJ\
+	$(O)SWAT_MSR.OBJ\
+	$(O)SWAT_OPR.OBJ\
+	$(O)SWAT_PCI.OBJ\
+	$(O)SWAT_PTE.OBJ\
+	$(O)SWAT_REG.OBJ\
+	$(O)SWAT_REM.OBJ\
+	$(O)SWAT_SCR.OBJ\
+	$(O)SWAT_SIG.OBJ\
+	$(O)SWAT_SRC.OBJ\
+	$(O)SWAT_SYM.OBJ\
+	$(O)SWAT_TOG.OBJ\
+	$(O)SWAT_UNA.OBJ\
+	$(O)SWAT_VCP.OBJ\
+	$(O)SWAT_VID.OBJ\
+	$(O)SWAT_WGH.OBJ\
+	$(O)SWAT_WIN.OBJ\
+	$(O)SWAT_XLT.OBJ\
+	$(O)POP87.OBJ	\
+	$(O)P87_TABS.OBJ\
+	$(O)P87_DISP.OBJ\
+	$(O)VERSION.OBJ \
+	$(O)VERSBETA.OBJ\
+	$(1O)INT1_ESC.OBJ\
+	$(1O)INT1_FNS.OBJ\
+	$(1O)INT1_FOP.OBJ\
+	$(1O)INT1_GRP.OBJ\
+	$(1O)INT1_MSC.OBJ\
+	$(1O)INT1_TAB.OBJ\
+	$(1O)INT1_TXT.OBJ\
+	$(1O)INT1_WIN.OBJ\
+	$(O)QMAX_MBT.OBJ\
+	$(O)STRFNS.OBJ
+
+# implicit translation rules
+# With typical reverse intuition, the last rules to be defined are the
+# first ones to be applied.
+{$(Q)}.asm{$(O)}.obj:
+!IF "$(NEWDIR)" == "Y"
+	copy $(S)$(O)$(@F) $(@D)\.
+!ELSE
+	set INCLUDE=$(ALLINC);$(INCLUDE)
+	masm %s $(MOPT), $@ $(LSTMAC);
+	set INCLUDE=$(INCLUDE)
+	@dispobj $*/w
+	@ff $*/,/#
+!ENDIF
+
+{$(S)}.asm{$(O)}.obj:
+!IF "$(NEWDIR)" == "Y"
+	copy %|dpF$(@D)\$(@F) $(@D)\.
+!ELSE
+	set INCLUDE=$(ALLINC);$(INCLUDE)
+	masm %s /DOEM=$(OEM) $(MOPT), $@ $(LSTMAC);
+	set INCLUDE=$(INCLUDE)
+	@dispobj $*/w
+	@ff $*/,/#
+!ENDIF
+
+{$(R)}.asm{$(O)}.obj:
+!IF "$(NEWDIR)" == "Y"
+	copy %|dpF$(@D)\$(@F) $(@D)\.
+!ELSE
+	set INCLUDE=$(ALLINC);$(INCLUDE)
+	masm %s /DOEM=$(OEM) $(MOPT), $@ $(LSTMAC);
+	set INCLUDE=$(INCLUDE)
+	@dispobj $*/w
+	@ff $*/,/#
+!ENDIF
+
+{$(I01DIR)}.asm{$(1O)}.obj:
+!IF "$(NEWDIR)" != "Y"
+	set INCLUDE=$(ALLINC);$(INCLUDE)
+	masm %s /DOEM=$(OEM) $(MOPT), $@ $(LSTMAC);
+	set INCLUDE=$(INCLUDE)
+	@dispobj $*/w
+	@ff $*/,/#
+!ENDIF
+
+{$(1)}.asm{$(1O)}.obj:
+!IF "$(NEWDIR)" != "Y"
+	set INCLUDE=$(ALLINC);$(INCLUDE)
+	masm %s /DOEM=$(OEM) $(MOPT), $@ $(LSTMAC);
+	set INCLUDE=$(INCLUDE)
+	@dispobj $*/w
+	@ff $*/,/#
+!ENDIF
+
+ALL:	DIR		\
+	$(BIN)$(SYSNAME).LOD	\
+	$(BIN)$(SYSNAME).SSF	\
+!IF "$(NEWDIR)" == "Y"
+	NEWDIR			\
+!ENDIF
+	$(SYSDIR)$(SYSNAME).LOD
+
+DIR:
+	vdir -c $(O) $(1O)
+
+!IF "$(NEWDIR)" == "Y"
+NEWDIR: 	  {$(P)}PVCS.CFG	  {$(P)}PVCS.LST	  {$(P)}MAKEFILE	\
+		  {$(P)}UDLOCAL.BAT   {$(P)}UDNET.BAT	  {$(P)}UDBIN.BAT
+	$(COMSPEC) /c <<$(O)MAKEFILE.BAT
+	xc/r/a/n/t $(**: =^
+	xc/r/a/n/t )
+<<NOKEEP
+
+!ENDIF
+
+DEPSCAN = -r$(MAXROOT)
+DEPSCAN = $(DEPSCAN) -p{$$(P)}
+DEPSCAN = $(DEPSCAN) -t$(S)={$$(P)},$(Q)=$$(Q),$(1)={$$(P1)},$(E)=$$(E)
+DEPSCAN = $(DEPSCAN) *.asm $(S)*.asm
+DEPSCAN = $(DEPSCAN) $(1)*.asm $(I01DIR)*.asm
+DEPSCAN = $(DEPSCAN) >$(O)swatdep.inc
+
+DEPSCAN: {$(P)}MAKEFILE
+	depscan $(DEPSCAN)
+
+{$(P)}MAKEFILE: $(O)swatdep.inc
+
+!IF "$(NEWDIR)" == "Y"
+!if [xc/r/a/n/t $(S)$(O)SWATDEP.INC $(O).]
+!endif
+!ELSE
+!if exist ($(O)swatdep.inc) == 0
+!if [depscan $(DEPSCAN)]
+!endif
+!endif
+!include $(O)swatdep.inc
+!ENDIF
+
+$(O)VERSION.OBJ:	{$(P)}VERSION.ASM	$(VERSION_ADEP)
+
+$(O)VERSBETA.OBJ:	{$(P)}VERSBETA.ASM	$(VERSBETA_ADEP)
+
+$(1O)INT1_ESC.OBJ:	{$(P1)}INT1_ESC.ASM $(INT1_ESC_ADEP)
+
+$(1O)INT1_FNS.OBJ:	{$(P1)}INT1_FNS.ASM $(INT1_FNS_ADEP)
+
+$(1O)INT1_FOP.OBJ:	{$(P1)}INT1_FOP.ASM $(INT1_FOP_ADEP)
+
+$(1O)INT1_GRP.OBJ:	{$(P1)}INT1_GRP.ASM $(INT1_GRP_ADEP)
+
+$(1O)INT1_MSC.OBJ:	{$(P1)}INT1_MSC.ASM $(INT1_MSC_ADEP)
+
+$(1O)INT1_TAB.OBJ:	{$(P1)}INT1_TAB.ASM $(INT1_TAB_ADEP)
+
+$(1O)INT1_TXT.OBJ:	{$(P1)}INT1_TXT.ASM $(INT1_TXT_ADEP)
+
+$(1O)INT1_WIN.OBJ:	{$(P1)}INT1_WIN.ASM $(INT1_WIN_ADEP)
+
+$(O)SWAT.OBJ:		{$(P)}SWAT.ASM		$(SWAT_ADEP)
+
+$(O)SWAT_A20.OBJ:	{$(P)}SWAT_A20.ASM	$(SWAT_A20_ADEP)
+
+$(O)SWAT_AFL.OBJ:	{$(P)}SWAT_AFL.ASM	$(SWAT_AFL_ADEP)
+
+$(O)SWAT_AGR.OBJ:	{$(P)}SWAT_AGR.ASM	$(SWAT_AGR_ADEP)
+
+$(O)SWAT_ARG.OBJ:	{$(P)}SWAT_ARG.ASM	$(SWAT_ARG_ADEP)
+
+$(O)SWAT_BLK.OBJ:	{$(P)}SWAT_BLK.ASM	$(SWAT_BLK_ADEP)
+
+$(O)SWAT_CMD.OBJ:	{$(P)}SWAT_CMD.ASM	$(SWAT_CMD_ADEP)
+
+$(O)SWAT_DAT.OBJ:	{$(P)}SWAT_DAT.ASM	$(SWAT_DAT_ADEP)
+
+$(O)SWAT_DBG.OBJ:	{$(P)}SWAT_DBG.ASM	$(SWAT_DBG_ADEP)
+
+$(O)SWAT_DTE.OBJ:	{$(P)}SWAT_DTE.ASM	$(SWAT_DTE_ADEP)
+
+$(O)SWAT_DRV.OBJ:	{$(P)}SWAT_DRV.ASM	$(SWAT_DRV_ADEP)
+
+$(O)SWAT_ENT.OBJ:	{$(P)}SWAT_ENT.ASM	$(SWAT_ENT_ADEP)
+
+$(O)SWAT_FBR.OBJ:	{$(P)}SWAT_FBR.ASM	$(SWAT_FBR_ADEP)
+
+$(O)SWAT_FCN.OBJ:	{$(P)}SWAT_FCN.ASM	$(SWAT_FCN_ADEP)
+
+$(O)SWAT_FVM.OBJ:	{$(P)}SWAT_FVM.ASM	$(SWAT_FVM_ADEP)
+
+$(O)SWAT_GOT.OBJ:	{$(P)}SWAT_GOT.ASM	$(SWAT_GOT_ADEP)
+
+$(O)SWAT_HEX.OBJ:	{$(P)}SWAT_HEX.ASM	$(SWAT_HEX_ADEP)
+
+$(O)SWAT_HLP.OBJ:	{$(P)}SWAT_HLP.ASM	$(SWAT_HLP_ADEP)
+
+$(O)SWAT_HST.OBJ:	{$(P)}SWAT_HST.ASM	$(SWAT_HST_ADEP)
+
+$(O)SWAT_I41.OBJ:	{$(P)}SWAT_I41.ASM	$(SWAT_I41_ADEP)
+
+$(O)SWAT_I68.OBJ:	{$(P)}SWAT_I68.ASM	$(SWAT_I68_ADEP)
+
+$(O)SWAT_INI.OBJ:	{$(P)}SWAT_INI.ASM	$(SWAT_INI_ADEP)
+
+$(O)SWAT_INT.OBJ:	{$(P)}SWAT_INT.ASM	$(SWAT_INT_ADEP)
+
+$(O)SWAT_IOP.OBJ:	{$(P)}SWAT_IOP.ASM	$(SWAT_IOP_ADEP)
+
+$(O)SWAT_KEY.OBJ:	{$(P)}SWAT_KEY.ASM	$(SWAT_KEY_ADEP)
+
+$(O)SWAT_KTB.OBJ:	{$(P)}SWAT_KTB.ASM	$(SWAT_KTB_ADEP)
+
+$(O)SWAT_KT2.OBJ:	{$(P)}SWAT_KT2.ASM	$(SWAT_KT2_ADEP)
+
+$(O)SWAT_MAC.OBJ:	{$(P)}SWAT_MAC.ASM	$(SWAT_MAC_ADEP)
+
+$(O)SWAT_MAX.OBJ:	{$(P)}SWAT_MAX.ASM	$(SWAT_MAX_ADEP)
+
+$(O)SWAT_MEM.OBJ:	{$(P)}SWAT_MEM.ASM	$(SWAT_MEM_ADEP)
+
+$(O)SWAT_MSC.OBJ:	{$(P)}SWAT_MSC.ASM	$(SWAT_MSC_ADEP)
+
+$(O)SWAT_MSR.OBJ:	{$(P)}SWAT_MSR.ASM	$(SWAT_MSR_ADEP)
+
+$(O)SWAT_OPR.OBJ:	{$(P)}SWAT_OPR.ASM	$(SWAT_OPR_ADEP)
+
+$(O)SWAT_PCI.OBJ:	{$(P)}SWAT_PCI.ASM	$(SWAT_PCI_ADEP)
+
+$(O)SWAT_PTE.OBJ:	{$(P)}SWAT_PTE.ASM	$(SWAT_PTE_ADEP)
+
+$(O)SWAT_REG.OBJ:	{$(P)}SWAT_REG.ASM	$(SWAT_REG_ADEP)
+
+$(O)SWAT_REM.OBJ:	{$(P)}SWAT_REM.ASM	$(SWAT_REM_ADEP)
+
+$(O)SWAT_DR2.OBJ:	{$(P)}SWAT_DR2.ASM	$(SWAT_DR2_ADEP)
+
+$(O)SWAT_SCR.OBJ:	{$(P)}SWAT_SCR.ASM	$(SWAT_SCR_ADEP)
+
+$(O)SWAT_SIG.OBJ:	{$(P)}SWAT_SIG.ASM	$(SWAT_SIG_ADEP)
+
+$(O)SWAT_SRC.OBJ:	{$(P)}SWAT_SRC.ASM	$(SWAT_SRC_ADEP)
+
+$(O)SWAT_SYM.OBJ:	{$(P)}SWAT_SYM.ASM	$(SWAT_SYM_ADEP)
+
+$(O)SWAT_TOG.OBJ:	{$(P)}SWAT_TOG.ASM	$(SWAT_TOG_ADEP)
+
+$(O)SWAT_UNA.OBJ:	{$(P)}SWAT_UNA.ASM	$(SWAT_UNA_ADEP)
+
+$(O)SWAT_VCP.OBJ:	{$(P)}SWAT_VCP.ASM	$(SWAT_VCP_ADEP)
+
+$(O)SWAT_VID.OBJ:	{$(P)}SWAT_VID.ASM	$(SWAT_VID_ADEP)
+
+$(O)SWAT_WGH.OBJ:	{$(P)}SWAT_WGH.ASM	$(SWAT_WGH_ADEP)
+
+$(O)SWAT_WIN.OBJ:	{$(P)}SWAT_WIN.ASM	$(SWAT_WIN_ADEP)
+
+$(O)SWAT_XLT.OBJ:	{$(P)}SWAT_XLT.ASM	$(SWAT_XLT_ADEP)
+
+$(O)POP87.OBJ:		{$(P)}POP87.ASM 	$(POP87_ADEP)
+
+$(O)P87_TABS.OBJ:	{$(P)}P87_TABS.ASM	$(P87_TABS_ADEP)
+
+$(O)P87_DISP.OBJ:	{$(P)}P87_DISP.ASM	$(P87_DISP_ADEP)
+
+$(O)STRFNS.OBJ: 	{$(P)}STRFNS.ASM	$(STRFNS_ADEP)
+
+$(O)QMAX_MBT.OBJ:	{$(Q)}QMAX_MBT.ASM
+
+# SWAT_HTX.ASM contains the long help text that requires
+# wrapping. This is accomplished by compiling SWAT_HTX.ASM
+# to a .COM file, and processing (with WRAPPER) the .COM file to
+# produce a new .ASM that is wrapped correctly. That .ASM file is
+# compiled to the final .OBJ
+
+$(O)SWAT_HTX.OBJ: {$(P)}SWAT_HTX.ASM	$(SWAT_HTX_ADEP)
+!IF "$(NEWDIR)" == "Y"
+	copy %|dpF$(@D)\$(@F) $(@D)\.
+!ELSE
+	set INCLUDE=$(ALLINC)
+	masm %s $(MOPT), $@ /I$(E);
+	set INCLUDE=$(OLDINC)
+!ENDIF
+
+$(O)SWAT_HTX.COM: $(O)SWAT_HTX.OBJ
+!IF "$(NEWDIR)" == "Y"
+	copy $(S)$(O)$(@F) $(@D)\.
+!ELSE
+	$(LINK) @<<$(O)SWAT_HTX.ARF
+	$*
+	$*
+	$*
+	$(LFLAGS) /tiny ;
+<<KEEP
+!ENDIF
+
+$(O)SWAT_HT2.ASM: $(O)SWAT_HTX.COM	$(E)WRAPPER.COM
+!IF "$(NEWDIR)" == "Y"
+	copy $(S)$(O)$(@F) $(@D)\.
+!ELSE
+	$(E)wrapper.com %s $@
+!ENDIF
+
+$(O)SWAT_HT2.OBJ: $(O)SWAT_HT2.ASM
+!IF "$(NEWDIR)" == "Y"
+	copy $(S)$(O)$(@F) $(@D)\.
+!ELSE
+	set INCLUDE=$(ALLINC)
+	masm %s $(MOPT), $@ $(LSTMAC);
+	set INCLUDE=$(OLDINC)
+!ENDIF
+
+$(BIN)$(SYSNAME).LOD:  $(OBJS)		{$(P)}MAKEFILE		\
+					{$(P)}SWAT.WSG
+!IF "$(NEWDIR)" == "Y"
+	copy $(S)$(O)$(@B).LOD $(O).
+	copy $(S)$(O)$(@B).SSF $(O).
+	copy $(S)$(O)$(@B).MAP $(O).
+	xc/r/a/n/t $(S)SWAT.WSG
+!ELSE
+	$(LINK) @<<$(O)swat.arf
+$(OBJS: =+^
+)
+	$(O)386swat.lod
+	$(O)386swat /map /line ;
+<<KEEP
+	fixovl /d $(O)386swat.lod
+
+$(O)386swat.map:   $(O)386swat.lod
+
+$(O)386swat.ssf:   $(O)386swat.map
+	mapssf -t$(O)386swat.ssf -wswat.wsg -v+ $(O)386swat.map
+	@ff $*/,/#
+!ENDIF
+
+$(SYSDIR)$(SYSNAME).LOD: $(BIN)$(SYSNAME).LOD
+!IF "$(NEWDIR)" != "Y"
+	xc /r  $(BIN)$(@B).LOD	$(SYSDIR)
+	xc /r  $(O)$(@B).MAP	$(SYSDIR)
+	xc /r  $(BIN)$(@B).SSF	$(SYSDIR)
+!ENDIF
+
+

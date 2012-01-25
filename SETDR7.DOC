@@ -1,0 +1,10 @@
+Allow DR7 to be Set in SWAT
+
+Previously, the Register set command allowed DR7 to be set, but the
+register value wasn't actually changed.  That's because we save DR7 at
+the very beginning of 386SWAT and reset the register to zero so
+accesses within SWAT don't generate breakpoints.  The value that the
+Register command should change is SAVE_DR7 which is what this TWT
+accomplishes.
+
+

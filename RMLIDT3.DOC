@@ -1,0 +1,15 @@
+Make NORMLIDT The Default
+
+I've encountered enough circumstances debugging RM where RM LIDT
+redirection has gotten in the way, that I've decided that it's best to
+make NORMLIDT the default and use the (new) keyword RMLIDT to enable
+it when necessary.
+
+386SWAT 	 Document keyword changes.
+
+SWAT_ARG.ASM	 Define parsing entry for new keyword.
+		 Make NORMLIDT the default.
+
+SWAT_FCN.ASM	 Define function entry for new keyword.
+
+

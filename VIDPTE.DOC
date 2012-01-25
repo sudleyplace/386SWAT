@@ -1,0 +1,108 @@
+Provide Physical Address Access to Video Buffers
+
+When SWAT needs to write to the video buffers, it does so using the
+appropriate linear address.  However, if there is something else
+mapped into that linear address (such as might be done with VGASWAP,
+or with recovery of the Monochrome Display Adapter region), we can
+fail.
+
+This change provides access to the physical addresses corresponding to
+the video buffers at a linear address within SWAT.  That is, we change
+the PTEs corresponding to two 4KB blocks inside SWAT to point to B000
+and B800.  The linear addresses inside SWAT can then be used to write
+to the screen.
+
+In the process, several related changes were made:
+
+* The MONO=xxxx keyword is removed as it is no longer needed.
+
+* An older scheme of calling SWAP_VIDPTE is superseded by this
+  technique and the older scheme is removed.
+
+* References to VIDBASE are changed to VIDBASE_FVEC.  If paging hasn't
+  been enabled as yet (during 386MAX initialization only), this
+  variable points to AGROUP:B0000 or AGROUP:B8000.  After paging has
+  been enabled, this variable contains DS:PLCLMONO or DS:PLCLCOLR.
+
+* Because SWAT may come up under one of several CR3s (only one of
+  which is from 386MAX), we need to reset the video PTEs occasionally.
+  The technique used to decide whether or not we need to re-establish
+  the PTEs is to compare the current CR3 with the previous one.  If
+  they are same, we assume that the video PTEs are in place.  If not,
+  we blast them in.  To handle the case where we come up twice in a
+  row in a non-386MAX context (Windows and VCPI come to mind), we
+  invalidate the previous value of CR3 (saved in OLDCR3) whenever
+  INIT_PROT or REST_PROT is called (to handle Windows), and whenever a
+  Get Protected Mode Information VCPI call is made (to handle VCPI).
+  That way, we shouldn't get confused if the user enters Windows,
+  brings up SWAT, exits SWAT, exits Windows, and then repeats that
+  sequence.  Without invalidating OLDCR3 at INIT_PROT (or REST_PROT),
+  when SWAT comes up the second time, it would think that the video
+  PTEs are still in place.
+
+
+The following modules are changed and why:
+
+386SWAT 	 Delete reference to the MONO=xxxx keyword.
+
+SWAT_VID.INC	 Delete @VID_FLIPPTE equate as it is no longer used.
+
+SWAT.ASM	 Delete references to SWAP_VIDPTE as it is no longer
+		   needed.
+
+SWAT_ARG.ASM	 Delete MONO=xxxx keyword as a command line argument.
+
+SWAT_BLK.ASM	 Extend SCROFF to a dword so it may be referenced
+		   directly that way.
+
+SWAT_FCN.ASM	 Delete MONO=xxxx command line action routine.
+
+SWAT_FVM.ASM	 Change references of VIDBASE to VIDBASE_FVEC.
+		 Define OLDCR3 variable.
+		 If DVGA in effect, be sure to execute SET_VIDPTE and
+		   SET_VIDVARS.  Previously we didn't, because the
+		   attributes didn't change, but now we need to be
+		   sure the video PTEs are established.
+		 Call SET_VIDPTE from CHECK_VMOD which is called very
+		   early in SWATTER.
+		 Define SET_VIDPTE routine to establish the video
+		   PTEs.
+		 In SET_VIDVARS, use physical video buffer address if
+		   paging hasn't been enabled.
+
+SWAT_INI.ASM	 Define PLCLMONO and PLCLCOLR variables.
+		 In INIT_PROT, invalidate OLDCR3.
+		 In INIT_PROT, save offset in DGROUP of mono and color
+		   video buffers.
+		 In REST_PROT, invalidate OLDCR3.
+		 In SET_ATTRS, base video mode on TXTMODE instead of
+		   VIDBASE.
+		 In INIT_REAL, delete special case of DVGA when
+		   setting initial video state.
+		 In INIT_REAL, count in size of two more pages for the
+		   video buffers.
+		 Change references of VIDBASE to VIDBASE_FVEC.
+
+SWAT_KEY.ASM	 Change references of VIDBASE to VIDBASE_FVEC.
+
+SWAT_SCR.ASM	 Change references of VIDBASE to VIDBASE_FVEC.
+		 Use SCROFF as dword.
+
+SWAT_VCP.ASM	 Delete LDT entry for video selector as we don't use
+		   it and don't want to keep it up-to-date.
+		 In VCPI GPMI call, invalidate OLDCR3.
+		 Define LIN2PPTE which returns a pointer to the PTE
+		   for a given linear address.
+		 Define LIN2PPTEZ which cleans up after LIN2PPTE.
+		 Call LIN2PPTE and LIN2PPTEZ in LIN2LIN.
+
+SWAT_VID.ASM	 Define VIDBASE_FVEC variable.
+		 Delete old VID_xxx variables (VID_FLIP moved to be
+		   close to VIDBASE_FVEC).
+		 Change references of VIDBASE to VIDBASE_FVEC.
+		 Delete SWAP_VIDPTE routine as it is no longer used.
+		 In FLIPVBASE, save EAX instead of just AX (fix bug).
+
+SWAT_WIN.ASM	 Change references of VIDBASE to VIDBASE_FVEC.
+
+

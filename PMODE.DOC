@@ -1,0 +1,13 @@
+Compatibility With PMODE
+
+There is a popular shareware DOS extender available on the Internet
+called PMODE which is used to create PM programs.  When it is run as a
+VCPI client, it allocates selectors from the top down in the GDT --
+the same as SWAT does.	PMODE uses the AVL bit in the DTE to mark a
+selector as in use, so this change has us set that bit as well so
+PMODE doesn't write on top of our selectors.
+
+SWAT_VCP.ASM	 Set $DTE_AVL in selectors allocated when intruding
+		   into a VCPI client.
+
+

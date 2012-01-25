@@ -1,0 +1,26 @@
+
+P:\TWT\SWTTHINK.WRL
+
+===============================================================================
+
+* Show Thinkpad PM_BIOS.386 in INT 20h disassembly under Windows
+
+  Description:	Show PM_BIOS.386 device's services when disassembling
+		INT 20h under Windows.	Also add the GetVMInfo SHELL services
+		that's new to Windows 3.1 and used heavily by DOSMAX.
+		SWATVXD has been changed to sent symbols for PM_BIOS.386
+		to SWAT.
+  When:  13 APR 93.
+  Who:	WRL
+  SW/HW Environment:  Debugging Windows
+  Symptom:  None, it's not a bug.
+  Temporary Workaround:  None, it's not a bug.
+  Version:  2.00.015
+
+===============================================================================
+
+Here's what's changed and how:
+
+INT1_WIN.ASM		Add new entries to the Windows INT 20h tables.
+
+

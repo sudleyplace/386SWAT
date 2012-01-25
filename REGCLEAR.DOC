@@ -1,0 +1,20 @@
+Implement Saved Register Clear Command
+
+In case you do not need to restore a saved register set, the saved
+state can be  cleared with the RC command.
+
+Also, in the operand analysis display for an IRETd with NT=1, the back
+link TSS selector is omitted as there's noroom for it and all of the
+other information being displayed.
+
+386SWAT.DOC	Document new command.
+
+SWAT_CMD.ASM	Include new command in parse table.
+
+SWAT_HTX.ASM	Document new command.
+
+SWAT_OPR.ASM	Omit display of back link TSS in IRETd with NT=1.
+
+SWAT_REG.ASM	Implement new command.
+
+

@@ -1,0 +1,49 @@
+Handle Memory Manager in AUTO Mode
+
+When we install as a VCPI client, the memory manager can be in AUTO
+mode, meaning that it is in RM until a service comes along which puts
+it into PM/VM.	In this case, we need to wake it up (into PM/VM)
+before checking to see if there is a VCPI host.  We do this by
+allocating a zero length XMS handle and freeing it when we're done.
+
+At the same time, some miscellaneous fixes are included here:
+
+* For VCPI SWAT, use an alternate VCPICALL macro (called XVCPICALL)
+  with certain MMs (QEMM comes to mind) which intercept VCPI calls
+  (including our debugger calls) in PM and return 8Fh (unknown
+  subfunction).  In this case, we call the previous INT 67h handler
+  via PUSHF/CLI/CALLF.
+
+* For Device SWAT, respecify the TR each time we enter PM as it can
+  get clobbered by other RM code.
+
+* For all types of SWAT, display message text saying what kind it is.
+
+
+SWAT_DRV.INC	 Document limit on DTEs in comment.
+		 Define flag bit in DEVLOAD for VCPI SWAT.
+		 Define alternate VCPICALL macro for use with MMs
+		   which intercept VCPI calls in PM.
+
+SWAT_DRV.ASM	 In EPM from RM, respecify TR in case it was changed.
+		 Define save area for Seg:Off of the previous INT 67h
+		   handler.
+		 Define save area for XMS zero-length handle.
+		 Define message text indicating what type of SWAT is
+		   installing.
+		 At DEV_INTR_NR_EXIT, if we allocated a zero-length
+		   XMS handle, de-allocate it.
+		 In CHECK_VCPI, allocate a zero-length XMS handle in
+		   order to wake up sleeping MMs.
+		 In CHECK_VCPI, mark as VCPI SWAT in DEVLOAD.
+		 In CHECK_VCPI, save the current holder of INT 67h for
+		   use in XVCPICALL macro.
+		 In INIT_VCPI, display message text for Device or VCPI
+		   SWAT, as appropriate.
+		 Use XVCPICALL macro instead of VCPICALL for VCPI
+		   debugger calls.
+		 In CHECK_PSWAT, display message text if present.
+
+SWAT_INI.ASM	 If we installing as LOAD SWAT, display message text.
+
+

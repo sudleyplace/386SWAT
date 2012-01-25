@@ -1,0 +1,10 @@
+Fix Bug When Searching For Bytes
+
+In an earlier TWT, when handling Page Faults, the ZF flag was cleared
+without realizing that subsequent code depended upon it being set.
+The effect was that searches for bytes were never found.  This change
+fixes that.
+
+SWAT_SRC.ASM	Ensure ZF=1 on byte searches.
+
+

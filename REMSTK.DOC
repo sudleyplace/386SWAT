@@ -1,0 +1,84 @@
+Use Separate INT 0Ch Handler For Remote Debugging
+
+In order to further distinguish Stack Faults from IRQ4 remote
+debugging, I've changed SWAT to use a separate interrupt handler for
+each.  The IRQ4 handler gets installed first, then the Stack Fault
+handler iff TRAPSTACK is specified.  Correspondingly, they are
+uninstalled in reverse order.
+
+At the same time, the following minor changes are made:
+
+* Define keystroke Ctl-F4 to toggle the Stack Fault handler from the
+  IDT.	This also entails defining a new bit to mark the current
+  state.
+
+* In IDTMAC, because we control whether or not we swap the IDT entry
+  via an external flag bit, I've removed the FORCE state; we now
+  always swap the two entries.
+
+* Define bits to mark whether or not Divide Overflow interrupt and
+  Bound Interrupt have been toggled.
+
+* Fix a bug upon exiting SWATTER, we mistakenly checked for the VM bit
+  in what turns out to be a copy of CR0 (it's not there) instead of
+  (correctly) FORW_EFL.
+
+
+MAKEFILE	 Note dependency of SWAT.ASM on SWAT_LC4.INC.
+		 Note dependency of SWAT_INI.ASM on SWAT_LC4.INC.
+
+SWAT_COM.INC	 In IDTMAC, because we control whether or not we swap
+		   the IDT entry via an external flag bit, I've
+		   removed the FORCE state; we now always swap the two
+		   entries.
+
+SWAT_LC3.INC	 Define bit to mark state of Stack Fault IDT toggle.
+
+SWAT_LC4.INC	 Define new module to hold additional flags.
+		 Define bit to mark state of Divide Overflow IDT
+		   toggle.
+		 Define bit to mark state of Bound Interrupt IDT
+		   toggle.
+
+SWAT.ASM	 Define new flags word LC4_FLAG.
+		 Define keystroke Ctl-F4 to toggle Stack Fault state.
+		 Define action to toggle Stack Fault state.
+		 If we're on a 486 or later CPU, when we're planting
+		   an INT 03h, in case we're dealing with a cached ROM
+		   invalidate the cache before comparing the value.
+		 Fix a bug upon exiting SWATTER, we mistakenly checked
+		   for the VM bit in what turns out to be a copy of
+		   CR0 (it's not there) instead of (correctly)
+		   FORW_EFL.
+
+SWAT_INI.ASM	 When installing Divide Overflow handler, mark as
+		   intercepted via new flag bit.
+		 When installing Bound Interrupt handler, mark as
+		   intercepted via new flag bit.
+		 Use separate variables for old IRQ3 handler for
+		   INT 0Bh.
+		 Use separate variables for old IRQ4 handler for
+		   INT 0Ch.
+		 Delete code which replaces LCLINT0C_FVEC value if
+		   TRAPSTACK specified as we now have separate
+		   handlers.
+		 Install Stack fault handler if TRAPSTACK specified.
+
+SWAT_INT.ASM	 Define separate variables for Stack Fault and IRQ4
+		   handlers.
+		 Define routine to check for IRQ4 in service.
+		 Uncomment commented out code to revive Stack Fault
+		   processing.
+
+SWAT_REM.ASM	 Use separate variables for old IRQ3 and IRQ4
+		   handlers.
+		 At INT xx_ORIG, check for @DEVL_LOAD before checking
+		   for the VM bit because if we enter via Stack Fault
+		   the stack has an error code on it and the VM bit
+		   isn't where we think it is.
+		 Delete commented out code in case TR is in LDT (the
+		   CPU won't let that ever happen).
+		 In LCL_INT0C2, check for IRQ4 vs. other (Stack Fault,
+		   software interrupt).
+
+

@@ -1,0 +1,43 @@
+Initial Support For LOD Module Initialization
+
+In order to reduce the low DOS memory footprint of 386MAX when LOD
+modules are being loaded (SWAT, that is), this change is made to
+386SWAT.
+
+In particular, if the LOD module indicates that it, too, supports this
+feature, then after INIT_REAL, we copy the LOD module to extended
+memory and relocate the INIT_VIRT code to be the only part of the LOD
+module which remains in low DOS memory.  This means that the INIT_VIRT
+code needs to be in a separate group so it can be relocated by 386MAX.
+Because we don't want to enable this feature at all times, it is
+enabled by the LOADHIGH keyword.
+
+Note that with the possibility that the INIT_VIRT code is the only
+portion of 386SWAT which remains in low DOS memory, any data it needs
+to access must be co-resident.
+
+The following modules are changed and why:
+
+386SWAT 	 Document new keyword.
+
+MAXDEV.INC	 Define new field MD_VSIZE to allow the LOD module to
+		   tell 386MAX that it supports the new feature.
+
+SWAT_ARG.INC	 Define flag for LOADHIGH keyword.
+
+SWAT.ASM	 Move references to INIT_VIRT to new group.
+
+SWAT_ARG.ASM	 Define LOADHIGH keyword in parse table.
+
+SWAT_FCN.ASM	 Define action routine for LOADHIGH keyword.
+
+SWAT_INI.ASM	 Move INIT_VIRT code to new group.
+		 Define variables local to new group.
+		 In INIT_REAL, normalize the ptr in SWATINI.MD_VSIZE.
+		 If LOADHIGH is not specified, zero the
+		   SWATINI.MD_VSIZE field.
+		 If the host will load INIT_VIRT group low, go
+		   resident in PM without that code.
+		 Copy PGROUP/DGROUP variables to INIT_VIRT group.
+
+

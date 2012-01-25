@@ -1,0 +1,205 @@
+Add display of symbolic data in Unassemble (F9) screen
+
+This TWT implements a linear address hash table with any number of
+bits from 8 to 12 significant for looking up resolved real- and 
+protected-mode effective addresses and matching them with symbol
+records.  Address table storage is derived from the number of bits
+specified by the ADDRHBITS parameter; the default is 12 bits, which
+takes up 4K dwords or 16K bytes storage space.
+
+Hashing of the address table also allows quick proximity searching
+on symbol addresses.  This allows disassembly of expressions like
+mov [foobar],ax
+mov [foobar+02],dx
+Proximity searching is enabled by default and checks only once for
+a symbol 2 bytes before the address being checked.
+
+Symbol name hashing is also implemented using hash values calculated
+from the symbol name (case insensitive).  The remainder is taken after
+a dword hash value is divided by a prime divisor.  This word is used to
+index the name hash table, which like the address hash table is an array
+of bucket pointers.  These bucket pointers are set to -1 if unused, or
+to the offset within DGROUP of the symbol entry at the beginning of
+the bucket chain.
+
+The symbol records themselves contain the pointers for both the address
+bucket list and the name bucket list.  This adds an additional 12 bytes
+per symbol record, but allows for future implementation of dynamic
+allocation of symbol storage.  Only the address and name hash tables
+need be in contiguous memory.
+
+The efficiency of name searches may be improved or sacrificed (the latter
+to reduce storage requirements) by changing the BUCKETS parameter.
+BUCKETS is used to specify the approximate number of 1K blocks which
+will be used for name hashing.  Values range from 1 to 255.  The default
+is max (min (SYMSIZE / 4096, 255), 1).  BUCKETS is used to index a table
+of prime divisors chosen for their closeness to multiples of 256.  Using
+prime divisors for the name hash values gives the best distribution of hash
+remainders (the value which is actually used as an index into the bucket
+pointers).
+
+The name hashing algorithm is taken from the Aho book on compilers (aka
+the dragon book).  A complete C example is listed in SWATSYM.DOC.
+
+Besides the two linked-list pointers added to the symbol structure,
+the SYM_ADDR field contains the complete 0-based linear address of
+each segment/selector and offset pair.  This field is calculated from
+the caller's GDT/LDT, and is updated whenever a symbol is added,
+overwritten, or translated.  This field is the comparison value against
+which a base+offset value is matched when looking through the address
+hash table bucket chain.
+
+Code labels are inserted in the Unassemble output.  If multiple labels
+match a given address, only the first one found will be displayed.  This
+means publics will always appear in lieu of line number symbols, and
+only the first of multiple publics with equivalent effective addresses
+will be displayed.
+
+JMP and CALL operands are resolved in the INSTR_DEC procedure, as are
+data references.
+
+The SELFDBG flag byte and SELFBREAK macro are introduced.  They provide
+a useful mechanism for debugging inside SWAT where reentrancy must be
+controlled.
+
+With label display, we also need to handle the special case where a
+label could be displayed on the last line of the disassembly screen,
+and the instruction itself will not fit on the screen.  In this case
+we must ensure that the label is NOT displayed when its corresponding
+instruction line will not fit, and that it is not recorded as the
+last instruction on the screen.
+
+A minor bug in displaying the symbol table (^F6) is also fixed.  If one
+paged down in the symbol table, then flushed the symbol table and loaded
+another one smaller than the current display offset in the old symbol
+table, the new symbol table would not be displayed in the ^F6 screen
+until one paged up to the point which would have been valid for the new
+symbol display as well as the old.
+
+A MAPSSF .WSG file is included for SWAT debugging.  To use it, enter
+MAPSSF -w386swat 386swat
+and the 386swat.map file will be loaded, with selector translation
+provided by 386swat.wsg.  Note that the selector values in 386swat.wsg
+are hard-coded for 386MAX 6.0 with DPMI support.  Values for MAX pre-
+6.0 are 120 for AGROUP and 128 for DGROUP.
+
+SWAT also tags data screens (F7) if a symbol is found matching the
+address at the top of the screen.
+
+Lines with BC or BD breakpoints set are now highlighted.  A different
+set of attributes are used when the breakpointed line is also the
+current instruction.
+
+This code also fixes a bug in GET_LASTPLEN which was not previously
+exacerbated.  When disassembling backwards via PgUp, we were calling
+DISASSEMBLE with EBP not pointing to a valid FORW_STR.  This would
+result in random errors when attempting to get selector bases.
+
+Files affected:
+386SWAT		Defined new keywords, ADDRHBITS and BUCKETS.
+
+386SWAT.WSG	MAPSSF -w file for debugging SWAT.
+
+int1\INT1_FNS.ASM Added symbol substitution to INSTR_DEC.  With an
+		effective linear address in EAX, we call local procedure
+		CHECK_SYM.  If the address in EAX corresponds to a symbol
+		(via SYMHASH_SRCH) we blast the symbol name into
+		ES:DI and return with CF=0.  Otherwise, CF=1 and we
+		proceed with constant processing.
+
+		This behavior was added to @REL8 after the @REL_COM entry
+		point, which is shared by @REL16, @REL32; to RM_ADDR,
+		which is called by @RM8, @RM16, @RM32, @RM8P, @RM16P, 
+		and @RM32P; to @PTR16@16 and to @PTR16@32.
+
+		In CHECK_SYM, we also do proximity searches based on
+		the current setting of PROXSRCH.  If PROXSRCH is set
+		to 0000h, proximity searches are disabled.
+
+int1\INT1_FNS.INC Added equate to access EBP referencing FORW_STR from
+		stack (needed to calculate effective linear addresses).
+
+MAKEFILE	Reorganized to use OBJS= scheme.
+		Added new dependencies.
+
+SWAT.ASM	Fix bug in GET_LASTPLEN (SS:EBP not pointing to FORW_STR
+		when calling DISASSEMBLE).
+
+		Also ensure that stack allocations keep ESP dword aligned.
+
+SWAT_ARG.ASM	Added new keywords, ADDRHBITS and BUCKETS.
+
+SWAT_BLK.ASM	Added code label display to DISP_INSTR.  Moved comments
+		indicating course of conditional jumps and loops to
+		@NCOLS - 10 - 10 (10 characters before stack display).
+		Also added SELFDBG variable for debugging unassembly 
+		display.  Entering a CC at the public label 
+		DISPINSTR_BREAKPT and setting SELFDBG to 0 will cause 
+		an int 3 on ONLY the next call to DISP_INSTR.
+		Handled special case when displaying labels and label
+		would be displayed on last line of screen.  This case
+		also requires a special adjustment of the length to
+		move when paging down.
+
+SWAT_CMD.ASM	Added null terminating byte to command line workspace.
+		A terminating null is expected when parsing the command
+		line.
+
+SWAT_COM.INC	Added SELFBREAK macro.  SELFBREAK DISPINSTR,01 is
+		used to trigger a breakpoint at DISPINSTR_BREAKPT when
+		bit 0 of SELFDBG != 0.  Used in SWAT_BLK.ASM and INT1_FNS.ASM.
+		SELFBREAK SYMHASH_SRCH,10h,SYMHASH_SRCH_ERR will only
+		allow the code in SYMHASH_SRCH to execute when bit 4
+		of SELFDBG is != 0; otherwise, execution continues at
+		SYMHASH_SRCH_ERR.
+
+SWAT_DBG.ASM	Added highlighting of lines with breakpoints enabled.
+
+SWAT_FCN.ASM	Added functions to process ADDRHBITS and BUCKETS parameters.
+
+		Added table of primes for determination of prime divisor
+		for hashing from BUCKETS parameter.
+
+		Added code to SYMSIZE function to set BUCKETS if not already
+		set.  If neither SYMSIZE nor BUCKETS is specified, both
+		have default values (4K and 1, respectively).
+
+SWAT_INI.ASM	Added allocation of address and name hash tables.
+
+		Added new attributes for labels and breakpoints.
+
+		Added calculation of default BUCKETS if not specified.
+
+SWAT_IOP.ASM	Added S16 macro to stosb instruction.
+
+SWAT_MEM.ASM	Added code to label first line of data display if first
+		byte matches a symbol.  This is done only for db, dw,
+		and dd displays.
+
+SWAT_SYM.ASM	Added SYMHASH_SRCH (translate effective address to
+		symbol record offset), UPDATE_SYMHASH (update effective
+		address in symbol hash table), and UPDATE_SYMNHASH.
+
+		Added calls to UPDATE_ADDRHASH in SYMAPPND and SYMTRANS.
+		Since names cannot be changed, UPDATE_SYMNHASH is called
+		only from SYMAPPND.
+
+		Also modified LCL_SYMSRCH to return offset within DGROUP
+		of symbol record found, and to use hashing to speed search.
+
+		Added code to initialize hash tables to -1.  This is done
+		on the first symbol append when SYMCOUNT=0.  SYMCOUNT is
+		used as the test for whether we have a symbol table or not.
+
+		Fixed minor bug in displaying symbol table after size has
+		been reduced.
+
+SWAT_SYM.INC	Changed structure of symbol table record.  Added struct
+		defining symbol record as passed from caller via VCPI
+		API call.
+
+SWATSYM.DOC	Documentation for subset of SWAT features dealing with
+		symbol support.
+
+VERSION.ASM	Added VERS_HTU for compatibility with VERSION.INC
+

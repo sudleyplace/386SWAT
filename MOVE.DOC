@@ -1,0 +1,22 @@
+SWAT\MOVE.MDA
+
+* Introduce the M command to move a block of data
+
+The MOVE command arguments may be specified in the usual way, that is,
+the parsing is similar to that of all other SWAT commands.
+
+M source_addr l length destin_addr
+
+
+Here's what's changed:
+
+SWAT_CMD.ASM	- Added 'm' to list of valid commands
+
+SWAT_ENT.ASM	- Added CMD_MOVE routine.  This routine is almost
+		  identical to the CMD_FILL routine.
+
+
+386SWAT.DOC	- Add MOVE rule
+
+386SWAT.GRM	- Add MOVE rule
+

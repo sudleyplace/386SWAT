@@ -1,0 +1,15 @@
+Fix SYMSIZE Bug
+
+Previously, I had attempted to calculate SYMSIZE based upon the size
+of the incoming .SSF file and it didn't work.  This time it does.  The
+effect is that you don't need to use SYMSIZE with a LOADSYM, thus
+reducing wasted space in SWAT's symbol table as well as perhaps
+avoiding a mistake when calculating SYMSIZE and finding it is too
+small.
+
+SWAT_FCN.ASM	 Catch the exit case when reading in the .SSF file.
+		 Add into the SYMSIZE calculation room for the
+		   difference between the storage and incoming strucs
+		   per symbol.
+
+

@@ -1,0 +1,17 @@
+Implement Exit Command
+
+A common command line sequence is to set AH to 4C, SIGINT 21, and G.
+This is now done via a command called EXIT.
+
+The following files are changed and why:
+
+SWAT.ASM	 Move check for ESC to precede the one for SIGINT so
+		   we can skip the breakpoint setting for EXIT.
+
+SWAT_CMD.ASM	 Define entry for EXIT command.
+
+SWAT_HTX.ASM	 Document EXIT command in help screen.
+
+SWAT_SIG.ASM	 Define action for EXIT command.
+
+

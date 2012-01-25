@@ -1,0 +1,16 @@
+Implement VMSINT= Command
+
+In order to better support VCPI debugging, a new syntax to an old
+command line keyword is defined to enable the user to change the set
+of interrupts hooked whenever SWAT intrudes into a VCPI context.
+
+386SWAT.GRM	 Define new command (as well some old ones).
+
+SWAT_HTX.ASM	 Document new command.
+
+SWAT_VCP.ASM	 (This printout has the changes from the DEFINTS TWT
+		  merged into it).
+		 In CMD_VMSCOUNT, use U32_HEX2DD instead of BASE2BIN.
+		 In CMD_VMSINT, document and define new syntax.
+
+

@@ -1,0 +1,129 @@
+Split Data Segment Into 16-bit and 32-bit
+
+Now that SWAT has USE32 data, some of it needs to be addressible from
+16-bit code segments, i.e.  real mode.	To avoid problems with
+addressibility, I've split the data segment into DATA and DATA16 where
+the latter segment should contain the data items which must be
+addressible from real mode.
+
+To test these changes, I put a big DB at the start of the 32-bit data
+such that all of the 32-bit data was above 64KB.  This entailed a
+slight delay as I had to write a new linker to handle this, but I'm
+back now.
+
+Most if not all of the changes involve moving data declarations and
+EXTRNs to the DATA16 segment.
+
+One bug is fixed in which a call to LIN2PPTE can signal a Page Fault
+because we save two PDEs (on spec in case it crosses a 4MB boundary).
+This can occur inside LIN2LIN where we need to get only one PDE.
+
+DOSCALL.INC	 Make the DOSCALL macro sensitive to the value of
+		   @WordSize so that it LEAs into a 16- or 32-bit
+		   register as appropriate.
+
+DPMI.INC	 Define record values for the Get/Set Page Attributes
+		   function (needed for QLINK).
+
+DTE.INC 	 Define DPLn and RPLn equates.
+
+MASM5.MAC	 Change FICALLD macro to use DD on the label so it can
+		   be used in a USE32 segment with a 32-bit offset.
+
+PTR.INC 	 Define DQ_STR structure.
+
+XMS.INC 	 Define @XMS_PRES and @XMS_ADDR equates and use them
+		   in the macros.
+
+MAKEFILE	 Define and use P1 as the path to search for INT1
+		   source files.  This way, you need MD INT1 locally
+		   and then copy only the changed files to this
+		   subdirectory.  Previously, if a local mod involved
+		   changes to INT1 code, you had to copy all the INT1
+		   source files to the local directory.
+		 Note dependency of SWAT_FCN.ASM on SWAT_SEG.INC.
+		 Delete call to EXE2BIN and use /TINY switch on the
+		   linker to create a .COM file for SWAT_HTX.
+
+SWAT_SEG.INC	 Define new DATA16 segment and place at the start of
+		   DGROUP.
+
+POP87.ASM	 Move data declarations and/or EXTRNs to DATA16.
+
+SWAT.ASM	 Delete filler between CODE and DATA segments as we no
+		   longer need to overcome that linker bug.
+		 Move data declarations and/or EXTRNs to DATA16.
+
+SWAT_AFL.ASM	 Move data declarations and/or EXTRNs to DATA16.
+
+SWAT_ARG.ASM	 Move data declarations and/or EXTRNs to DATA16.
+
+SWAT_BLK.ASM	 Move data declarations and/or EXTRNs to DATA16.
+
+SWAT_CMD.ASM	 Move data declarations and/or EXTRNs to DATA16.
+
+SWAT_DAT.ASM	 Move data declarations and/or EXTRNs to DATA16.
+
+SWAT_DBG.ASM	 Move data declarations and/or EXTRNs to DATA16.
+
+SWAT_DR2.ASM	 Move data declarations and/or EXTRNs to DATA16.
+
+SWAT_DRV.ASM	 Move data declarations and/or EXTRNs to DATA16.
+
+SWAT_DTE.ASM	 Move data declarations and/or EXTRNs to DATA16.
+
+SWAT_ENT.ASM	 Move data declarations and/or EXTRNs to DATA16.
+
+SWAT_FBR.ASM	 Move data declarations and/or EXTRNs to DATA16.
+
+SWAT_FCN.ASM	 Move data declarations and/or EXTRNs to DATA16.
+
+SWAT_FVM.ASM	 Move data declarations and/or EXTRNs to DATA16.
+
+SWAT_HLP.ASM	 Move data declarations and/or EXTRNs to DATA16.
+
+SWAT_INI.ASM	 Move data declarations and/or EXTRNs to DATA16.
+
+SWAT_INT.ASM	 Move data declarations and/or EXTRNs to DATA16.
+
+SWAT_IOP.ASM	 Move data declarations and/or EXTRNs to DATA16.
+
+SWAT_KEY.ASM	 Move data declarations and/or EXTRNs to DATA16.
+		 Use LOG2 macro even though it's zero.
+
+SWAT_KTB.ASM	 Use type instead of constant.
+
+SWAT_MEM.ASM	 Move data declarations and/or EXTRNs to DATA16.
+
+SWAT_MSC.ASM	 Move data declarations and/or EXTRNs to DATA16.
+
+SWAT_OPR.ASM	 Move data declarations and/or EXTRNs to DATA16.
+
+SWAT_PTE.ASM	 Move data declarations and/or EXTRNs to DATA16.
+		 Change skip marker in call to LIN2PPTE.
+
+SWAT_REG.ASM	 Move data declarations and/or EXTRNs to DATA16.
+
+SWAT_REM.ASM	 Move data declarations and/or EXTRNs to DATA16.
+
+SWAT_SCR.ASM	 Move data declarations and/or EXTRNs to DATA16.
+		 Use RGRSEG2 instead of constant for readability.
+
+SWAT_SIG.ASM	 Move data declarations and/or EXTRNs to DATA16.
+
+SWAT_SRC.ASM	 Move data declarations and/or EXTRNs to DATA16.
+
+SWAT_SYM.ASM	 Move data declarations and/or EXTRNs to DATA16.
+
+SWAT_TOG.ASM	 Move data declarations and/or EXTRNs to DATA16.
+
+SWAT_UNA.ASM	 Move data declarations and/or EXTRNs to DATA16.
+
+SWAT_VCP.ASM	 Move data declarations and/or EXTRNs to DATA16.
+		 Change skip marker in call to LIN2PPTE.
+
+SWAT_VID.ASM	 Move data declarations and/or EXTRNs to DATA16.
+
+SWAT_WIN.ASM	 Move data declarations and/or EXTRNs to DATA16.
+
+

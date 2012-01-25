@@ -1,0 +1,9 @@
+Fix Bug When Using Enter Command
+
+If you use the Enter command "e addr" and continue into the next line,
+we clobber the terminating byte of the command line.  Subsequently,
+some commands such as unassemble don't work anymore.
+
+This change affects SWAT_ENT.ASM only.
+
+

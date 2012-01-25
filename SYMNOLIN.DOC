@@ -1,0 +1,17 @@
+Implement Line # Disable Switch to LOADSYM
+
+Because I don't use line numbers very often, I've implemented a new
+switch (/LI-) to the LOADSYM keyword which initially disables line
+numbers.  To re-enable them, use LI+ from the SWAT command line.
+
+At the same time, I fixed a bug in the processing of LOADSYM switches
+where we would increment the text pointer one too many times.  The
+effect would be to generate an error if the switches weren't separated
+by (say) a blank.
+
+386SWAT 		Document new switches to LOADSYM.
+
+SWAT_FCN.ASM		Delete extra increments to text pointer.
+			Parse /LI- to disable line numbers.
+
+

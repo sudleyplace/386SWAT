@@ -1,0 +1,11 @@
+Handle GRP5 and 7 Invalid Opcodes
+
+When decoding GRP5 and GRP7 opcodes, the MOD bits might indicate a
+register operand where it doesn't make sense, e.g., FF EE which would
+translate to JMPF Dword SI.  This change picks off those cases and
+displays an opcode of ???.
+
+INT1_GRP.ASM	 In @GRP5 and @GRP7, check for MOD=11 and REG=
+		   specific values which are actually invalid opcodes.
+
+

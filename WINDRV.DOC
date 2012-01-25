@@ -1,0 +1,68 @@
+Call REST_PROT/INIT_PROT On Windows Entry/Exit With Device SWAT
+
+When SWAT is loaded as a device driver (whether it was intruding into
+an existing memory manager or loading as VCPI SWAT), previously it
+wasn't handling the transitions into and out of Windows.
+
+When Windows starts up, SWAT needs to disable itself (by calling its
+REST_PROT entry point) so that it is in the proper state when the VxD
+calls its INIT_PROT entry point after Windows loads.  Correspondingly,
+when Windows terminates, the VxD calls SWAT at its REST_PROT and SWAT
+needs to call its INIT_PROT entry point to re-enable it.
+
+When SWAT is loaded from within 386MAX, MAX handles calling the proper
+REST_PROT/INIT_PROT entry points.  When SWAT is loaded as a device
+driver, these calls are not made.
+
+Now they are.
+
+The technique used is to hook INT 2Fh, watch for the Windows Begin
+Initialization Broadcast (1605h), and return our own entry point for
+the Windows enter/exit callback.  When we are called at the enter/exit
+callback, enter PM (from RM) and call the appropriate routine
+(REST_PROT on the way into Windows, INIT_PROT on the way out).
+
+Also, if we're device loaded and running under Windows, we need to
+save the device loaded state (into @DEVL_WIN3) and clear @DEVL_LOAD so
+when we're invoked (say, via an interrupt), we don't attempt to return
+to the device loaded state.  This state is restored in REST_PROT if
+@DEVL_WIN3 is set.
+
+
+MASM5.MAC	Make FICALL sensitive to USE16/USE32 segments.
+		Define FICALL32 macro similar to FIJMP32 macro.
+
+SWAT_DRV.INC	Define new flag @DEVL_WIN3.
+		Define new flag @TRP_WCB.
+		Document bit values for all such flags to aid in
+		  debugging.
+
+SWAT_DR2.ASM	If we're intruding into a MM, setup values for Windows
+		  callback.
+
+SWAT_DRV.ASM	Define variables to support Windows callbacks.
+		Define routine (RMDEV2F) to look for INT 2Fh/1605
+		  broadcasts.
+		Define routine (DEV_EPM) to enter PM (from RM) to
+		  process Windows callback.
+		Define routine (DEV_ERM) to enter RM (from PM).
+		Define routine (DEV_WINCB) to handle Windows callbacks
+		  when intruding into an existing MM.
+		Ensure INT 2Fh is always hooked for VCPI SWAT.
+		Define routine (RMDEV_WINCB) to handle Windows
+		  callbacks for VCPI SWAT.
+		In INIT_VCPI, if we're intruding, ensure INT 2Fh is
+		  hooked.
+		Define routine (INTRUDE_HOOK2F) to hook INT 2Fh.
+
+SWAT_INI.ASM	In INIT_PROT, if we're device loaded (RM or VM-VCPI)
+		  and initializing under WIndows, save that state in
+		  @DEVL_WIN3 and clear @DEVL_LOAD for proper return.
+		In INIT_PROT, if we're device loaded don't
+		  automatically set all @ARG_xxx flags as we don't
+		  want everything hooked if we run under Windows.
+		  Those flags were hooked as a convenience, only.
+		In REST_PROT, if we were device loaded and are
+		  returning from Windows, restore the original state.
+
+

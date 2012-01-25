@@ -1,0 +1,50 @@
+Dual PCI VGA Adapter Routines
+
+While adding support to 386SWAT for dual PCI VGA adapters, I learned a
+bit about PCI programming which I thought I'd share with others.
+
+The assembler code contains routines to detect dual PCI VGA adapters
+and enable and disable them.  The case where there is an AGP
+controller in the picture is covered as well.
+
+There are two distinct cases covered by this code.
+
+1.	A monochrome adapter is in the system, but isn't visible because
+	it is hidden by an AGP controller.	Use DPCI MONO to test this
+	case.
+
+2.	Two (or more) PCI VGA adapters are in the system, one is the
+	primary, one is the secondary.	Use DPCI DVGA to test this case.
+
+For more details, see
+
+	http://www.sudleyplace.com/swat/swatdisp.htm
+
+Note that we support access mechanism #1 only.
+
+Thanks go to Dominik Behr, Federico Bianchi, Ralf Brown, and others 
+for their helpful suggestions and/or source code.
+----------------------
+This zip file contains
+
+DPCI.TXT		This file
+DPCI.ASM		The main assembler file
+DPCI_MSC.ASM	Miscellaneous routines
+DPCI.INC		Application-specific include file
+DPCI.COM		The correspoinding executable file
+DPCI.MAK		The make file
+KK.BAT			A batch file to call the make file
+
+386.INC 		General-purpose include files
+6845.INC		...
+ASCII.INC		...
+BIOSDATA.INC	...
+DOSCALL.INC 	...
+INTVEC.INC		...
+MASM.INC		...
+PCI.INC 		...
+PSP.INC 		...
+PTR.INC 		...
+VIDATTR.INC 	...
+VIDCALL.INC 	...
+

@@ -1,0 +1,25 @@
+Remove Unmatched Extrns
+
+In the interest of cleanliness, almost all extraneous extrns are
+removed.  This allos QLINK with /W:EXTMAT to show the actual problem
+areas.
+
+SWAT_AFL.ASM
+SWAT_FBR.ASM
+SWAT_FVM.ASM
+SWAT_HST.ASM
+SWAT_MAC.ASM
+SWAT_SYM.ASM
+POP87.ASM
+SWAT_WIN.ASM
+SWAT_SCR.ASM
+SWAT_PTE.ASM
+SWAT_VID.ASM
+SWAT_FCN.ASM
+SWAT_HLP.ASM
+SWAT_INT.ASM
+SWAT_KEY.ASM
+SWAT_REM.ASM
+SWAT_VCP.ASM
+
+

@@ -1,0 +1,11 @@
+Fix bug in displaying LOOPE and LOOPNE instructions
+
+SWAT would sometimes fail to indicate the jump direction
+correctly on a LOOPE instruction with ZF=1 and CX=1, and
+on a LOOPNE instruction with ZF=0 and CX=1.
+
+Files affected:
+
+SWAT_OPR.ASM	Handle all conditional loop cases correctly.
+
+

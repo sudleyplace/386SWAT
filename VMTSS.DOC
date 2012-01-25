@@ -1,0 +1,72 @@
+Allow TSS Debugging In VM
+
+If a program enters PM from RM and asks 386SWAT to enter its GDt and
+IDT, as usual we setup TSS selectors for the interrupts we manage.  If
+this program subsequently enters VM, we need to handle the interrupt
+via a TSS from VM differently as the stack and register interpretation
+(segments vs. selectors) are different.  Previously, our TSS interrupt
+code expected to be entered from PM only, so a change is needed.
+
+Also, when debugging such a RM program where the user sets a
+breakpoint shortly after entering PM (via setting the PE bit in CR0)
+but before setting TR, I found that SWAT failed miserably because it
+was depending upon there being a valid back link in the local TSS.
+Thus, more changes were needed to handle an invalid back link.	In
+conjunction with this change, the register set command (R) is enhanced
+to allow TR and LDTR (a.k.a. LDT) to be read and set, so the user can
+setup a valid back link should the need arise.
+
+Also, when SWAT is installed as a RM debugger, avoid setting TR to our
+local TSS as that changes it from an invalid value to a valid value.
+Unfortunately, this doesn't prevent another program from doing the
+same, but at least we're not the culprit.  BTW, unlike the LDTR, there
+seems to be no way to clear (and thus invalidate) the Task Register
+once it's set.  Setting TR to zero (which is after all its initial
+state), causes a GP Fault even though the current value of TR may be
+already be invalid.  Thus, once TR is set to an invalid (and possibly
+non-zero) value, it stays that way until set to a valid value.
+
+
+VCPIDBG.DOC	 Old file now put under version control.
+
+386SWAT.DOC	 Note availability of new registers TR and LDTR (LDT).
+
+386SWAT.GRM	 Note availability of new registers TR and LDTR (LDT).
+
+SWAT_COM.INC	 Define VM interrupt stack frame structure.
+
+SWAT.ASM	 Handle invalid back link cases.
+		 When exiting SWAT in TSS mode, ensure there's a valid
+		   back link; if not, signal error message and refuse
+		   to leave SWAT (because if we do allow that, the
+		   system crashes -- there's a good reason).
+
+SWAT_CMD.ASM	 Define inalid back link error message.
+
+SWAT_DRV.ASM	 When entering PM from RM, do not set TR so we don't
+		   change it from an invalid value to a valid value.
+
+SWAT_HTX.ASM	 Note availability of new registers TR and LDTR (LDT).
+
+SWAT_OPR.ASM	 Handle invalid back link case.
+
+SWAT_REG.ASM	 Define new registers TR and LDTR (LDT).
+
+SWAT_VCP.ASM	 Delete SETLDT macro and use explicit simpler code.
+		 Delete VCP_CODE2 entry as it's no longer used.
+		 When setting the new debugger linear address and CR3,
+		   if paging isn't enabled, don't translate the
+		   address.
+		 In the PM callback code, return error in AH, not AL.
+		 In SET_COMMON and RESET_COMMON, if we're called from
+		   a TSS trap in VM (and thus there's no local LDT),
+		   check for this and avoid swapping selectors.
+		 In SET_NEWCR3, if the previous CR3 is valid, don't
+		   save the incoming CR3 in the back link TSS.
+		 For INTs for which we have TSSs, prepare for a later
+		   TWT by using ESI to reference the local TSS
+		   structures.
+		 In TSS_INTCOM, handle the case where we're entered
+		   via an interrupt from VM.
+
+

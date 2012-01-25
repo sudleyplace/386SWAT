@@ -1,0 +1,14 @@
+Widen PTE Display
+
+If we have more then 16MB of PTEs, we use to truncate the display
+there and wrap to zero.  As systems have more memory, we need to
+display more PTEs.  This change widens the displayed offset from a
+word to a dword and at the same time (unless we're under Windows)
+truncates the PTE display at the limit of the CR3 selector passed to
+SWAT by 386MAX.  This has the effect of noting the effective end of
+the PTE display by displaying blanks after the last valid PTE setup by
+386MAX.
+
+This change affects SWAT.ASM and SWAT_DTE.ASM.
+
+

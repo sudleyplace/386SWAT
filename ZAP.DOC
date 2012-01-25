@@ -1,0 +1,19 @@
+ZAP.MDA
+
+* Add Ctrl-Z command to zap the top instruction
+
+Since converting an instruction to NOPs is a frequently performed
+function, a hot-key has been created to easily accomplish this task.
+The Ctrl-Z key will convert the top instruction to the appropriate
+amount of single byte NOP instructions.
+
+Author's note:
+This is useful for removing debugging breakpoints when they are no
+longer needed.
+
+
+Here's what's changed:
+
+SWAT.ASM	- Added Ctrl-Z key definition
+		  Added code to convert top instruction to NOPs
+

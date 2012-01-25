@@ -1,0 +1,45 @@
+Enter/Exit Protected Mode Example
+
+This assembler program was written to provide an example of how to
+enter and exit Protected Mode (PM) under various starting points one
+might encounter in DOS:
+
+* Real Mode (RM);
+
+* Virtual Mode (VM) using VCPI;
+
+* Virtual Mode (VM) using DPMI.
+
+
+
+
+VCPI:
+
+To simplify stack references, we set the B-bit in the stack selector
+so we can use ESP for base addressing as necessary.
+
+
+DPMI:
+
+We enter PM as a 32-bit client.  This has several implications among
+which are
+
+* Interrupts are passed to us with a 32-bit stack frame, and we
+  terminate using IRETD or RETFD as appropriate.
+
+* DPMI calls made by us must use 32-bit register pointers (ES:EDI
+  instead of ES:DI) where appropriate.
+
+* The B-bit in the stack selector so we can use ESP for base
+  addressing.
+
+
+
+
+
+Please feel free to use this code to learn more about this process.
+
+If you have any questions about how this program works, please contact
+Bob Smith at Internet address "bsmith@sudleyplace.com".
+
+

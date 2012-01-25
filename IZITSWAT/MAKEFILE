@@ -1,0 +1,15 @@
+
+B=$(BINDIR)
+P=IZITSWAT
+
+ALL:	$(P).COM	\
+	$(B)$(P).COM
+
+$(P).COM:	$(P).OBJ
+
+$(B)$(P).COM:	$(P).COM
+	xc/r %s $@
+
+$(P).OBJ:	$(P).ASM
+
+

@@ -1,0 +1,55 @@
+Implement Toggle Interrupt Interception Command
+
+A new command line command TOGINT is now available for toggling SWAT's
+interception of any of the interrupts 00h, 01h, 02h, 03h, 05h, 06h,
+0Ch, 0Dh, and 0Eh.  The syntax is
+
+TOGINT xx [xx ...]
+
+where xx is a hex number from the above list.
+
+At the same time, the display of which of the above interrupts is
+intercepted has been shortened to just the interrupt # as in
+Ä00Ä01ÄÄÄ03Ä ... in the same place on the screen as before.
+
+Also, while looking over the grammar, I discovered that the Enter,
+Fill, and Move commands could take advantage of using Lvals instead of
+Atoms as part of its syntax.  That way, you can use a more complicated
+syntax rather than the limited Atom which is just a constant or
+register.
+
+386SWAT.DOC	 Document the new command with other minor changes.
+
+386SWAT.GRM	 Document the new command with other minor changes.
+
+MAKEFILE	 Note new module and its dependencies.
+
+SWAT_COM.INC	 Define structure needed for toggling interrupts as
+		   well as displaying them.
+
+SWAT_LCL.INC	 Delete unused bits @LCL_DBG and @LCL_DEBUG.
+		 Define both mask and index forms of the bits.
+
+SWAT.ASM	 Move toggling code from here to SWAT_TOG.ASM.
+		 Delete definition of C-F10 as the flag it sets is not
+		   used anywhere.
+
+SWAT_CMD.ASM	 Define new command in parse list.
+
+SWAT_ENT.ASM	 Use PARSE_LVAL instead of PARSE_ATOM.
+		 Fix comments to match the new grammar.
+
+SWAT_HLP.ASM	 Document C-F4 keystroke (missed in an earlier TWT).
+
+SWAT_SCR.ASM	 Change intercepted interrupt display to 'ÄxxÄ'.
+		 Delete commented out PTEs.
+		 In DISPVMHANDLE, save and restore EAX as it's used.
+		 Define DISP_INTR to display a single intercepted
+		   interrupt.
+		 Call above routine from DISP_MODE for each potential
+		   intercepted interrupt.
+
+SWAT_TOG.ASM	 Define new module to handle TOGINT command as well as
+		   ACT_TOGINT called from SWAT.ASM.
+
+

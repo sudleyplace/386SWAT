@@ -1,0 +1,55 @@
+Fixes for symbolic debugging
+
+Four minor but annoying bugs have been fixed:
+
+* When displaying a file in the source browser, the current line
+  highlighted is off by one or more lines.  This happens when one
+  or more blocks in the file end with LF being the last character
+  in SWAT's input buffer.  To reproduce this, start 386LOAD.COM
+  with symbols and trace for the first few instructions in source
+  mode.  TSRCOM.ASM will be off by a line or two starting at around
+  line 2000.  The source line numbers are now displayed in decimal.
+  The initial screen displayed for any file would read "Line 1-0."
+  This has also been fixed.
+
+* Tab expansion for the source display did not work properly.
+
+* When displaying disassembly of code with breakpoints set, the
+  breakpoints show up in red.  If one of these set breakpoints
+  happens to be labeled and the label comes at the bottom of the
+  screen such that a blank line is displayed (because the label
+  and the disassembled line won't both fit), the default attribute
+  suddenly becomes red.
+
+* When an error message is displayed, the underlying screen is saved.
+  The buffer is 80 characters, which is enough for 40 characters and
+  attributes.  Some newer messages are more than 40 characters in
+  length (Unable to open file ...).  These messages clobber variables
+  following the message buffer.  One of these variables is the SELFDBG
+  flag, so a common symptom is a breakpoint at 178|xxxx.  Usually the
+  system is hosed at this point.
+
+Files affected:
+
+SWAT_BLK.ASM	Extend message buffer to 80 characters.
+
+		Fix "breakpoint bloodbath" bug.
+
+SWAT_FBR.ASM	Fix source browser line dislocation bug.
+
+		Display source lines in decimal.
+
+		When LF command fails, zero file name so we don't
+		display garbage in the Ctrl-F7 screen.
+
+		Display Ctrl-F7 screen header after we've displayed
+		the rest of the screen, so we know the starting and
+		ending lines.
+
+		Fix tab fill bug.
+
+SWAT_SCR.ASM	Add function to display a long unsigned decimal value.
+
+SWAT_SYM.ASM	Clarify comments a bit.
+
+

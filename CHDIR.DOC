@@ -1,0 +1,20 @@
+Add CHDIR command to SWAT
+
+This new command is identical to its DOS counterpart.  All of following:
+
+CHDIR
+CHDIR d:
+CHDIR \dirname
+CHDIR d:\dirname
+
+behave as in DOS.  The CD abbreviation is valid as well.
+
+Files affected:
+
+SWAT_CMD.ASM	Add CHDIR and CD commands to parser.
+
+SWAT_FBR.ASM	Add CHDIR code.
+
+		Check for file browser error condition.
+
+

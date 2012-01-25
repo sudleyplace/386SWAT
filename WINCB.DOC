@@ -1,0 +1,12 @@
+Display Windows Callback Address At Startup
+
+To make it easier to use the INSERT command, we now dieplsy the
+address of the Windows callback procedure.  This way the user can
+write down the address and set a breakpoint there before bringing up
+Windows.
+
+SWAT_DRV.ASM	Display the WINCB address.
+
+SWAT_MSC.ASM	Define variants of BIN2DWORD and friends for NCODE.
+
+

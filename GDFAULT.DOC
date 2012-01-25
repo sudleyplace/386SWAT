@@ -1,0 +1,32 @@
+Skip Over Read/Write From/To Debug Registers If GD Bit Is Set
+
+When the GD bit in DR7 is set, any read from or write to a debug
+register triggers a Debug Fault (and the CPU clears the GD bit from
+DR7 so the Debug Fault handler can use those registers).
+
+Various environments (Microsoft Windows comes to mind) clear the debug
+registers upon entry thus making it difficult debug that context.
+With this change, setting the GD bit traps reads and write of those
+registers and handles them transparently.  A read from a debug
+register returns the actual value.  A write to a debug register is
+ignored.  The GD bit can be set from the SWAT command line via
+
+R DR7.GD=1
+
+If you desire this behavior to be the default, use SWATCMD with the
+above argument.
+
+The following files are changed and why:
+
+SWAT.ASM	Handle additional entry points which we must allow to
+		  proceed.
+
+SWAT_DBG.ASM	Define labels around an entry point.
+
+SWAT_INT.ASM	Define table of action routines for reading a debug
+		  register.
+		In LCL_INT01, check for and handle GD debug faults.
+		In LCL_INT09, don't read BIOS data area if we're in W
+		  as that location might not be mapped in.
+
+

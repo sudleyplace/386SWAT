@@ -1,0 +1,55 @@
+
+	     ______             ____  ______     _____  ______ 
+	    |  ____|           |  _ \|  ____|   / / _ \|  ____|
+	    | |__ _ __ ___  ___| |_) | |__     / / |_| | |__ 
+	    |  __| '__/ _ \/ _ \  _ <|  __|   / /|  _  |  __|
+	    | |  | | |  __/  __/ |_) | |____ / / | | | | |
+	    |_|  |_|  \___|\___|____/|______/_/  |_| |_|_|
+
+
+		    Matrox driver implementation notes.
+
+
+
+   This driver supports the Millenium, Mystique, and Millenium II (both PCI 
+   and AGP) cards.
+
+   It supports color depths of 8, 15, 16, and 32 bits per pixel in both 
+   linear and banked modes, and should be able to use all the resolutions 
+   provided by your underlying VESA driver. It provides accelerated versions 
+   of the VBE/AF functions:
+
+      DrawScan()
+      DrawPattScan()
+      DrawColorPattScan()
+      DrawRect()
+      DrawPattRect()
+      DrawColorPattRect()
+      DrawLine()
+      DrawTrap()
+      PutMonoImage()
+      BitBlt()
+      BitBltSys()
+      SrcTransBlt() - Mystique only
+      SrcTransBltSys() - Mystique only
+
+   This driver supports the FreeBE/AF extension mechanism for enabling true 
+   protected mode access to video memory. Uncomment the definition of 
+   NO_HWPTR at the top of driver.c if you want to return to the standard 
+   nearptr memory access.
+
+   Masked blitting from system memory is only enabled in 256 color modes, 
+   because in truecolor resolutions it is actually faster to do the masking 
+   checks in software (the increased pixel size means that too much time is 
+   wasted copying zeros to the card, so it is more efficient for the cpu to 
+   test and discard these).
+
+   Hardware cursors are supported, but only on the Mystique. The Millenium 
+   does them quite differently, and I have no way to test any code for it.
+
+   This code is not portable to any platforms other than DOS+DPMI, because 
+   it uses VESA calls to set the initial video mode.
+
+
+   By Shawn Hargreaves
+   shawn@talula.demon.co.uk

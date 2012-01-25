@@ -1,0 +1,12 @@
+Read IRQ Bases If VCPI Client
+
+If we're running as a VCPI client, we should read and use the IRQ base
+of the VCPI host.  I didn't think any memory manager would be so
+foolish as to use a base of other than 08h and 70h, but then along
+comes DRDOS 7 (DRDOS 6 uses the original bases).  Boy, are they asking
+for trouble.
+
+SWAT_DRV.ASM	 In CHECK_VCPI, read and save for later use the master
+		   and slave IRQ bases.
+
+

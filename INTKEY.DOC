@@ -1,0 +1,55 @@
+Support International Keyboards
+
+One of SWAT's design goals is to be as unassuming about the system as
+possible, intruding into the system at an absolute minimum.  As part
+of achieving this goal, SWAT has its own keyboard handler so it can
+debug keyboard actions within the BIOS as well as not depend upon the
+system's keyboard routines or data being intact and functional.
+
+One consequence of this is that SWAT needs to be changed in order to
+support international keyboards which is what this TWT accomplishes.
+
+To this end, the keyword KEYB= is recognized in the SWAT profile.  At
+the start, the only keyboard supported is the German one -- its
+keyboard layout is 129, so the KEYB= value is GR129.  Others can be
+supported as the need arises.
+
+New keyboard layouts go in a new module SWAT_KT2.ASM.
+
+Also, the German keyboard uses the right Alt-key as a modifier for
+certain other keys.  This has two effects:  we need to add more
+entries in the shift key precedence table for both Alt-keys, and we
+need to add one more column in the TABMAC tables for the other
+Alt-key.
+
+
+386SWAT 	 Note additional default keyword value.
+		 Document new keyword.
+
+386SWAT.DOC	 Document new keyword.
+
+MAKEFILE	 Include new module in .OBJ list.
+
+SWAT_SEG.INC	 Define new byte-wide segment in class 'ndata'.
+
+SWAT_ARG.ASM	 Define parse table entry for new keyword.
+
+SWAT_FCN.ASM	 Define structures and macros for additional keyboard
+		   tables.
+		 Define keyboard table entries.  Until we need to, the
+		   other layouts are documented but commented out.
+		 Define action routine for new keyword.
+
+SWAT_KEY.ASM	 Define additional precedence entries as we now
+		   distinguish the left and right Alt-keys from each
+		   other.
+		 Include bits for both Alt-keys when indexing the
+		   shift precedence table.
+		 Index TABMAC tables by five words instead of four
+		   words to reflect the additional column for the
+		   other Alt-key.
+
+SWAT_KT2.ASM	 New module to contain layouts for international
+		   keyboards.
+
+

@@ -1,0 +1,67 @@
+Split Apart Toggling of INT 01h and INT 03h
+
+In order to simplify debugging of 386SWAT itself, this change splits
+apart interception of INTs 01h and 03h.
+
+* New keywords TRAPSTEP and TRAPSKIP are defined to intercept INTs 01h
+  and 03h separately.
+
+* Change meaning of c-F1 to toggle INT 01h only.
+
+* Change meaning of c-F2 to toggle INT 03h only.
+
+* Change meaning of c-F3 to toggle INT 06h.
+
+* Undefine C-F4.  The previous meanings of c-F1 through c-F4 were
+  related to the 486 cache.  To accomplish the same effect, use the
+  register commands R CR0.CD=0 or 1, and R CR0.NW=0 or 1.
+
+The following files are modified and why:
+
+386SWAT 	 Make minor changes to existing keywords.
+		 Make TRAPNMI a default when using this profile.
+		 Define new keywords.
+
+SWAT_ARG.INC	 Replace @ARG_DEBUG with @ARG_STEP and @ARG_SKIP.
+
+SWAT_LC3.INC	 Define equates for new flag word.
+
+MAKEFILE	 Note dependency of SWAT.ASM on SWAT_LC3.INC
+		 Note dependency of SWAT_INI.ASM on SWAT_LC3.INC
+		 Note dependency of SWAT_SCR.ASM on SWAT_LC3.INC
+
+SWAT.ASM	 Define new flag word LC3_FLAG.
+		 Change meaning of c-F1 to toggle INT 01h only.
+		 Change meaning of c-F2 to toggle INT 03h only.
+		 Change meaning of c-F3 to toggle INT 06h only.
+		 Undefine c-F4.
+		 Define new entry SWATTER_I01A to mark that we should
+		   toggle INT 03h also.
+		 Change the code at SWATTER_I01 to toggle INT 01h
+		   only.
+		 At the end of SWATTER_I01, check to see if should
+		   toggle INT 03h also (we entered at SWATTER_I01A).
+		 Define separate actions to toggle INTs 03h and 06h at
+		   SWATTER_I03 and SWATTER_I06.
+		 Delete code to toggle 486 cache state.
+		 Move the "Last screen -xxx" message to the left so it
+		   doesn't overlap the toggle state displays.
+		 *** This is what the changes actually do, although
+		   you might not be able to detect that by reading the
+		   VDIFF listing.
+
+SWAT_FCN.ASM	 Change action for TRAPDEBUG to set both TRAPSTEP
+		   and TRAPSKIP flags.
+		 Define new actions to handle TRAPSKIP and TRAPSTEP.
+
+SWAT_HLP.ASM	 Document new keystroke meanings.
+
+SWAT_INI.ASM	 Separately initialize INT 01h and 03h.
+		 Note initialization of INT 06h in LC3_FLAG as it's
+		   now able to be toggled.
+		 Separately uninitialize INT 01h and 03h.
+
+SWAT_SCR.ASM	 Provide separate displays of the state of INT 01h,
+		   03h, and 06h hooks.
+
+

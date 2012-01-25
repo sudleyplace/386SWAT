@@ -1,0 +1,9 @@
+* Fix bug in trace over IRET/D with NT set in VM
+
+The CPU ignores the NT bit during an IRET/D in VM, but our test of
+that case fails to note that fact.  This change inserts a test for VM
+when we detect that we're tracing over an IRET/D and continues with
+normal execution (which sets the TF in the flags to be put into effect
+by the IRET/D).  This change affects SWAT.ASM only.
+
+

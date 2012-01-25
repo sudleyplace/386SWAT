@@ -1,0 +1,393 @@
+386SWAT symbolic debugging
+
+This document covers the basics of symbolic debugging support for
+386SWAT.  386SWAT basics are documented in 386SWAT.DOC; here we
+will describe actual usage of SWAT for symbolic debugging, and the
+tools needed to load symbols.
+
+There are three sections:
+386SWAT - new profile options and commands
+SWATRUN - program loader for debugging .COM and .EXE files
+MAPSSF	- symbol loader/translator
+
+386SWAT
+New profile options:
+
+ADDRHBITS=n	Specify number of address bits to use for address hash
+		table.	Values less than 8 and over 12 are ignored.
+
+		Address hash table storage in bytes is 2 ^ (ADDRHBITS + 2).
+		The minimum is therefore 1K and the maximum, 16K.
+		The default is 16K.  Smaller address hash tables may
+		significantly impact unassembly when symbols are loaded.
+
+BUCKETS=n	Specify number of 1K blocks to be used for symbol name
+		hashing.  Values less than 1 and over 255 are ignored.
+
+		The storage occupied by the name hashing table is
+		approximately BUCKETS * 1K.  If not specified, this
+		value is derived from SYMSIZE / 4096.  Reducing BUCKETS
+		may increase time required to load symbols.
+
+LOADSYM 	Enable file I/O functions within 386SWAT.  This is needed
+		for using the file browser, and for source level debugging.
+
+LOADSYM=filename.ssf
+		Enables file I/O (same as LOADSYM).  Also loads symbols
+		from the specified .SSF file (created by MAPSSF) at
+		initialization time.
+
+PATH=d:\dir1[,d:\dir2[,...]]
+		Specify search path for source browser.  If not specified,
+		only the current directory is searched.  If a path is
+		specified, the current directory (.) must be included
+		explicitly.  For example,
+		PATH=c:\qui\quilib,c:\qui\inst
+		will not search the current directory for source files.
+
+PROXSRCH=r[,g]	Set range and granularity for symbol address proximity
+		searches.  The default range is 2, and the granularity is
+		1 (byte).
+
+SYMSIZE=n	This option sets the number of bytes to be used for the
+		SWAT symbol table.  The internal format of SWAT's symbol
+		table is 12 bytes larger than the symbol table used for
+		the SWAT API calls.  Each public or line number occupies
+		23 bytes plus the length of the symbol name.
+
+		SYMSIZE is used to calculate a default value for BUCKETS.
+		If BUCKETS is not explicitly defined in the profile, it
+		will be set to min (255, max (1, SYMSIZE / 4096)).
+
+		If SYMSIZE is not specified, it will default to 4096 bytes.
+		The default BUCKETS value (if also not specified) will then
+		be 1.  See BUCKETS for storage requirements.
+
+		Use SYMSIZE=0 to minimize symbol storage requirements.
+		This will save 4K over the default.
+
+Using symbols
+
+Any symbol may be used as an effective address.  For example,
+
+db ([__psp):0
+
+will display the PSP for a MS C program.  Symbol display will occur
+automatically if the symbols are loaded properly.  See sections below
+on SWATRUN and MAPSSF.
+
+Symbols are displayed in the Unassemble (F9) screen.  Code addresses
+may be displayed as public names or line numbers (if line numbers
+were specified with the linker's /LI option).  Addresses within the
+unassembly are handled as intelligently as possible.  For example,
+
+mov ax,[bx+7c39]
+
+may be displayed as
+
+mov ax,[bx+FOOBAR]
+
+if FOOBAR's offset is 7c39 and the default segment/selector (DS in this case)
+matches the segment/selector specified for the symbol FOOBAR.
+
+SWAT can also resolve addresses CLOSE TO symbols; a construction commonly
+seen in C code might be:
+
+mov [FOOBAR],bx
+mov [7c3b],es
+
+SWAT will disassemble this as
+
+mov [FOOBAR],bx
+mov [FOOBAR+02],es
+
+The PS (proximity search) command may be used to vary the range and
+granularity of proximity searches.  The default behavior is to search
+for 2 bytes only.
+
+SWAT's handling of symbols is not case-sensitive.
+
+
+New and changed commands within SWAT
+
+FS		 ð Flush symbol table
+
+All symbols are deleted.  The same action is accomplished using the
+SWATRUN and MAPSSF /o option.
+
+
+LF filename	 ð Load file into browser
+
+If file I/O services have been enabled via the LOADSYM keyword in the
+386SWAT profile, the specified file will be available for viewing in
+the file browser screen (Ctrl-F7).
+
+
+LI +		 ð Enable line number display in disassembly screen
+LI -		 ð Disable line number display
+
+This command is useful when debugging assembler programs which have
+line number symbols for source level debugging, but displaying these
+line symbols clutters the disassembly screen.  This does not affect
+source level debugging.
+
+
+LI dddd 	 ð Go to line dddd (decimal) in file browser
+LI dddd+	 ð Go to line dddd forward from current line
+LI dddd-	 ð Go to line dddd back from current line
+
+If a file has been loaded into the file browser using the LF command,
+or source debugging is enabled via SB+, these commands allow one to
+move to a specified line in the browser.
+
+
+LS filename	 ð Load symbol file
+LS filename exp  ð Load symbol file and add 16-bit value to all VM segments
+
+This command loads an SSF file created by MAPSSF using the -tfilename option.
+If exp is specified, this value will be added to all V86 mode segments.
+This fixing up is normally done automatically by SWATRUN, but this can
+be useful when debugging device drivers or in other situations where it
+is not possible to use SWATRUN.
+
+
+PATH d:\dir1[,d:\dir2[,...]] ð Set source file search path
+PATH+ d:\dira[,d:\dirb[,...]] ð Add to source file search path
+
+When source debugging has been enabled via SB+, this command specifies
+(or adds to) the search path used for source modules.  If a module is
+not found, source browse mode is turned off.
+
+Module names are extracted from the line number symbol.  For example,
+SWATDPMI#213 tells us we should search for SWATDPMI.C or SWATDPMI.ASM
+in the search path, then position the file browser to line 213 decimal.
+
+The first form is equivalent to the PATH= keyword.
+
+
+PS r		 ð Set range of symbol proximity searches to r
+PS r g		 ð Set range and granularity (1=bytes, 2=words, 4=dwords)
+		   of symbol proximity searches
+
+Same as the PROXSRCH= profile keyword.	Proximity searching is useful
+when dealing with structures, but if extended too far may slow down
+disassembly.  The default range is 2 with a granularity of 1 (bytes).
+
+
+SB+		 ð Enable source browser mode
+SB-		 ð Disable source browser mode
+SB*+		 ð Enable source browser mode but disregard module names
+
+When source browser mode is enabled, line number records are parsed
+to obtain module name and line number information.  As soon as a line
+number record is encountered with a module name which can be found
+by searching in the source path (see the PATH command), it will be
+loaded for display in the Ctrl-F7 screen and the Ctrl-F7 screen will
+be made active.  It is possible to single-step and single-skip through
+code in the Ctrl-F7 screen if source browser mode has been enabled.
+
+Source browser mode is disabled by default.  The SB*+ form of the
+command causes module names to be ignored, but line numbers will still
+be acted on.
+
+
+TS		 ð Force all symbols to be retranslated according to
+		   current GDT and LDT
+TS sel		 ð Retranslates only for selector/segment sel
+TS * ID 	 ð Retranslates for all selectors/segments with ID specified
+TS sel ID	 ð Retranslates only for selector/segment sel with ID specified
+TS *|sel *|ID v|p ð Change to specified mode for selector and/or ID specified
+TS *|sel *|ID *|v|p nsel ð Replace segment/selector and mode for specified
+		   selectors and IDs.  If * is specified for mode, the mode
+		   is left alone.
+TS *|sel *|ID *|v|p nsel+ ð nsel is added to all specified segments
+
+The Translate Symbols (TS) command may be used to
+ * retranslate symbols after changing the GDT or LDT;
+ * replace segment/selector values;
+ * fix up V86 mode segment values;
+ * add a constant to symbol offsets, after the symbols are loaded.
+   This is needed for debugging in the Windows environment.
+
+The complete syntax of the TS command is:
+
+TS [osel|* [ogrp|* [nflag|* [nsel[+]|* [nbase] ] ] ] ]
+
+osel	Old selector value or * for all
+ogrp	Target group ID or * for all
+nflag	P for PM symbols
+	V for VM symbols
+	* to leave unchanged
+nsel	New selector value (in above example, unchanged).
+	If + is specified, nsel is added to all V86 mode segment values.
+nbase	Base value to be added to all symbol offsets
+
+For a complete example using a .WSG file to specify group IDs and
+TS to retranslate dynamic selectors, see SWATDPMI.DOC.
+
+
+SWATRUN
+
+Syntax: SWATRUN [options] progname [arguments]
+
+
+SWATRUN is a program loader for debugging V86 mode programs.  It
+creates a breakpoint before the first instruction of the target
+program, and will also attempt to load symbols into SWAT via the
+VCPI debugger API with the appropriate segment fixup.
+
+If no file extension is specified, SWATRUN looks first for a .COM
+file then an .EXE file.  The filename specified is converted into
+a fully qualified pathname including drive letter, directory, and
+extension.  SWATRUN will load this file using the undocumented DOS
+function 4B01 to determine the segment fixup.
+
+SWATRUN will then look for a matching .SSF file, and
+if found, will load it directly into SWAT.  If an .SSF file is not
+found, SWATRUN will look for a matching .MAP file.  If a .MAP file
+is found, SWATRUN will invoke MAPSSF with the proper parameters
+to fixup and load the parsed .MAP file.  See the section on MAPSSF
+for further information on .MAP file formats supported and on
+creation of .SSF files.  .SSF file loading is faster, but does not
+currently report symbol allocation table shortages.  If your
+symbols do not appear to be loaded from an .SSF file, delete
+the .SSF file.	SWATRUN will try to load symbols from the .MAP file
+with MAPSSF.  MAPSSF will report any changes required to the
+386SWAT.PRO file.
+
+
+  Valid SWATRUN options are:
+
+    /b	 Generate Int 1 at beginning of SWATRUN
+	 This is useful only for debugging the loading process
+
+    /mMAPFILE Load MAPFILE instead of progname.map
+	 If no .SSF file is present, SWATRUN constructs a map file
+	 name by taking the path and basename of the .EXE or .COM
+	 file and adding .MAP.	This filename is passed to MAPSSF
+	 if it exists.	This option may be used to specify a map
+	 file on another drive:directory.
+
+    /n	 Do not load symbols
+	 If SWATRUN has already run once, the target program did not
+	 go resident, and symbols were loaded, run SWATRUN with this
+	 option on subsequent invocations.
+
+    /o	 Overwrite existing SWAT symbols
+	 This option is passed to MAPSSF.  Any existing symbols will
+	 be destroyed.
+
+    /sSYMFILE Load SYMFILE instead of progname.ssf
+	 SWATRUN normally constructs a .ssf file name by taking
+	 the path and basename of the .EXE or .COM file and adding
+	 .SSF.	If this file exists and is in the proper format
+	 created by MAPSSF, it will be loaded into 386SWAT.
+
+    /?	 Display this message
+
+
+MAPSSF
+
+
+This program is called by SWATRUN to load .MAP files on the fly.
+It may also be used to produce .SSF files for loading at CONFIG.SYS time
+(not currently supported by SWAT).  .SSF files may also be loaded
+directly by SWATRUN.  This is faster than calling MAPSSF every time
+symbols are loaded.
+
+Besides reading .MAP files, MAPSSF will also process Windows SYM32 files.
+MAPSSF has been tested with the following .MAP file formats:
+- Microsoft LINK
+- Microsoft LINK386 flat model
+- Borland TLINK
+
+Syntax:
+
+MapSSF [options] fspec1 [fspec2 [...]]
+
+All options are preceded with - or /:
+
+  -g#,# 	restrict symbol group types to specified #'s
+		(SYM32 files only)  Only symbols with group types matching
+		one of these values will be loaded.  The group type in
+		SYM32 files is NOT the same as the group ID defined
+		in a .WSG file.
+
+  -l		ignore line number information in .MAP file
+		This option may be used to suppress loading of line number
+		symbols when space is at a premium.  Typically, line
+		numbers take about 80% of symbol space.
+
+  -o		overwrite existing symbol table (default is append)
+		Normally, new symbols are added to SWAT.  Existing
+		symbols will be updated.  This option forces the
+		symbol table to be flushed at the beginning of MAPSSF.
+
+  -sxxxxm	set selector to xxxx hex, where m is
+		v for V86/real mode
+		v+ for V86/real mode, add value to segment,
+		p for protected mode
+		The -sxxxxv+ form is used by SWATRUN to add a fixup to all
+		segment values.
+
+  -tfname	echo SWAT tables to file fname
+		This option may be used to create a file in SWAT symbol
+		format (.ssf file).
+
+  -wfname[.wsg] read Windows Symbol Group file fname.wsg
+		This feature may be used for .MAP files or for .SYM files.
+		See SWATDPMI.DOC for an example of .WSG file usage.
+
+  -v		sort symbols by value (default is by name)
+		This option controls which section of the .MAP file is
+		read.  If included on the command line, the "By Value"
+		section is read.  By default, the "By Name" section is
+		read.  By controlling the order in which symbols are passed
+		to SWAT, the display in SWAT's Ctrl-F6 screen may be
+		sorted by name or by value.
+
+  -x#		set debugging level to # (default is 0 -- no messages)
+		This is useful for debugging only.
+
+  -y		default to recognizing files as SYM32 format
+		Normally, MAPSSF recognizes files as .MAP or .SYM by
+		their extension.  If neither extension is used, this
+		option forces recognition as SYM32.
+
+Source level debugging with SWAT
+
+386SWAT currently supports a very rudimentary form of source level
+debugging.  To illustrate, let's take a brief tour of SWAT's source
+debugging features.
+
+1. Ensure the LOADSYM keyword is present in your 386SWAT.PRO.  If
+   you are adding LOADSYM for the first time, ensure all PRGREG=
+   statements have been deleted from your 386MAX.PRO.  Reboot if
+   necessary.
+
+2. From the DOS prompt,
+   SWATRUN SWATDPMI
+   You should see a SWAT screen with Start: at the top of the
+   screen.
+
+3. At the SWAT command line, enable source browser mode:
+   SB+
+
+4. Single-step once (grey + or F11).  The source file SWATDPMI.ASM
+   should now be displayed on the instruction
+
+5. Continue to single-step into the Init procedure.  Notice that when
+   we encounter an instruction without a line number, SWAT automatically
+   switches back to the disassembly screen.
+
+6. Single-skip through the Init procedure (grey - or F12).  Continue to
+   single skip until the call to Ext_mainp, then single step.
+
+7. We are now in extended memory with no symbols visible.  Retranslate
+   symbols for the dynamic selectors:
+   TS
+   and line numbers become visible again.
+
+8. Single skip again and we return to the file browser screen.
+
+

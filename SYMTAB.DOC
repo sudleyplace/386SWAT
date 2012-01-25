@@ -1,0 +1,47 @@
+Display symbol table TWT
+
+These changes to SWAT include
+ - Added Ctrl-F6 (Display symbol table) screen to SWAT
+ - Fixed symbol search.  Because we were calling GET_TOKN to read
+   symbol names from the command line, and because GET_TOKN rejects
+   anything not A-Z or 0-9, symbols never got found and generated
+   a 'Syntax error' message in SWAT.
+ - Rearranging SWAT's project management to conform to the new model.
+   There is currently only one OEM version of SWAT, which goes in RET.
+
+Files affected:
+386swat.prj	New file - project description file for 386SWAT
+
+makefile	Changes are currently logged out and are relative to
+		the current PVCS code base.  This makefile now supports
+		the new project management model, with all generated
+		files going in the RET directory.  Also compressed out
+		space between MASM option switches and comma-separated
+		arguments; long pathnames for LST caused NMAKE/MASM to
+		choke.
+
+swat.asm	Added support for Ctrl-F6.  Added processing of up, down,
+		PgUp & PgDn while in display symbol table screen.
+		Changes are relative to code in p:\twt\swat\symbols.bob
+		and need to be merged.
+
+swat_cmd.asm	Added GET_SYMTOKN to get symbol names as tokens from
+		the command line.  This accepts all characters up to
+		the next tab, space or null.  Used a call to GET_SYMTOKN
+		before trying to find the token in the symbol table.
+		Changes are relative to code in p:\twt\swat\symbols.bob
+		and need to be merged.
+
+swat_hlp.asm	Added Ctrl-F6 to help screen.  Changes are logged out
+		relative to the current PVCS code base.
+
+swat_com.inc	Added state equate for displaying symbol table.  Changes
+		are logged out relative to the current PVCS code base.
+
+swat_sym.asm	Added DISP_SYMTAB (invoked by Ctrl-F6) & it's associated
+		variables.  Changes are relative to code in ...\symbols.bob
+		and need to be merged.
+
+swat_sym.inc	Added additional bitmap values for symbol flag (as defined
+		in p:\misc\swttools\MAPSSF.H).	Changes are relative to code
+		in p:\twt\swat\symbols.bob and need to be merged.

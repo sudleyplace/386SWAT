@@ -1,0 +1,12 @@
+In Device SWAT, Use EPM Code Exclusively To Enter PM
+
+In case device SWAT runs into broken BIOSes or other INT 15h hookers
+(such as the Kingston Datacard) which do not correctly handle INT 15h
+function 89h, we use our EPM code as the only way to enter PM.
+Previously, we used the BIOS function the first time we enter PM.
+However, we need to rely upon our own EPM code at each subsequent
+entry (such as when tracing), so why not use it exclusively.
+
+This change affects SWAT_DRV.ASM only.
+
+

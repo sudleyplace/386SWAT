@@ -1,0 +1,60 @@
+Change Default Interrupt Behavior
+
+Originally, SWAT was designed to work in conjunction with other
+debuggers (partially because SWAT wasn't as fully featured as the
+commercial ones).  To this end, the INT 01h/03h traps were not set by
+default so they wouldn't interfere with the other debugger.
+
+This behavior actually puts SWAT at a disadvantage because if the SWAT
+user forgets to enable those interrupts (as is the case if they don't
+read the documentation which says to copy 386SWAT to *.PRO and use it
+on the SWAT command line), they think SWAT isn't working.
+
+This TWT changes the default behavior to always enable INT 01h and 03h
+at startup.
+
+Also, included in this TWT are the following changes:
+
+* Remove support for INT 11h (Alignment Check).  It's never used and
+  sometimes gets in the way.
+
+* Include support for Segment Not Present Fault (INT 0Bh) with a
+  profile keyword (TRAPSEGNP), and other corresponding changes.
+
+
+386SWAT 	 Remove TRAPACHK support.
+		 Include TRAPSEGNP support.
+		 Reword others to reflect Fault nature.
+
+SWAT_ARG.INC	 Replace ACHK with SEGNP flag.
+
+SWAT_LC4.INC	 Define SEGNP flag.
+
+SWAT_ARG.ASM	 Remove TRAPACHK support.
+		 Include TRAPSEGNP support.
+		 Make TRAPSTEP and TRAPSKIP the default.
+
+SWAT_DRV.ASM	 Reword INT 0Bh comments to reflect dual nature
+		   (interrupt vs. fault) although SEGNP can't occur
+		   in RM.
+
+SWAT_FCN.ASM	 Remove TRAPACHK support.
+		 Include TRAPSEGNP support.
+
+SWAT_INI.ASM	 Remove TRAPACHK support.
+		 Include TRAPSEGNP support.
+		 Reorder INIT_VIRT code to close file earlier.
+
+SWAT_INT.ASM	 Remove TRAPACHK support.
+		 Include TRAPSEGNP support.
+		 Define IZIT_IRQ3 for later use.
+
+SWAT_REM.ASM	 Include TRAPSEGNP support.
+
+SWAT_SCR.ASM	 Display interception status of INT 0Bh on screen.
+
+SWAT_TOG.ASM	 Include TRAPSEGNP support.
+
+SWAT_VCP.ASM	 Remove TRAPACHK support.
+
+

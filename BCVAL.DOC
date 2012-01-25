@@ -1,0 +1,18 @@
+Allow BC Values To Be Set Over Single Step
+
+Previously, if we had a BC set in (say) an interrupt handler and we
+signle-step, we didn't enable the BC settings.  Only if we ESCaped did
+we put the BC settings into effect.  As a result, we might not catch
+some BC settings.  This TWT fixes that; however, we are still subject
+to the limitation that if the current instruction has a BC setting in
+effect for it, we do not put the current BC settings into effect.
+This needs to be fixed, but not in this TWT.
+
+This change affects SWAT.ASM only.
+
+Also, I changed the directory to which the SWAT.MAP file is copied
+from PSSDIR to SYSDIR (the same as to where the executable is copied).
+
+This change affects MAKEFILE only.
+
+

@@ -1,0 +1,13 @@
+* Implement AND (&) and XOR (^) functions for command line.
+* Define case-sensitive and case-insensitive get token routines.
+* Change special GDT, IDT, LDT names to .GDT, .IDT, .LDT to avoid
+  conflict with symbols.
+* Implement .TSS to return base of current TSS as effective address.
+* Implement .CODE and .DATA to return base of code and data displays
+  as an effective address.
+* Implement |T as monadic function to extract CS|EIP as effective
+  address from (presumed) TSS effective address.
+* Fix bug in parser returning incorrect message (syntax instead of
+  overflow) in PARSE_ADDR.
+
+

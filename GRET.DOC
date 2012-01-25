@@ -1,0 +1,72 @@
+Implement Return Address and Goto Return Address
+
+A common address to jump to is the (near or far) return address of a
+subroutine.  This is made easier by using shortened forms of the
+commands one might use to extract these addresses.  The various
+flavors of return addresses are (where LaSTK is the address of the
+current stack pointer -- SS:SP if VM, SS|SP if PM and the B-bit in SS
+is clear, and SS|ESP if PM and the B-bit in SS is set):
+
+Keyword 	 Grammar Equivalent	Meaning
+---------------------------------------------------------------------
+.RETND		 {LaSTK 		Near dword
+.RETNS		 [LaSTK 		Near word
+.RETFD		 :{LaSTK or |{LaSTK	Far word:dword or word|dword
+					(depending upon the VM bit in
+					the current EFL)
+.RETFS		 :[LaSTK or |[LaSTK	Far word:word or word|word
+					(depending upon the VM bit in
+					the current EFL)
+.RETN		 .RETND or .RETNS	Depending upon the D-bit in CS
+.RETF		 .RETFD or .RETFS	...
+.IRET		 .RETF in VM		Also allows mode switch from
+		 .RETFD in PM		PM to VM by checking VM bit
+					in EFL above return address
+
+As a common shortcut, .RETN and .RETF refer to one of the above forms
+depending upon the setting of the D-bit in the current CS (that is,
+whether we're running in a USE16 or USE32 segment).  Moreover, .IRET
+can be used as a shorthand for .RETF with the added check on the VM
+bit in the EFL above the return address.  If this bit is set, the
+return address is interpreted as a VM address even though the current
+mode is PM.
+
+No magic is invoked to extract the return address if data has been
+pushed onto the stack below the return address, so be sure that LaSTK
+points to the actual return address.
+
+Finally, the keystrokes A-F and A-N are defined as shortcuts for the
+commands G .RETF and G .RETN, respectively.
+
+Also, several commands/keywords which were omitted from previous TWTs
+are now documented in the appropriate places.
+
+386SWAT.DOC	 Note that NORMLIDT is the default.
+		 Document RMLIDT command.
+		 Document A-F and A-N keystrokes.
+		 Document MACBASE command.
+		 Document common memory reference keywords.
+
+SWAT.ASM	 Define parse entries for A-F and A-N.
+		 Define actions for A-F and A-N.
+
+386SWAT.GRM	 Document EXIT command.
+		 Document new dot commands.
+
+SWAT_COM.INC	 Define IRETD_STR in a common place.
+
+SWAT_CMD.ASM	 Include new keywords in parse table.
+		 Define actions for new keywords.
+		 Define subroutines for .RETF and .RETN so they can be
+		   called via A-F and A-N.
+
+SWAT_HTX.ASM	 Document new keystrokes.
+		 Document new keywords.
+		 Change documentation for MACBASE to match
+		   386SWAT.DOC.
+
+SWAT_KEY.ASM	 Move IRETD_STR to SWAT_COM.INC
+
+SWAT_VCP.ASM	 Move IRETD_STR to SWAT_COM.INC
+
+

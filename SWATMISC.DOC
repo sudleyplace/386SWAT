@@ -1,0 +1,37 @@
+More Miscellaneous Changes To SWAT
+
+* In DECODE_ADDR in SWAT_AGR.ASM, we now handle LOOPxx instructions in
+  our Shift-F1 code as it's another control transfer instruction we
+  can figure out.
+
+* In DECODE_ADDR in SWAT_AGR.ASM, as the selectors in Windows we
+  typically encounter are based at zero, when decoding group 5
+  instructions such as CALL Dword Ptr DS:[xxxxxxxx], although the
+  default selector may be DS, we can still decode the target address
+  using a selector base of zero.
+
+* In DEV_INTR_NR in SWAT_DRV.ASM, if we enter here with the high-order
+  word of ESP as non-zero, we fail.  This change zeros it.
+
+* In CMD_HEX in SWAT_HEX.ASM, if we already have a result leftover
+  from a previous /H command, we don't handle it well.  By zeroing the
+  command line at the equal sign, we don't get confused.
+
+* In SWAT_MEM.ASM, we now set the default state of memory display to
+  PM rather than VM.  This means that you can start right off
+  displaying 32-bit addresses without having to precede them with 0|.
+  Only until a non-zero base address or a VM address is displayed,
+  does the state change and then you might have to use an explicit
+  override.  Also, I changed a 16-bit register push to a 32-bit push
+  for better stack alignment.
+
+* In CMD_REG in SWAT_REG.ASM, the register combinations CSIP and CSEIP
+  are now supported.  This allows you to set this pair of registers in
+  one statement instead of using two.  Moreover, the instruction
+  screen is redisplayed only if that's the screen currently displayed.
+  With this change, if a register command is entered when looking at
+  the data screen, the data screen remains displayed.  Also, a
+  harmless bug was fixed where I mistakenly declared a data segment to
+  be USE32 instead of USE16.  The LINKer didn't seem to notice.
+
+

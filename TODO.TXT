@@ -1,0 +1,17 @@
+	386SWAT To Do
+
+* Include PEDUMP
+
+* Finish WGH displays
+
+* Implement PL3 windows interface
+
+* Save changes in version control
+
+* Implement commands for entering and exiting Windows
+  such as changing symbol bases.
+
+* Finish and document INSERT command.
+
+
+

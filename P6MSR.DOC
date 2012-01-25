@@ -1,0 +1,65 @@
+Implement Support For P6 Features
+
+Two P6 features are supported by this TWT.
+
+* The Branch Trace Facility (BTF) can be turned on and off via the
+  command line BTF ON/OFF.
+
+* The Last Branch/Exeception From/To registers can be displayed
+  at all times in the lower right corner of the screen.  This feature
+  can be turned on and off via the command line LBR ON/OFF.
+
+
+The following files are changed and why:
+
+MAKEFILE	Define new module and its associated dependencies.
+		Note dependency of SWAT.ASM on SWAT_LBR.INC.
+		Note dependency of SWAT_INI.ASM on SWAT_LBR.INC.
+		Note dependency of SWAT_SCR.ASM on SWAT_LBR.INC and
+		  SWAT_LC4.INC.
+
+386SWAT.DOC	Document new commands.
+
+386SWAT.GRM	Document new grammar.
+
+MSR.INC 	Split MSr definitions into P5 and P6 cases as they are
+		  CPU-specific.  Note that @MSR_MCADDR is common to
+		  all.
+
+SWAT_LBR.INC	Define new module to hold the CLR_LBR macro.
+
+SWAT_LC4.INC	Define new bits for BTF and LBR settings.
+		Document bit definitions for all equates.
+
+SWAT.ASM	Handle BTF and LBR (read/clear/set) upon entry to
+		  SWATTER.
+		When tracing over a PUSHFd, don't convert a trace into
+		  a skip so we don't lose control.  This is a design
+		  undersight in BTF.
+
+SWAT_CMD.ASM	Define new error message.
+		Include new commands in parse table.
+		In GET_TOKNSUB, allow '.' as first character of token
+		  so we can use dot commands.
+		In PARSE_ATOM, parse the .LBRxx/.LEXxx tokens.
+
+SWAT_HTX.ASM	Document new commands.
+
+SWAT_INI.ASM	Define screen attribute for LBR/LEX window.
+		Initialize LBR state in INIT_PROT.
+		Save CPU family value in CPUFAM for later use.
+		If P6, enable LBR and LBR window flags.
+
+SWAT_INT.ASM	Clear the LBR register whenever we gain control so we
+		  can reference the values before we change them
+		  ourselves.
+		Define the reset of the IZIT_IRQn routines and use
+		  them.
+
+SWAT_MSR.ASM	Define new module to handle Model-Specific Register
+		  stuff.
+
+SWAT_SCR.ASM	Display BTF=ON/OFF state on screen.
+		Display LBR window as appropriate.
+
+

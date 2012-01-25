@@ -1,0 +1,11 @@
+Fix Bug In Implicit Stack References
+
+When displaying the data (if any) pointed to by the current
+instruction, if the instruction used an implicit stack reference (such
+as the PUSH instruction) we sometimes would use the wrong base
+register (ESP vs. SP).	This TWT fixes that bug.
+
+SWAT_OPR.ASM	Switch the order of tests for ESP vs. SP as the base
+		  register to use for implicit stack references.
+
+

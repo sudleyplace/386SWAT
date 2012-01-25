@@ -1,0 +1,71 @@
+Implement Command Recall
+
+Commands entered on the command line are saved in a ring buffer whose
+length can be changed from the default of 1024 via the profile keyword
+CMDHIST=nnn.
+
+Previous commands can be retrieved via the keystrokes Alt-< (previous
+command) and Alt-> (next command).  Pressing either of these keys
+repeatedly scrolls through the buffer in the chosen direction.	The
+keystroke Alt-? displays a history of (up to 25) commands from which
+a command can be chosen by scrolling up or down through the list, or
+by typing the letter next to the command.  A command may be deleted
+from this list via the Del key.
+
+Also included in this TWT are the following:
+
+* A bug was fixed when running under Windows where a jump was taken
+  with the wrong sense (JZ vs.	JNZ) if Win386 services are available.
+
+* A new help screen to describe the various searching options is
+  defined.
+
+
+386SWAT 	Document new profile keyword.
+
+386SWAT.DOC	Document new profile keyword.
+		Document command recall behavior.
+
+MAKEFILE	Add new modules.
+
+STRFNS.ASM	New module of common string functions.
+
+SWAT.ASM	Move DRn offset checks into data object.
+		Define actions for Alt-<, Alt->, and Alt-?.
+		Move SWATTER_REDISP into callable routine.
+		Label DR6/7 references for INT 01h checks.
+
+SWAT_ARG.ASM	Define action for CMDHIST profile keyword.
+
+SWAT_CMD.ASM	Move command keys and actions into macro.
+		When the command line is typed on, mark as a new
+		  command.
+		Strip trailing blanks from commands before appending
+		  them to the ring buffer.
+		Append new commands to the ring buffer.
+		Define CHECK_TOKN routine.
+
+SWAT_COM.INC	Define keystroke macro for global use.
+
+SWAT_DTE.ASM	Fix bug of wrong sense of @MD_WSVC test.
+
+SWAT_FCN.ASM	Define action for new profile keyword.
+
+SWAT_HLP.ASM	Define help screen for Searching.
+		Use global instead of local keystroke macro.
+
+SWAT_HST.ASM	Define new module to handle command histpry actions.
+
+SWAT_HTX.ASM	Define help screenb for Searching.
+		Document command history keystrokes.
+
+SWAT_INI.ASM	Define attributes for command history display.
+		Initialize the command history buffer if first time.
+
+SWAT_INT.ASM	Fix bug of wrong sense of @MD_WSVC test.
+
+SWAT_KEY.ASM	Fix bug of wrong sense of @MD_WSVC test.
+
+SWAT_LC4.INC	Define flag to mark a new command.
+
+

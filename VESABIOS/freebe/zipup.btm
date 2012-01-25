@@ -1,0 +1,15 @@
+@rem 4DOS batch file for building the distribution zips
+@echo off
+make.exe clean
+make.exe docs
+del /q freebe_s.zip
+del /q freebe_b.zip
+del /q freebe.mft
+cd ..
+zip -9 -r freebe\freebe_s.zip freebe -x freebe/readme.txt
+unzip -Z -1 freebe\freebe_s.zip > freebe\freebe.mft
+echo freebe/freebe.mft >> freebe\freebe.mft
+zip -9 freebe\freebe_s.zip freebe\freebe.mft
+cd freebe
+make.exe install.exe
+zip -9 freebe_b.zip install.exe readme.txt

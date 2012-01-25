@@ -1,0 +1,39 @@
+Add Color To SWAT Help Screen DIsplays
+
+In order to improve the SWAT help topic display, a color attribute is
+available.  This color attribute applies to the entire line, not
+within a line (gimme a break).	The text in SWAT_HTX.ASM contains
+references to the COLOR macro which specify the color index number
+(not the color itself).  The actual color depends upon the video mode
+(B&W, LCD, or color) and is defined in SWAT_INI.ASM.  Each line in the
+help topic text is preceded by a color index number (with zero being
+the default color).  Unless a file contains a reference to the COLOR
+macro, no extra color index number is included in the output, thus not
+affecting RAMEXAM.
+
+WRAPPER.INC	 Define new COLOR macro.
+
+WRAPPER.C	 Define variables to handle color attributes.
+		 Handle color switch.
+		 When outputting a line, if we're using colors,
+		   include the color index number.
+		 Whenotuputting the row count equate, if we're using
+		   colors, include the color index number in the
+		   column count.
+
+MEM_HTX2.AUS	 Delete two leading ESCs in $Header$ line.
+
+SWAT_HLP.ASM	 When skipping over leading rows, include the color
+		   index number in the column count.
+		 When displaying a help text topic, display the lines
+		   one by one with the appropriate color attribute.
+
+SWAT_HTX.ASM	 Include COLOR macro as appropriate.
+		 Note that we use an LALR parser on the command line.
+		 Reorganize the Quick Guide to Keystrokes to space it
+		   out more.
+
+SWAT_INI.ASM	 Define array of additional color attributes which
+		   correspond to the color index numbers.
+
+

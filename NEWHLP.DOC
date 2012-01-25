@@ -1,0 +1,52 @@
+Implement Help Menu Topics
+
+In a manner similar to that used in RAMExam (and a shameless ripoff of
+that code, if I must say so), SWAT now has help menu topics.
+
+The help text is all contained in an overlay segment WTXT (rather than
+define a whole new overlay class, it's easier to use one of the
+existing Windows overlay segments).  If the feature is requested
+before the overlay has been loaded an error message is displayed
+instead ("Feature Not Initialized").
+
+If any new help topics are defined, the phrase NEW TOPIC GOES HERE
+identifies each place where a change should be made.
+
+Miscellaneous changes:
+
+* Fix a bug in Windows handling of bookmarks where we failed to
+  distinguish between PM and VM.
+
+MAKEFILE	 Define new environment variable RXMDIR which points
+		   to the RAMExam directory where we expect to find
+		   WRAPPER.COM and WRAPPER.INC.
+		 Define new entries for SWAT_HTX.ASM.
+
+SWAT.ASM	 Delete call to GETKEY after DISP_HELP as that's now
+		   handled in the later routine.
+
+SWAT_AGR.ASM	 Distinguish between PM and VM bookmarks when under
+		   WIndows.
+
+SWAT_CMD.ASM	 Define new error message for uninitialized features.
+
+SWAT_HLP.ASM	 Define new help handling.  This code is an alomst
+		   complete ripoff of the code from MEM_HELP.ASM.
+
+SWAT_HTX.ASM	 Define new help topic text.
+
+SWAT_INI.ASM	 Define new help screen attributes.
+		 In INIT_VIRT where an overlay is being read in and
+		   loaded upstairs, change the point at which the file
+		   is closed and preserve BX in case any new overlays
+		   are added later on.	I originally had a new overlay
+		   section for help text, but then decided it wasn't
+		   necessary.  Nonetheless, I though that this change
+		   (which was necessary for a new overlay section) was
+		   useful to leave in.
+
+SWAT_WIN.ASM	 Define new window display routines for displaying
+		   help text.  See MEM_SCRN.ASM for the original
+		   code.
+
+

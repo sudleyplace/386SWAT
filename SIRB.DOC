@@ -1,0 +1,34 @@
+Enable entries in Software Interrupt Redirection Bitmap
+Enable Delete function in APPKEY keystroke buffer editor
+
+These changes parallel changes to 386MAX in recognizing
+chips that don't support Virtual Mode Extensions.  We also
+turn on IDT trapping of interrupts we may need via the
+SIRB.
+
+Some other minor changes are included as well.
+
+Files affected:
+
+MAKEFILE	Get rid of $Log$ text.	It's all available via VLOG.
+
+		Lose .PSS rules; they're rarely used, if at all.
+
+SWAT.ASM	Use BTR instead of TEST / AND.
+
+SWAT.WSG	Specify new selector values.
+
+SWAT_DBG.ASM	Use laundered feature bits to check for I/O breakpoints.
+
+SWAT_ENT.ASM	Implement e addr valist.
+
+SWAT_INI.ASM	Launder CPU feature bits for steppings that say they
+		support VME but don't do it properly.
+
+SWAT_LC2.INC	Free defunct @LC2_P5 flag for future use.
+
+SWAT_REM.ASM	Implement keystroke buffer deletion.
+
+SWAT_VCP.ASM	If VME present and enabled, make sure we set bits in SIRB.
+
+

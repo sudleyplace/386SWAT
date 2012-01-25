@@ -1,0 +1,87 @@
+#' $Header:   P:/PVCS/386SWAT/MAKEFILE.DSV   1.11   30 Jul 1993 08:39:44   HENRY  $
+#
+# Makefile for 386SWAT distribution disk
+#
+# This makefile is specific to a minor SWAT version.  It is retrieved
+# by label by the SWAT makefile.top and copied to the appropriate version
+# directory.  A MAKEDISK.BAT is created with the appropriate VER=
+# substitution.
+#
+# Currently, this makefile creates 386SWAT.ZIP and 386SWAT.EXE
+# encrypted with a password.
+#
+
+# Don't try to assemble any source files
+.SUFFIXES:
+
+!IF "$(REL)" == ""
+!ERROR REL must be specified in the environment.
+!ENDIF
+
+VER=
+
+!INCLUDE $(REL)makefile.inc
+
+!IF "$(VER)" == ""
+!ERROR VER must be specified on the command line.
+!ENDIF
+
+TARGET=$(RELSWAT)$(VER)\	# Release directory
+PWD=kansas			# Encryption password
+# Files to be included in .ZIP:
+LIST=			$(TARGET)386swat.lod	\
+			$(TARGET)swatvxd.exe	\
+			$(TARGET)386swat	\
+			$(TARGET)386swat.doc	\
+			$(TARGET)386swat.grm	\
+			$(TARGET)mapssf.exe	\
+			$(TARGET)swatcmd.exe	\
+			$(TARGET)swatrun.com	\
+			$(TARGET)swatsym.doc	\
+			$(TARGET)hello_pm.asm	\
+			$(TARGET)hello_pm.mak	\
+			$(TARGET)hello_pm.ssf	\
+			$(TARGET)hello_pm.exe	\
+			$(TARGET)swatdpmi.asm	\
+			$(TARGET)swatdpmi.mak	\
+			$(TARGET)swatdpmi.doc	\
+			$(TARGET)swatdpmi.wsg	\
+			$(TARGET)swatdpmi.ssf	\
+			$(TARGET)swatdpmi.exe	\
+			$(TARGET)dpmitsr.asm	\
+			$(TARGET)dpmitsr.mak	\
+			$(TARGET)dpmitsr.wsg	\
+			$(TARGET)dpmitsr.ssf	\
+			$(TARGET)dpmitsr.exe
+
+ALL:	$(TARGET)386swat.zip	$(TARGET)386swat.exe
+
+$(TARGET)386swat.zip:	$(LIST) makefile.dsk
+	if exist $*.zip del $*.zip
+	$(X)pkzip -s$(PWD) -o -a $* @<<$(TARGET)zip.lst
+	$(LIST: =^
+	)
+<<KEEP
+# After creating the zip file without a comment, we add
+# comments by the "brute force and ignorance" method.
+	$(X)zipcomm $*.zip <<
+
+   อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
+
+       386SWAT $(VER) release notes
+       ฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤ
+
+       This version of 386SWAT incorporates remote debugging.
+       See 386SWAT.DOC for details.
+
+   อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
+<<NOKEEP
+
+$(TARGET)386swat.exe: $(TARGET)386swat.zip
+	if exist $*.exe del $*.exe
+	$(X)zip2exe $*
+	$(T)xc /a/m $(@B).exe $*.*
+	pkunzip -v $*
+	pkunzip -v $*.exe
+
+

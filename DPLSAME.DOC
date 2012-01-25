@@ -1,0 +1,18 @@
+Use Same DPL When Hooking Interrupts
+
+Some memory managers (pssst, it's EMM386) set the DPL of various
+entries in the IDT to zero expecting the CPU to signal a GP Fault if
+the corresponding software interrupt occurs.  When we intrude into
+their PL0 context, previously we were setting the DPL to three because
+we didn't expect to encounter a MM which had a fetish with GP Faults.
+Now we retain the same DPL as the original IDT entry except for INTs
+01h and 03h.  They are handled differently so we can issue the
+corresponding software interrupts and gain control immediately instead
+of having to hook the GP Fault handler and pick them off there.
+
+
+SWAT_COM.INC	 Make the IDTMAC macro sensitive to preserving the
+		   original IDT entry's DPL except for INTs 01h and
+		   03h.
+
+

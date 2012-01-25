@@ -1,0 +1,15 @@
+Go monitor grammar
+
+gm
+Syntax error if no previous expression
+
+gm expr
+Logical dyadic expression using operands
+] [ { :[ :{ |[ |{
+&& ||
+== != < <= > >=
++ - * /
+
+Example:
+gm (ax==2508) && ((].csip)==cd)
+

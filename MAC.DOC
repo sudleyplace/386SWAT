@@ -1,0 +1,10 @@
+As a convenience in debugging in a DOS environment, the symbol .DMAC
+is defined to mean the segment and offset of the start of the DOS
+memory allocation chain.  That way, one can use DB .DMAC to display
+the first such entry, and then skip to the next one from there.
+
+The information saved in INIT_REAL is that of the linear address of
+the list of lists in case we need information from that table later
+on.
+
+

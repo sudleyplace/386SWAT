@@ -1,0 +1,273 @@
+.XLIST
+;-----------------------------------------------------------------------
+; Alternate Multiplex Interrupt Specification Library
+; AMIPOPUP.MAC	Public Domain 1992, 1993 Ralf Brown
+;		You may do with this software whatever you want, but
+;		common courtesy dictates that you not remove my name
+;		from it.
+;
+; Version 0.94
+; LastEdit: 4/30/96
+;-----------------------------------------------------------------------
+
+
+;-----------------------------------------------------------------------
+
+PUT_CHAR MACRO ch
+TSRcode@
+extrn TSR_PUT_CHAR:near
+TSRcodeEnd@
+
+IFNB <ch>
+	mov	al,ch
+ENDIF
+	call	TSR_PUT_CHAR
+	ENDM
+
+;-----------------------------------------------------------------------
+
+HOME_CURSOR MACRO
+TSRcode@
+extrn TSR_HOME_CURSOR:near
+TSRcodeEnd@
+	call	TSR_HOME_CURSOR
+	ENDM
+
+;-----------------------------------------------------------------------
+
+MOVE_CURSOR MACRO row,col,rowcol
+TSRcode@
+extrn TSR_MOVE_CURSOR:near
+TSRcodeEnd@
+IFNB <row>
+	mov	dh,row
+ENDIF
+IFNB <col>
+	mov	dl,col
+ENDIF
+IFNB <rowcol>
+	mov	dx,rowcol
+ENDIF
+	CALL	TSR_MOVE_CURSOR
+	ENDM
+
+;-----------------------------------------------------------------------
+
+GETKEY MACRO
+TSRcode@
+extrn TSR_GETKEY:near
+TSRcodeEnd@
+
+	CALL	TSR_GETKEY
+	ENDM
+
+;-----------------------------------------------------------------------
+
+PUT_LINE MACRO ch,count
+TSRcode@
+extrn TSR_PUT_LINE:near
+TSRcodeEnd@
+
+IFNB <ch>
+	mov	al,ch
+ENDIF
+IFNB <count>
+	mov	cx,count
+ENDIF
+	call	TSR_PUT_LINE
+	ENDM
+
+;-----------------------------------------------------------------------
+
+CLEAR_WINDOW MACRO
+TSRcode@
+extrn TSR_CLEAR_WINDOW:near
+TSRcodeEnd@
+
+	call	TSR_CLEAR_WINDOW
+	ENDM
+
+;-----------------------------------------------------------------------
+
+SCROLL_WINDOW MACRO
+TSRcode@
+extrn TSR_SCROLL_WINDOW:near
+TSRcodeEnd@
+
+	call	TSR_SCROLL_WINDOW
+	ENDM
+
+;-----------------------------------------------------------------------
+
+SET_WINDOW MACRO row,col,height,width,buffer,name
+IFNB <row>
+	mov	ah,row
+ENDIF
+IFNB <col>
+	mov	al,col
+ENDIF
+IFNB <height>
+	mov	bh,height
+ENDIF
+IFNB <width>
+	mov	bl,width
+ENDIF
+IFNB <buffer>
+	mov	cx,offset buffer
+ENDIF
+IFNB <name>
+	mov	dx,offset name
+ENDIF
+	extrn	TSR_SET_WINDOW:DIST
+	call	TSR_SET_WINDOW
+	ENDM
+
+;-----------------------------------------------------------------------
+; If we can't pop up immediately because DOS or disk I/O is busy, try to pop
+; up on a subsequent timer tick
+;
+DEFAULT_INT08 MACRO
+int08_handler proc far
+ISP_HEADER 08h
+	ASSUME	DS:NOTHING,ES:NOTHING,SS:NOTHING
+	pushf
+	call	ORIG_INT08h		; chain to previous handler
+	extrn	$AMIS$TRY_POPUP:near
+	call	$AMIS$TRY_POPUP		; if need to pop up, try to do so now
+	iret
+int08_handler endp
+	ENDM
+
+;-----------------------------------------------------------------------
+; Can't pop up when disk is busy, so try to pop up on return
+;
+DEFAULT_INT13 MACRO
+int13_handler proc far
+ISP_HEADER 13h
+	ASSUME	DS:NOTHING,ES:NOTHING,SS:NOTHING
+	sti				; OK to interrupt here
+	inc	$AMIS$DISK_BUSY
+	push	bp			; now, restore original state of flags,
+	mov	bp,sp			;   especially IF
+	push	word ptr [bp+6]		; original flags before INT 13h
+	popf				; restore original flags
+	pop	bp
+	pushf				; simulate INT 13h
+	call	ORIG_INT13h
+	pushf				; preserve returned flags
+	dec	$AMIS$DISK_BUSY
+	popf				; restore returned flags
+	extrn	$AMIS$TRY_POPUP:near
+	call	$AMIS$TRY_POPUP		; pop up if requested (saves all regs)
+	ret	2
+int13_handler endp
+	ENDM
+
+;-----------------------------------------------------------------------
+; Default hotkey checker.
+;
+DEFAULT_INT15 MACRO scan,shift
+	extrn	$AMIS$ATTEMP_POPUP:near
+IFDEF CUSTOM_HOTKEY_CODE
+int15_handler proc far
+ISP_HEADER 15h
+	ASSUME	DS:NOTHING,ES:NOTHING,SS:NOTHING
+	pushf
+	sti				; OK to be interrupted
+	cmp	ax,4F00h+scan		; can also patch with actual scan code
+hotkey_scancode equ byte ptr ($-2)	;   at installation time
+	jne	not_hotkey
+	cmp	TSR_activated,0
+	jne	not_hotkey		; ignore hotkey if already popped up
+	push	ds
+	push	ax
+	xor	ax,ax
+	mov	ds,ax
+	mov	al,ds:[417h]		; get shift states
+	and	al,0Fh			; mask out all but Shift/Ctrl/Alt
+	cmp	al,shift		; specified combo of shift keys pressed?
+	pop	ax
+	pop	ds
+	jne	not_hotkey
+	;
+	; yes, we got our hotkey
+	;
+	popf
+	call	$AMIS$ATTEMPT_POPUP	; request a popup (preserves flags)
+	clc				; throw out scan code
+	ret	2			; and return so nobody else acts on it
+not_hotkey:
+	popf				; restore flags
+	jmp	ORIG_INT15h
+int15_handler endp
+
+ELSE
+hotkey_funcs label word			; list of hotkey handlers
+	dw	$AMIS$ATTEMPT_POPUP
+
+	HOTKEY_DISPATCHER AFTER,hotkey_funcs
+ENDIF
+	ENDM
+
+;-----------------------------------------------------------------------
+; Can't pop up when DOS is busy, but can do so during an INT 28h
+;
+DEFAULT_INT28 MACRO
+int28_handler proc far
+ISP_HEADER 28h
+	pushf
+	inc	$AMIS$POPUP_INT28
+	extrn	$AMIS$TRY_POPUP:near
+	call	$AMIS$TRY_POPUP
+	dec	$AMIS$POPUP_INT28
+	popf				; restore flags before chaining
+	jmp	ORIG_INT28h
+int28_handler endp
+	ENDM
+	
+;-----------------------------------------------------------------------
+
+DEFAULT_API_POPUP MACRO
+API_popup proc near
+	ASSUME	DS:NOTHING,ES:NOTHING,SS:NOTHING
+	extrn	$AMIS$ATTEMPT_POPUP:near
+	call	$AMIS$ATTEMPT_POPUP
+	mov	al,AMIS_POPUP_WILLDO	; can't pop up now, will do so when able
+	cmp	$AMIS$WANT_POPUP,1	; did we manage to pop up?
+	je	API_popup_done
+	mov	al,AMIS_SUCCESSFUL	; successful
+	xor	bx,bx			; no return code
+API_popup_done:
+	ret
+API_popup endp
+	ENDM
+
+;-----------------------------------------------------------------------
+
+DEFAULT_API_REMOVE MACRO
+API_remove proc near
+	ASSUME	DS:NOTHING,ES:NOTHING,SS:NOTHING
+	inc	$AMIS$WANT_SHUTDOWN
+	inc	$AMIS$WANT_POPUP
+	extrn	$AMIS$TRY_POPUP:near
+	call	$AMIS$TRY_POPUP
+	mov	al,0
+	xchg	al,$AMIS$WANT_SHUTDOWN	; get and clear shutdown flag
+	cmp	al,0			; if no longer set, shutdown successful
+	je	remov_successful
+	dec	$AMIS$WANT_POPUP	; clear popup request
+	mov	al,AMIS_UNINST_TRYLATER	; can't remove at this time
+	ret
+remov_successful:
+	mov	al,AMIS_UNINST_SAFE_OFF ; no resident remover, now disabled
+	mov	bx,0			; seg of block to free (will be patched)
+ALTMPX$PSP equ word ptr ($-2)		; magic name of word to be patched with
+					; actual memory block segment by TSR
+					; installation code
+	ret
+API_remove endp
+	ENDM
+
+;-----------------------------------------------------------------------
+
+.LIST

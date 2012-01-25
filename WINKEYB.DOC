@@ -1,0 +1,17 @@
+When Running Under Windows, Map In/Out VM's First Megabyte
+
+Previously, when our local keyboard handler was active, we avoided
+checking and setting the keyboard values in the BIOS data area if
+Windows was active because we couldn't be sure that that memory region
+was mapped in.	Now that I have discovered Win386 (INT 22h) services,
+we can map in/out that region around references to it.
+
+SWAT_INT.ASM	In LCL_INT09, if we're running under W and Win386
+		  services are available, map in/out the VM's low
+		  memory.
+
+SWAT_KEY.ASM	In SAVE_IRQS/REST_IRQS, if we're running under W and
+		  Win386 services are available, map in/out the VM's
+		  low memory.
+
+

@@ -1,0 +1,267 @@
+Allow loading of symbols directly from SWAT
+
+This TWT incorporates a number of new features:
+
+Profile options-
+
+ * The LOADSYM keyword (new) enables PL0 DPMI services within SWAT
+   via the PL0_INT21 procedure (see SWAT_FBR.ASM for usage examples).
+
+ * The LOADSYM=d:\path\filename.ext syntax allows SSF files to be
+   loaded into SWAT and made available when SWAT wakes up at the
+   end of SWAT's INIT_PROT.
+
+ * Two new debug options, DEBUG=PMI and DEBUG=VMI, trigger breakpoints
+   in SWAT's protected mode initialization and V86 mode initialization
+   respectively.
+
+ * The PROXSRCH=r[,g] allows a default range (and optionally, granularity)
+   for symbol proximity searches to be specified in the profile.
+
+ * The PATH=d:\dir[,d:\dir2[,...]] keyword allows a source file search
+   path for use with source level debugging.
+
+ * The VMSCOUNT=n keyword allows the user to specify the number of times
+   SWAT should insinuate itself into the GDT/IDT during VCPI debugging.
+   This is useful for debugging VCPI applications where VMSINT is used
+   and the entry to protected mode takes place in an interrupt handler.
+
+ * The COLDBOOT keyword tells us to blast 3412h instead of 1234h into
+   the warm boot flag location when rebooting from within SWAT to force
+   a cold boot.
+
+New commands-
+
+ * Ctrl-F7 now displays the source browser screen.
+
+ * The ps r [g] command allows the range [and granularity] of symbol
+   proximity searches to be changed from the SWAT command line.
+
+ * The fs command flushes the symbol table from within SWAT.
+
+ * The ls d:\path\filename.ext [fixup] allows SSF files to be
+   loaded from within SWAT provided the LOADSYM or LOADSYM= keyword
+   was specified.  If the optional fixup is specified, it will
+   be added to all V86 mode symbols.
+
+ * The lf d:\path\filename.exe command allows files to be loaded
+   into the browser (Ctrl-F7).	Like the ls command, lf requires
+   that LOADSYM or LOADSYM= be present in the profile, and that
+   the host version of MAX supports DPMI (>=6.0).
+
+ * The sb[*]+|- command turns source browse mode on or off.  If
+   the optional asterisk is specified, the module name is ignored.
+   With sb+, module names are extracted from line number symbols,
+   and the path specified by PATH= or the path command (see below)
+   is searched for source modules with .ASM or .C extensions.
+
+ * The path[+] dir1[, dir2[, ...]] command allows the source browser
+   search path to be specified (or added to if + is present) while
+   SWAT is running.
+
+ * The li +|- command allows display of line symbols to be turned on
+   or off (default=on).
+
+ * The li nnnn[+|-] allows display of a specified source line (entered
+   in decimal).  The optional + or - specifies a location relative to
+   the current line.
+
+ * The vmscount n command is equivalent to the VMSCOUNT= keyword
+   described above.
+
+Changed-
+ * The ts command now incorporates several new syntax options:
+   ts		Retranslates all symbols according to current GDT/LDT.
+   ts sel	Retranslates only for selector/segment sel.
+   ts *|sel ID	Retranslates only for selector/segment sel and ID specified,
+		or if * is present instead of an lvalue, all segments/selectors
+		with the specified ID.
+   ts *|sel *|ID v|p
+		Retranslates only for selector and/or ID specified, changing
+		to specified mode (VM/PM).
+   ts *|sel *|ID *|v|p nsel
+		Replaces segment/selector for specified symbols.  If * is
+		specified for mode, the mode is left alone.
+   ts *|sel *|ID *|v|p nsel+
+		Specified nsel value is added to all specified segments.
+
+Files affected:
+
+386.INC 	Create FINT macro to simulate 16-bit INT call within SWAT.
+
+386SWAT 	Prototype new profile options.
+
+386SWAT.DOC	Document new commands and profile options.
+
+INT1_FNS.ASM	Made SELFDBG a dword.
+
+		Fixed bug in unassembly of USE16 code where a relative offset
+		wraps past 64K.
+
+		Add comments to clarify where FORW_STR pointer is.
+
+INT1_STB.ASM	Made SELFDBG a dword.
+
+MAKEFILE	Add new modules and dependencies.
+
+		Reorganized copying of binaries to support build-level
+		makefiles.
+
+MAKEFILE.DSK	Makefile to generate SWAT distribution disk.  This
+		currently consists of 386SWAT.ZIP and the corresponding
+		386SWAT.EXE (self-extracting).
+
+MAKEFILE.INC	Common definitions for build level makefiles.
+
+MAKEFILE.TOP	Top-level build makefile for 386SWAT.
+
+SWAT.ASM	Add Ctrl-F7 screen functions to jump tables.
+
+		Handle source level debugging.
+
+SWAT_ARG.ASM	Define new profile options.
+
+		Moved BASE2BIN into PGROUP.
+
+SWAT_ARG.INC	Define flags for DPMI present and for DEBUG=VMI.
+		Note that by default, PL0 DPMI services are not available;
+		they must be enabled using LOADSYM, since they will increase
+		MAX's size in high DOS by 5-6K.  If this occurs and the
+		user leaves a PRGREG=n where N>0 in the MAX profile,
+		bad things will happen unless a version of MAX > 6.02.000
+		is used.
+
+SWAT_BLK.ASM	Change SELFDBG to a dword.
+
+		Handle source level debugging.
+
+SWAT_CMD.ASM	Define new commands.
+
+		Moved BASE2BIN in from SWAT_ARG.ASM.
+
+SWAT_COM.INC	Define display state for file browser.
+
+		Define display lines for file browser.
+
+		Change SELFBREAK macro to include an Int 1 instead
+		of requiring the user to blast in an Int 3.  This makes
+		it necessary to set only one trigger bit at a time in
+		SELFDBG.
+
+SWAT_DBG.ASM	Change SELFDBG to a dword.
+
+SWAT_DBG.INC	Define flags for DEBUG=VMI, DEBUG=PMI, and VMSCOUNT
+		specified.  Note that DEBUG=VMI is also present in
+		ARG_FLAGS, since it is needed at INIT_VIRT time.
+
+SWAT_FBR.ASM	(New) File browser display, command parsing, and read
+		functions.
+
+SWAT_FCN.ASM	Add processing for new profile options.
+
+		When LOADSYM=filename is specified, this is where we
+		open the file, verify that it is an SSF file of a version
+		we support, and read the data into extended memory starting
+		at 1.1MB.  A checksum is generated for later comparison
+		at INIT_PROT time.  The checksum is saved in DGROUP.
+
+SWAT_HLP.ASM	Add Ctrl-F7 to help screen.
+
+SWAT_INF.INC	Define additional field to enable symbol translation
+		from SWATVXD.  When Windows is active, there is no
+		IDT entry for Int 67 (thanks Microsoft) so SWATVXD
+		needs to squirrel away the linear address of our Int 67
+		entry point during its init_real.
+
+SWAT_INI.ASM	During INIT_PROT, if symbols were loaded into extended
+		memory and the checksum still holds water, process them.
+
+		At INIT_VIRT time, we need to check to ensure the host
+		has made DPMI services available (NODPMI was not
+		specified). We pass it up to SWAT via a new VCPI call.
+
+		At INIT_REAL time, we save the linear address of
+		DOS's reentrancy level flag.  This far 16:32 pointer
+		is used by DOS_AVAIL.
+
+SWAT_KEY.ASM	If COLDBOOT is specified, blast 3412h into warm boot
+		flag location instead of 1234h.
+
+SWAT_LC2.INC	Define flags for source level debugging, ignore module
+		name state, line number display, and current instruction
+		is a line.
+
+SWAT_SSF.INC	(New) Definitions moved out of SWATRUN.ASM and now
+		owned by SWAT (still shared by SWATRUN).  Structure
+		changes allow recognition of file versions 0.10 and
+		0.11 (implemented by MAPSSF version 1.07).
+
+		Note that the structure defined here is not the same
+		as the internal symbol table structure defined in
+		SWAT_SYM.INC; there are no bucket list pointers or
+		a linear address field.
+
+SWAT_SYM.ASM	Added processing for ls command.
+
+		Declared flags set at INIT_VIRT time via VCPI call.
+
+		Reorganized SYMAPPND_COM to be called from CMD_LOADSYM.
+		Note that in an earlier cut of this code, a bug was
+		introduced.  When checking to see if a symbol would
+		fit, we would use the size of the external symbol record
+		ISYM_STR rather than the slightly larger internal
+		symbol record SYM_STR.	This resulted in sometimes
+		overwriting the first few bytes of the symbol address
+		hash table.
+
+		Reintroduced raw symbol append (allow duplicates).
+
+		Expanded syntax for ts command.
+
+		Cease hashing of SWAT internal type symbols.
+
+		Handle line number records overlaid by other publics.
+
+		Added processing for ps, fs and ls commands.
+
+		Added DOS_AVAIL.  Returns with CF=0 if OK to call PL0_INT21.
+
+		Added PL0_INT21.  This code is needed to force a ring
+		transition when calling MAX for DPMI Int 21 services.
+		It also reenables masked-off hardware interrupts, and
+		swaps back the caller's IDT entries.
+
+SWAT_SYM.INC	Defined size of static file I/O buffer used for ls and lf.
+
+		Defined flags for imported symbol records (ISYM_STR).
+
+		Added flags field to symbol translation structure.
+		Bits are set to indicate that fields which were
+		previously required should be ignored.
+
+SWAT_VCP.ASM	Added set host flags call.  This is used by SWAT's
+		INIT_VIRT code to tell the protected mode portion
+		of SWAT about host features which may not be active
+		until SWAT's INIT_VIRT.  Currently, this is used for
+		DPMI detection.
+
+		Pass offset of LCL_INT67 in SWTINFO (used by SWATVXD).
+
+		Reinstated raw symbol append (allow duplicate symbols).
+		This would allow multiple sets of symbols with the same
+		name to refer to different areas in memory.  When symbols
+		are used on the command line as effective addresses,
+		the first match found will be used.
+
+		Process VMSCOUNT.  This is useful in debugging VCPI
+		interrupt handlers.  It prevents SWAT from overloading
+		the VCPI program's GDT.
+
+SWATSYM.EXT	Document new symbolic and source debugging features.
+
+VCPI.INC	Define VCPI set host features call and raw append
+		subfunction.  Defined flags for host features word.
+
+VERSBETA.ASM	Bump version number.
+
+

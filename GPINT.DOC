@@ -1,0 +1,24 @@
+Add GP Skip Keyword For INT Instruction
+
+When intruding into other memory manager's PL0 context (coming to a
+TWT near you soon), I've found it helpful to GP Skip the INT
+instruction.  As silly as it sounds, some MMs (EMM386 from MS) set the
+DPL in the IDT of many interrupts to zero such that they generate a GP
+Fault when executed from VM (a PL3 context).  This change adds the INT
+instruction to the list of ones you may wish to skip but still get the
+benefit of trapping other GP Faults.
+
+At the same time, I added the keyword ALL to skip all such GP Fault
+instructions so we don't have to change our profiles each time a new
+instruction to skip comes along.
+
+386SWAT 	 Define new GPSKIP keywords.
+		 Use consistent format for secondary lines.
+
+SWAT_GPS.INC	 Define new flag bit.
+
+SWAT_FCN.ASM	 Define new keywords in parse table.
+
+SWAT_VCP.ASM	 In CHECK_GPS, check for INT instruction.
+
+

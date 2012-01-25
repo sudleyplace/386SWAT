@@ -1,0 +1,42 @@
+Use Ctrl-Shift-PrtSc To Print Instruction Window Only
+
+When printing multiple instruction screens, repeating the register
+display and other information on the second and subsequent screens is
+unnecessary.  To this end, the key combination Ctrl-Shift-PrtSc prints
+the instruction portion of the display only, assuming the instruction
+window is displayed (if not, the entire screen is printed as usual).
+
+Also, some A20 routines with code duplicated between two modules now
+share a common source.	This means that some A20 routines are renamed
+to begin with a special prefix such as U32_, U16_ and DEV_.
+
+SWAT.ASM	Put code/data which must be first in a group into a
+		  separate segment such as PROG0 and RCODE0.
+		Rename A20 routines with special prefix.
+
+SWAT_A20.ASM	Delete duplicated code, and use external routines from
+		  SWAT_KEY.ASM.
+		Rename A20 routines with special prefix.
+
+SWAT_DRV.ASM	Put code/data which must be first in a group into a
+		  separate segment such as PROG0 and RCODE0.
+		Rename A20 variables with special prefix.
+
+SWAT_HTX.ASM	Document new key combination.
+
+SWAT_KEY.ASM	Use macros to define more A20 routines so that can be
+		  defined in multiple groups.
+		Rename A20 routines with special prefix.
+		Detect and act upon C-S-PrtSc.
+		In CMD_REBOOT, if we're running under Windows, ensure
+		  that the low DOS memory is mapped in.
+		Define needed A20 routines in RGROUP.
+
+SWAT_KTB.ASM	Delete commented out code.
+
+SWAT_SEG.INC	Define PROG0 and RCODE0 segments to hold code/data
+		  which must be first in the group.
+
+386SWAT.DOC	Document new key combination.
+
+

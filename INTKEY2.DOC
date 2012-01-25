@@ -1,0 +1,24 @@
+Support Spanish Keyboard
+
+Include support for Spain's keyboard layout 172.
+
+Also, some typos in 386SWAT.DOC are corrected as well as a bug in
+FCN_KEYB which cause the code to copy less than the full table to the
+final position.
+
+386SWAT.DOC	 Miscellaneous changes.
+		 Note SP172 now supported.
+
+386SWAT 	 Note SP172 now supported.
+
+SWAT_FCN.ASM	 Include SP172 in KEYB= parse table.
+		 Fix bug where wrong mutiplier (2 vs. 4) used in
+		   KEYBTAB_ACT address computation.
+		 Fix bug where wrong size (4 vs. 5) used for key
+		   tables.
+
+SWAT_KT2.ASM	 Include SP172 tables.
+
+SWAT_KTB.ASM	 Define equate for keyboard layout table size.
+
+

@@ -1,0 +1,7 @@
+Implement .CMAC Command
+
+The .CMAC command is now recognized to skip through a C memory
+allocation chain.  At the same time, the dot commands are re-organized
+into a macro structure to make it easier to add additional commands.
+
+
