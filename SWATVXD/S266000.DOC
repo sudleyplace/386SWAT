@@ -1,0 +1,100 @@
+
+P:\TWT\SWATVXD.WRL
+
+	Add symbol support to SWATVXD.
+	New utility program, CATSSF, added to the project.
+	Move the SYSTEM.INI cookies from [386Enh] to [386SWAT].
+	General cleanup.
+
+Here's what's changed and how:
+
+MAKEFILE	Added macros and equates to build C-based projects.
+		Added CATSSF tool to the project.
+		Added WIN.SFF to the project.  This .SSF file is a CATSSF
+		  of the symbols from SWATVXD.EXE and 386MAX.VXD.
+		Add /V:300 to ADDHDR command to mark SWATVXD as Windows 3.0
+		  compatible.  This is required now that we're using the
+		  ADDHDR binary from the Windows 3.1 DDK.
+		Add VMM.INC from the Windows 3.1 DDK to the project.  This
+		  allows local mods without wrecking the original file.
+		  This also avoids confusion on the build machines.
+		Add CodeView information to SWATVXD as part of the new symbol
+		  support, current under construction.
+
+SWATVER.ASM	Bump version number from 2.58 to 2.66.	This numbers in between
+		  have been used for local un-TWTed versions of SWATVXD.
+
+SWATSTUB.ASM	Add the standard Qualitas module description.
+		Remove local definition of WIN386_Startup_Info_Struc.
+		Include INT2FAPI.INC from the DDK.
+		Change SWATVXD /? text to display more VxDs as well as the
+		  numbers for the VMM callout events.  This is useful when
+		  setting up the DebugVxD= lines in SYSTEM.INI.
+		Stop reading and displaying info from SYSTEM.INI.
+
+SWAT_SVC.ASM	Move PVCS $Header$ to top of the file.
+		Update the copyright.
+		Change VMM.INC comment to match the others.
+
+SWAT_RMI.ASM	Move PVCS $Header$ to top of the file.
+		Update the copyright.
+		Change VMM.INC comment to match the others.
+		Add a bunch of global variables to support new SYSTEM.INI
+		  processing, as well as cleaner code in general.
+		Add a bunch of global variables to support the .SSF processing.
+		Add additional comments at SWAT_RMI describing the entry
+		  conditions for Windows 3.1.
+		Save entry-time variables from registers to globals for use
+		  later.
+		Check for duplicate installations in a subroutine.
+		Use the new Windows 3.1 loader services to read SYSTEM.INI
+		  checking for the RealModeBreak cookie.
+		Add a generalized failure case in the exit code.
+		Add proper ASSUMEs to all the procedures.
+		Comment out dead GET_WINDIR procedure.	Install new one.
+		  Still needs work.
+		Add RMI_STRLEN procedure.
+		Add LOAD_SSF procedure to process .SSF files.  Code ripped-off
+		  from SWATRUN.COM and modified to work in the VxD environment.
+
+SWAT_MSG.ASM	Move PVCS $Header$ to top of the file.
+		Update the copyright.
+		Change VMM.INC comment to match the others.
+		Fix typos in message text.
+		Add messages related to symbol support.
+
+SWAT_VXD.ASM	Move PVCS $Header$ to top of the file.
+		Update the copyright.
+		Remove phonebook.
+		Change VMM.INC comment to match the others.
+		Add new include file SWAT_SYM.INC.
+		Add VCPI.INC to support symbols.
+		Realign tabs on global variables.
+		Add FAR CALL vectors to SWAT's INT 67h handler.
+		Remove dead globals and generally cleanup global area.
+		Add search strings for symbol support.
+		Add DEVICE_SERVICE_STR to define VxDs we have symbols for.
+		Define text strings for symbols we know about in VxDs.
+		Add procedures to return the absolute addresses to help find
+		  the bases of IGROUP and LGROUP.
+		Add additional comments to various VMM callout message handlers
+		  describing their entry conditions.
+		Call the new procedures to setup symbols for VMM and .SSFs.
+		Comment-out and remove old hooks used for debugging various
+		  386MAX.VXD problems along the way.
+		Change all SYSTEM.INI cookies so they are found in a new
+		  [386SWAT] section, rather than in [386Enh].
+		Add a new procudure to rummage around in WIN386 and root out
+		  the symbols of the VxD services.
+		Add STRLEN procedure.
+		Add a new procedure to setup symbols for SWATVXD and 386MAX.VXD
+		  via a .SSF file.
+		Add a new procedure to trundle down the Device_List looking for
+		  a particular VxD.  Remove old inline code with calls to it.
+		Remove code that Assign_Device_V86_Pages the mono area.
+		Add code in reference data processing that checks the 386SWAT
+		  version and picks up additional info from SWAT_INFO.	This
+		  is used for symbol support.
+		Comment-out mode old hook code.  Probably we can delete it.
+
+

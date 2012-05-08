@@ -1,0 +1,27 @@
+
+P:\TWT\SWATVXD.WRL
+
+===============================================================================
+
+* Warn the user if DebugThruExit is set in SYSTEM.INI
+
+  Description: Since DebugThruExit is dangerous and has fooled me several
+	       times, I now announce the fact that the option is in effect.
+  When:  26 JAN 93.
+  Who:	WRL
+  SW/HW Environment: Debugging Windows
+  Symptom:  None, it's not a bug.
+  Temporary Workaround:  None, it's not a bug.
+  Version:  2.78
+
+===============================================================================
+
+Here's what's changed and how:
+
+SWATVER.ASM		Bumped the version #.
+
+SWATVXD.ASM		Print a message if DebugThruExit is set in SYSTEM.INI.
+
+SWAT_MSG.ASM		Add message.
+
+
