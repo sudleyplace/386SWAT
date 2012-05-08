@@ -1,0 +1,30 @@
+Handle Multiline Message Display
+
+Previously, the SWATDualDisplay message display dealt with one line
+messages only.	Now it handles multiline messages (with embedded
+CR,LFs).
+
+Also in this TWT:
+
+* Check for SWATSysVMInit and SWATCreateVM flags in [386SWAT] section
+  of SYSTEM.INI.  These flags were defined but not enabled.
+
+
+SWATSTUB.ASM	Include a few more VxD names in the default display.
+
+SWATVXD.ASM	Move debug check for SysCriticalInit up a few
+		  instructions.
+		Check for SWATSysVMInit and SWATCreateVM flags.
+		Delete commented out code for mono adapter mapping
+		  into linear address space (SWAT use a different
+		  technique now).
+		In LCL_GetSetDetailedVMError, avoid overwriting
+		  GSDVME_Codes data.
+		In LCL_GetSetDetailedVMError, ensure message properly
+		  terminated with CR,LF,0.
+
+SWAT_MSG.ASM	Ensure all messages properly terminated with CR,LF.
+
+SWAT_SVC.ASM	Handle embedded CR,LF in messages.
+
+

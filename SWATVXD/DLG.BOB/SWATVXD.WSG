@@ -1,0 +1,14 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;;	Windows Symbol Group file format
+;;
+;;	This file may contain comments, like this line, by preceding each
+;;	line with a semicolon (;).  Comments may also appear at the end of
+;;	each line, since all input after the group name is ignored.
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+2400	P	28	_LGROUP 	; SWATVXD (288 shl 5)+0
+A400	P	28	_IGROUP 	; SWATVXD (288 shl 5)+0 or 8000h
+
+

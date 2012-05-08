@@ -1,0 +1,75 @@
+
+P:\TWT\SWATVXD1.WRL
+
+This TWT is an attempt to get 6 months of SWATVXD changes up on the network
+before embarking on the development of a major feature.
+
+Here's what's changed and how:
+
+MAKEFILE	The standard LSTMAC thing is added.
+
+SWATSTUB.ASM	The standard Qualitas copyright boiler plate is added.
+		The greeting message includes a copyright.
+		The /? option has been added to display a list of VxD names,
+		  interesting places to debug them, and a list of SYSTEM.INI
+		  switches that I can never remember.
+		Fix bug during freeing of the environment before going resident.
+		An error message is added in case we can't open SYSTEM.INI.
+
+SWATVER.ASM	The version # is up to 2.58.
+		The defines controlling the version info are completely redone.
+
+SWATVXD.ASM	Ralph Lipe's telephone number is removed from the comments
+		  as he's proven to be a bastard.
+		V86MMGR.INC is in included so we can use and hook its services.
+		The error message EXTRNs are cleaned up and updated.
+		A constant string is added to help search for WINA20.386.
+		Globals are provided in which to remember the original addresses
+		  of services we've hooked.
+		Code is added to trundle the WIN386 device list looking for
+		  WINA20.386.
+		Code is added to check the state of SystemROMBreakPoint.
+		Services are hooked to reverse engineer the API translation
+		  mapping buffer system to help reduce the low DOS footprint.
+		Code is added to the device list trundler to allow a new syntax
+		  on the DEBUGVXD= SYSTEM.INI switch.  Specifying no message
+		  numbers following the device name tell SWATVXD to hook the
+		  device but install no breakpoints.  This way SWATVXD remembers
+		  what device was last active and displays this when it pops
+		  up.
+		A bug is fixed that caused a major crash if the size of
+		  386SWAT.LOD exceeded 1 MB.  The GDT descriptors now can
+		  use 4 KB granularity in that case.
+		Code is added (and now commented out) to trap errant calls
+		  to page mapping services where the input page # is below
+		  10h.	This was part of the bug in 386MAX.VXD's VGASWAP
+		  support that caused WINA20.386 to not work properly.
+		Code is added to hook the Shell VxD service, SHELL_MESSAGE,
+		  to help debug a VGASWAP problem when VxDs requested
+		  the message mode.  This turned out to mostly be a problem
+		  in a Beta version of Windows 3.1.
+
+SWAT_MSG.ASM	Error message texts have CR/LF/NUL sequences at the end so they
+		  may be sent either to the debugging monochrome monitor via
+		  SWATVXD services, or to WDEB386.
+		Message text is added to announce when SystemROMBreakPoint isn't
+		  set to FALSE.
+		Message text is added to announce when WINA20.386 is or isn't
+		  loaded.
+		Message text is added to announce when PhysIntoV86, MapIntoV86,
+		  or LinMapIntoV86 VMMcall services are used with a page #
+		  below 10h.
+		Message text is added to display interesting bits about the
+		  SetMappingInfo, AllocateGlobalV86DataArea, and
+		  V86MMGR_Get_Mapping_Info services.
+
+SWAT_RMI.ASM	The 386MAX version # check is removed.	I got sick of being
+		  told the versions didn't match, and I'll know when it
+		  doesn't work.
+
+SWAT_SVC.ASM	The SWATVXD service to display debugging info is changed to
+		  also send the output to WDEB386.
+		Some ASSUME statements are corrected.
+		Some comments are cleaned up.
+
+

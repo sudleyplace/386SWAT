@@ -1,0 +1,35 @@
+
+P:\TWT\PMAPIREG.WRL
+
+===============================================================================
+
+* Use the proper client register in HookPM=device,reg,fn,fn display
+
+  Description:	The groovy code in SWATVXD that hooks a VxD's protected mode
+		API entry point allows a client register to be specified by
+		name.  The code that displays the register contents when the
+		breakpoint is fired always displayed Client_DX.  Now we display
+		the correct client register.
+  When:  29 SEP 92.
+  Who:	WRL
+  SW/HW Environment: Debugging a VxD's protected mode API services.
+  Symptom:  The SWATMSG always shows the client DX register when stopping
+	    at a HookPM= breakpoint.  For example, when stopping in the SERVER
+	    VxD's protected mode API which uses AX for the functions, the
+	    SWAT display always shows SERVER[17].  17 happens to be the client's
+	    DX.  The correct display is SERVER[2], from the client's AX.
+  Temporary Workaround:  None.
+  Version:  2.76
+
+===============================================================================
+
+Here's what's changed and how:
+
+SWATVER.ASM		Bumped the version number to 2.76.
+
+SWATVXD.ASM		When picking up the client register value for the
+			call to SWATMSG, get the correct offset into the
+			Client_Register_Struct via PH_FNREGOFF rather than
+			always specifying Client_DX.
+
+
