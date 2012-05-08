@@ -1,8 +1,0 @@
-Use DEPSCAN In Makefile, Part II
-
-Along with changes in DEPSCAN, we now support DEPSCAN from a NEWDIR
-directory.
-
-MAKEFILE	Handle NEWDIR dependency case.
-
-

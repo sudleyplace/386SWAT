@@ -1,7 +1,0 @@
-Use DEPSCAN In Makefile
-
-As with other projects, we now use DEPSCAN with SWATVXD.
-
-MAKEFILE	Make sensitive to DEPSCAN dependencies.
-
-
