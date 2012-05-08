@@ -1,0 +1,17 @@
+Fix bug in MAPSSF
+
+MAPSSF was making the wrong call to add symbols to SWAT.  Rather than
+using the raw append (allow duplicates) service only when the -d switch
+is used, MAPSSF would use raw append only when -d is NOT specified.
+
+This only applies to loading .MAP files directly into SWAT.  SSF files
+would be created properly.  If SSF files are loaded via SWAT loadsym=
+or ls commands, or with SWATRUN, everything would work as expected.
+
+Files affected:
+
+MAPSSF.C	Bump version.
+
+SWAT_API.ASM	Fix incorrect test.
+
+

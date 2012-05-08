@@ -1,0 +1,158 @@
+386SWAT symbolic debugging
+
+This document covers the basics of symbolic debugging support for
+386SWAT.  The 386SWAT API specifics are documented elsewhere; here we
+will describe actual usage of SWAT for symbolic debugging, and the
+tools needed to load symbols.
+
+There are three sections:
+386SWAT - new profile options and commands
+SWATRUN - program loader for debugging .COM and .EXE files
+MAPSSF  - symbol loader/translator
+
+386SWAT
+Three profile options are new to SWAT:
+
+SYMSIZE=n	This option sets the number of bytes to be used for the
+		SWAT symbol table.  The internal format of SWAT's symbol
+		table is 12 bytes larger than the symbol table used for
+		the SWAT API calls.  Each public or line number occupies
+		23 bytes plus the length of the symbol name.
+
+		SYMSIZE is used to calculate a default value for BUCKETS
+		(described below).  If BUCKETS is not explicitly defined
+		in the profile, it will be set to min (255, max (1,
+		SYMSIZE / 4096)).
+
+		If SYMSIZE is not specified, it will default to 4096 bytes.
+		The default BUCKETS value (if also not specified) will then
+		be 1.  See below for BUCKETS storage requirements.
+
+BUCKETS=n	Specify number of 1K blocks to be used for symbol name
+		hashing.  Values less than 1 and over 255 are ignored.
+
+		To speed symbol name searches, all names are hashed using
+		the following algorithm:
+
+		extern unsigned int HASHPRIME;
+
+		int hashpjw(char *s)
+		{
+		 char *p;
+		 unsigned long h=0, g;
+
+		 for (p=s; *p; p++) {
+			h = (h << 4) + (unsigned) tolower (*p);
+			if (g = (h & 0xf0000000)) {
+			  h = h ^ (g >> 24);
+			  h = h ^ g;
+			}
+		 }
+
+		 return ((int) (h % HASHPRIME));
+
+		}
+
+		HASHPRIME is derived from a table of prime numbers closest
+		to multiples of 256.  Here are some examples:
+		BUCKETS		HASHPRIME
+		1		257
+		2		509
+		3		769
+		254		65027
+		255		65287
+
+		The storage occupied by the name hashing table is
+		HASHPRIMES[BUCKETS-1] * 4, or approximately BUCKETS * 1K.
+
+		When a hash value is calculated from a name, that value is
+		shifted left 2 bits and used as an index into the table
+		of dword bucket pointers based at the address contained
+		in SYMNHASH.  A bucket pointer may contain -1 (FFFFFFFF)
+		or an offset from the address contained in SYMBASE.  In
+		this case, a "bucket" actually points to a symbol record.
+		Next name pointers in each symbol record form a linked
+		list which may be traversed to find an exact name match.
+
+		The smaller the BUCKETS value, the longer these bucket
+		chains will be, thus increasing name search time.  This
+		is only likely to be a performance hit when loading
+		symbols, since SWAT checks for existing symbols by name.
+		Searches for symbols entered at the command line would
+		not be visibly impacted by longer searches.
+
+ADDRHBITS=n	Specify number of address bits to use for address hash
+		table.  Values less than 8 and over 12 are ignored.
+
+		Address hash table storage in bytes is 2 ^ (ADDRHBITS + 1).
+		The minimum is therefore 1K and the maximum, 16K.
+
+		ADDRHBITS defaults to 12.  When symbols are present,
+		all possible addresses in the disassembly screen
+		are searched against the address hash table.  Possible
+		hits require traversal of the address hash buckets chain,
+		similar to name hash bucket traversal.  A "next address
+		bucket" pointer is part of the symbol record.  Thus the
+		set of symbol records forms two interleaved linked lists:
+		the address bucket chain and the name bucket chain.
+
+		The number of bits specified by ADDRHBITS are taken from
+		a resolved linear address, shifted left 2 bits, and used
+		as an index into the table of dword pointers based at the
+		address contained in SYMNHASH.  The address pointed to is
+		an offset from the address in SYMBASE, and points to the
+		beginning symbol record in that address bucket chain.  If
+		the value is -1 (FFFFFFFF), there is no such address.
+
+		Smaller address hash tables may significantly impact
+		unassembly.
+
+Using symbols
+Any symbol may be used as an effective address.  For example,
+dd 180|{SYMHASH
+will display the symbol address hash table.  Symbol display will occur
+automatically if the symbols are loaded properly.  See sections below
+on SWATRUN and MAPSSF.
+
+Symbols are displayed in the Unassemble (F9) screen.  Code addresses
+may be displayed as public names or line numbers (if line numbers
+were specified with the linker's /LI option).  Addresses within the
+unassembly are handled as intelligently as possible.  For example,
+mov ax,[bx+7c39]
+may be displayed as
+mov ax,[bx+FOOBAR]
+if FOOBAR's offset is 7c39 and the default segment/selector (DS in this case)
+matches the segment/selector specified for the symbol FOOBAR.
+
+SWAT cannot resolve addresses CLOSE TO symbols; a construction commonly
+seen in C code might be:
+mov [FOOBAR],bx
+mov [7c3b],es
+A future enhancement might be to unassemble this as
+mov [FOOBAR+2],es
+
+New commands within SWAT
+
+Syntax: SWATRUN [options] progname.ext [arguments]
+  Valid options are:
+    /b   Generate Int 1 at beginning of SWATRUN
+    /mMAPFILE Load MAPFILE instead of progname.map
+    /n   Do not call MAPSSF.EXE to load symbols
+    /o   Overwrite existing SWAT symbols
+    /?   Display this message
+
+MapSSF [options] fspec1 [fspec2 [...]]
+All options are preceded with - or /:
+  -x#           set debugging level to # (default is 0 -- no messages)
+  -o            overwrite existing symbol table (default is append)
+  -y            default to recognizing files as SYM32 format
+  -g#,#         restrict symbol group types to specified #'s
+  -sxxxxm       set selector to xxxx hex, where m is
+                v for V86/real mode
+                v+ for V86/real mode, add value to segment,
+                p for protected mode
+  -tfname       echo SWAT tables to file fname
+  -wfname[.wsg] read Windows Symbol Group file fname.wsg
+  -l            ignore line number information in .MAP file
+  -n            sort symbols by name (default is by value)
+

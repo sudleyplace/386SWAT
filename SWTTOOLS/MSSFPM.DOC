@@ -1,0 +1,17 @@
+Fix bug in MAPSSF when dealing with protected mode symbols
+
+When MAPSSF processes addresses, it needs to normalize them
+to 20-bit values when matching segments.  In CHECK_WSG(),
+we don't want to denormalize V86 or protected mode addresses;
+we should always leave the offset alone and blast in the
+segment value specified in the WSG file.  V86 symbols will
+have to be fixed up from the SWAT command line with the
+ts command.
+
+Currently, the only use for V86 symbols in WSG files is
+deleting them via the D flag.
+
+Files affected:
+MAPSSF.C	Delete code to denormalize offsets.
+
+

@@ -1,0 +1,56 @@
+Changes to SWAT tools for device driver version of SWAT
+
+Now that SWAT can run without MAX by loading as a device driver,
+some minor changes are needed to MAPSSF and SWATRUN so that they
+don't insist on MAX being present.
+
+A minor enhancement to WSG file syntax allows the segments of
+V86 mode group ID's to be preserved.
+
+Files affected:
+
+MAKEFILE	Link common SWATPRES module with MAPSSF and SWATRUN.
+
+MAPSSF.C	Include prototype for MASM functions.
+
+		Bump version.
+
+		Don't replace segment if * specified.
+
+		Parse * in WSG file for V86 mode segments only.
+
+		Call SWAT_PRESENT() before trying to load symbols.
+
+MAPSSF.H	Define flags in WSG record.
+
+QMAX.WSG	Put all initialization time V86-mode segments in
+		group ID 3010, and keep the map file segments.
+		At DEBUG=CAPS time, they can be fixed up by typing
+		ts * 3010 * cs+
+
+SWAT_API.ASM	Ripped out useless IS_VM().  Its original intention
+		is served by SWAT_PRESENT() in SWATPRES.ASM.
+
+SWAT_API.PRO	Added prototype for SWAT_PRESENT().  It is declared
+		far so it can stay in PGROUP rather than DGROUP.
+
+SWATPRES.ASM	(New) Code common to SWATRUN.COM and MAPSSF.EXE.  It
+		is set up to 1) be callable from assembler and C code
+		and 2) to not generate any segment fixups so SWATRUN
+		can call it with an FCALL macro.
+
+SWATRUN.ASM	Bump version.
+
+		Remove obsolete messages.
+
+		Move 386SWAT presence check to SWATPRES.ASM.
+
+		Put .8086 - DOT386 around code that may be run on
+		where CPU < 386.
+
+		Removed CPUTYPE.  This is the first thing we check
+		for in SWAT_PRESENT.
+
+		Commented out code for MAX presence check.
+
+

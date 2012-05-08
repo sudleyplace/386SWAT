@@ -1,0 +1,74 @@
+Use 20-bit addresses for mapping group names to symbol names
+
+The .WSG file mechanism provided by MAPSSF allows translation
+of specified groups into selectors for debugging of protected
+mode applications like 386MAX and 386SWAT.  This TWT incorporates
+three new features:
+
+1. A segment within a group may be assigned a different selector
+   from the rest of the group.	This is done by extending the
+   .wsg syntax to include groupname!segname.
+2. The D flag may be used in place of P (protected mode) or V
+   (virtual mode).  This deletes all symbols in the specified
+   group or segment from the subset of symbols to be loaded into
+   SWAT or included in the .SSF file.
+3. Association of symbol addresses with group names operates
+   differently.  It is no longer necessary to make assumptions
+   about the order in which groups appear in the MAP file.
+
+Special recognition of LINK32 map files allows exact segment
+value matching.  All groups are assigned arbitrary unique segment
+values in LINK32 map files (0, 1, 2, 3, etc.)
+
+Files affected:
+LOADMAP.C	Move group matching to MAPSSF.C
+		Recognize LINK32 map files by structure of segment section.
+		Add debugging display of filled-in WSG data.
+		Run line number records through group/segment matching.
+		Maintain groups/segment data via resolve_wsg (in
+		MAPSSF.C)
+		Check for SSF2_DEL flag set before passing non-line
+		record and non-ABS symbols up to SWAT.
+
+LOADMAP.H	Delete unnecessary #defines (group matching done by
+		value in MAPSSF.C).
+
+MAKEFILE	Generate MAP file for MAPSSF.
+		Define location of GETOPT.C and GETOPT.H via environment
+		variable VCSDIR.
+
+MAPSSF.C	Bump version number.
+		When checking symbols against WSG groups, make two
+		passes.  First pass picks off segment matches, the
+		second is for more generic group matches.
+		Group/segment matching is done within check_wsg()
+		by checking value ranges rather than having the
+		caller first figure out the group name.
+		Add resolve_wsg() to set segment data for matching
+		segments in the MAP file.
+		Add clear_wsg() to reset segment data before processing
+		MAP file.
+		Add sort_wsg() to maintain wsg group data sorted
+		descendingly.
+		Ignore ^Z in WSG file.
+		Fix bogus loop construct which had us strcpy()'ing with
+		an endless (well, nearly) source and a limited destination.
+		Parse group!segment in WSG file.
+		Process D(elete) flag in WSG file.
+		Add check for protected mode if we're trying to load symbols.
+
+MAPSSF.H	Define flag constant for symbol deletion.
+		Add segment name, start, and end to WSG data structure.
+
+QMAX.WSG	WSG file for 386MAX.  All non-resident code and data
+		is excluded from loading.  Note that the data selector
+		18 is applied to EDATA and VALSEG, and the rest of
+		PGROUP gets 50.
+
+SWAT_API.ASM	Add IS_VM () to check for 1) CPU >= 286 and 2) CPU in
+		protected mode (SMSW AX, TEST AX,1).
+
+SWATSYM.DOC	Updated document with expanded example using QMAX.WSG
+		and illustrating all new features of MAPSSF.
+
+

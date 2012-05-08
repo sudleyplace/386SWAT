@@ -1,0 +1,34 @@
+Use STDERR for SWATRUN and MAPSSF intermediate output
+
+When debugging programs like QSORT that normally redirect their
+output, it is useful to still have the debugger loader display
+its intermediate messages via standard error so the STDOUT contents
+are the same irregardless of whether the debugger loader is used
+or not.
+
+Files affected:
+
+MAKEFILE	Change rules for SWATRUN.COM so it depends on
+		SWATRUN.OBJ rather than on SWATRUN.ASM directly.
+
+MAPSSF.C	Bump version number.
+
+		Display copyright notice via STDERR.
+
+SWATRUN.ASM	Use nulls to terminate messages.
+
+		Add message display routine for ASCIIZ strings.
+
+		Display all messages to standard error.
+
+		Bump version number.
+
+		Eliminate code needed to display ASCIIZ string using
+		DOS @STROUT.
+
+		If no dot specified in filename, assume extension
+		of .COM or .EXE.  To load a binary file called FOO
+		for debugging, it would be necessary to enter
+		SWATRUN foo.
+
+

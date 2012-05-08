@@ -1,0 +1,215 @@
+Turbo Assembler	 Version 2.5	    01/10/92 08:06:29	    Page 1
+izins.ASM
+
+
+
+      1				     ;
+      2				     ;	To do, need to identify	MONO monitors, and overwite vBase w/B000
+      3				     ;	also, write a C	prog to	align the ;'s
+      4				     ;	also, write a C	prog that will pull out	the comments, w/the line number
+      5				     ;	so I can spell check them, and then let	the C prog put in the updated
+      6				     ;	comments
+      7				     ;
+      8	0000			     MODEL SMALL
+      9	0000			     Stack 256
+     10
+     11	0000			     dataseg
+     12	      =	0007			  attrib   equ	 07h
+     13	0000  00			  exitcode db	 0     ; exit code for installation program
+     14
+     15	      =	0040			  KFlagsSeg equ	0040h	; The segment for DOS stuff
+     16	      =	0017			  KFlagsOff equ	0017h	; Where	the keyboard flags are
+     17
+     18
+     19	0001			     codeseg
+     20
+     21					     Public  Start,StartRes
+     22	0000			     Start:	     ; This is an old label, we	now use	END INIT
+     23	0000  EB 58 90			  jmp	init
+     24	0003			     StartRes:	     ; Resident	portion	here
+     25
+     26	0003  FB			   sti			      ;	enable interrupts
+     27	0004  2E: FE 0E	0025r		   dec	 cs:counter
+     28	0009  75 4A			   jnz	 ExitTSR	      ;	If the counter is not zero, exit
+     29	000B  2E: C6 06	0025r 6C  +	   mov	 cs:counter, 6*18  ; Reset the counter
+     30	      90
+     31	0012  50			   push	 ax
+     32	0013  53			   push	 bx
+     33	0014  51			   push	 cx
+     34	0015  52			   push	 dx
+     35
+     36	0016  06			   push	 es
+     37	0017  57			   push	 di
+     38
+     39	0018  1E			   push	 ds
+     40	0019  56			   push	 si
+     41
+     42	001A  EB 0E 90			   jmp	 AfterVars	      ;	Will put vars w/ TSR code, DOSSEG may have been
+     43								      ;	Screwing with me.
+     44
+     45					     Public   vBase,Pressed,NotPressed,Counter,OldInt1C
+     46	001D  B800			 vBase	       dw 0b800h      ;	define video base
+     47
+     48	001F  49 6E 73			 Pressed       db 'Ins'	      ;	Message	to print when ins is pressed
+     49	      =	0003			 LenPressed =  $ - pressed    ;	Len of message
+     50
+     51	0022  20 20 20			 NotPressed    db '   '	      ;	Message	to print when ins is NOT pressed
+     52	      =	0003			 LenNotPressed = $ - notPressed	 ; Len of message
+     53
+     54	0025  06			 counter       db 6    ; Set to	18 decimal
+     55
+     56	0026  00000000			 OldInt1C  dd 0	 ; Holder for previous int 1C vectors
+     57
+Turbo Assembler	 Version 2.5	    01/10/92 08:06:29	    Page 2
+izins.ASM
+
+
+
+     58					     Public  AfterVars
+     59	002A			     AfterVars:
+     60	002A  B9 0003			   mov	 cx, LenNotPressed	; Setup	the length
+     61	002D  BE 0022r			   mov	 si, offset NotPressed	; Setup	the NotPressed message
+     62
+     63	0030  A0 0017			   mov	 al,   [KFlagsSeg:KFlagsOff]	 ; Move	the kboard flag	into al
+     64	0033  24 80			   and	 al, 80h      ;	This will isolate the Ins bit
+     65	0035  74 03			   jz	 SkipAlt     ; If its Zero skip	setting	up the INS message
+     66
+     67					     Public  Alt_key,SkipAlt,Top
+     68	0037			     Alt_Key:
+     69	0037  BE 001Fr			   mov	 si, offset Pressed
+     70
+     71	003A			     SkipAlt:
+     72	003A  2E: 8E 06	001Dr		   mov	      es,    [vBase]  ;	set up the video BASE
+     73	003F  BF 008C			   mov	      di,    2*70     ;	setup where to start printing
+     74
+     75	0042			     top:
+     76					 ; use loadsb
+     77	0042  2E: 8A 24			   mov	      ah,    [cs:si]  ;	read the charactor to print
+     78	0045  26: 88 25			   mov	      [es:di],	ah    ;	display	it
+     79
+     80	0048  47			   inc	      di   ; move the next video spot
+     81	0049  47			   inc	      di   ; move past the video attribute
+     82	004A  46			   inc	      si   ; move to the next piece of data
+     83	004B  E2 F5			   loop	top
+     84
+     85	004D  5E			   pop	 si
+     86	004E  1F			   pop	 ds
+     87
+     88	004F  5F			   pop	 di
+     89	0050  07			   pop	 es
+     90
+     91	0051  5A			   pop	 dx
+     92	0052  59			   pop	 cx
+     93	0053  5B			   pop	 bx
+     94	0054  58			   pop	 ax
+     95
+     96					     Public  ExitTSR
+     97	0055			     ExitTSR:
+     98	0055  2E: FF 2E	0026r		   jmp	 oldint1c    ; transfer	control	to other int 1C	handler
+     99
+    100
+    101
+    102				     ;
+    103				     ;!!!!!!!!!!!	    End	of TSR portion,	installation follows
+    104				     ;
+    105
+    106	      =	_TEXT:005A	     keep = $ ;	Store how much to keep (later turned to	para)
+    107
+    108					     Public  Initial,Init
+    109				     ; TASM ideal mode won't take (offset Initial)
+    110	005A			     Initial label   byte
+    111	005A			     Init:
+    112	005A  CC			   int	 03h	       ; Kick in SWAT if it is arround
+    113	005B  B8 0000s			   mov	 ax, @data
+    114	005E  8E D8			   mov	 ds, ax
+Turbo Assembler	 Version 2.5	    01/10/92 08:06:29	    Page 3
+izins.ASM
+
+
+
+    115	0060  8E C0			   mov	 es, ax	       ; es,ds,ax are all equal	to @data
+    116
+    117				     ; Ask DOS for current interrupt vector for	1C
+    118
+    119	0062  06			   push	 es	       ; Preserve es
+    120	0063  B4 35			   mov	ah, 35h	       ; Get interrupt function
+    121	0065  B0 1C			   mov	al, 1Ch	      ;	Interrupt to get
+    122	0067  CD 21			   int	21h	       ; Let DOS get the vector
+    123	0069  2E: 89 1E	0026r		   mov	word ptr OLDINT1C,   bx	; Save the offset
+    124	006E  2E: 8C 06	0028r		   mov	word ptr OLDINT1C+2, es	; ... and the segment
+    125	0073  07			   pop	es	       ; Restore es
+    126
+    127				     ;
+    128				     ;	  Get ready to install my stuff
+    129				     ;
+    130	0074  1E			  push	ds		     ; Preserve	ds
+    131	0075  B4 25			  mov	ah, 25h		     ; Install interrupt function
+    132	0077  B0 1C			  mov	al, 1Ch		     ; Interrupt to install
+    133	0079  0E			  push	cs		     ; Get the codeseg and,
+    134	007A  1F			  pop	ds		     ; Put Code	Seg into ds
+    135	007B  BA 0003r			  mov	dx, offset StartRes  ; dx if offset for	interrupt
+    136	007E  CD 21			  int	21h		     ; Do the deed, we are now installed
+    137	0080  1F			  pop	ds		     ; Restore ds
+    138
+    139	0081  CD 1C			  int	1Ch	       ; force a timer update so debugger will go through code
+    140
+    141	0083			     exit:
+    142				     ;	User the function 31 of	int 21 per Henry's suggestion
+    143				     ;	    mov	  ax, 1Ah   ; keep the correct amount
+    144				      ;	    mov	  dx, ax     ; Tell DOS	what to	keep
+    145	0083  BA 0069r			   lea	 dx,Initial[15]	     ; Next even paragraph after resident code
+    146	0086  B4 31			   mov	 ah, 31h      ;	keep function
+    147	0088  CD 21			   int	 21h		    ; go TSR
+    148
+    149					 END   start  ;	where to start executing
+Turbo Assembler	 Version 2.5	    01/10/92 08:06:29	    Page 4
+Symbol Table
+
+
+
+
+Symbol Name			  Type	 Value
+
+??DATE				  Text	 "01/10/92"
+??FILENAME			  Text	 "izins	  "
+??TIME				  Text	 "08:06:28"
+??VERSION			  Number 0205
+@CODE				  Text	 _TEXT
+@CODESIZE			  Text	 0
+@CPU				  Text	 0101H
+@CURSEG				  Text	 _TEXT
+@DATA				  Text	 DGROUP
+@DATASIZE			  Text	 0
+@FILENAME			  Text	 IZINS
+@MODEL				  Text	 2
+@WORDSIZE			  Text	 2
+AFTERVARS			  Near	 _TEXT:002A
+ALT_KEY				  Near	 _TEXT:0037
+ATTRIB				  Number 0007
+COUNTER				  Byte	 _TEXT:0025
+EXIT				  Near	 _TEXT:0083
+EXITCODE			  Byte	 DGROUP:0000
+EXITTSR				  Near	 _TEXT:0055
+INIT				  Near	 _TEXT:005A
+INITIAL				  Byte	 _TEXT:005A
+KEEP				  Number _TEXT:005A
+KFLAGSOFF			  Number 0017
+KFLAGSSEG			  Number 0040
+LENNOTPRESSED			  Number 0003
+LENPRESSED			  Number 0003
+NOTPRESSED			  Byte	 _TEXT:0022
+OLDINT1C			  Dword	 _TEXT:0026
+PRESSED				  Byte	 _TEXT:001F
+SKIPALT				  Near	 _TEXT:003A
+START				  Near	 _TEXT:0000
+STARTRES			  Near	 _TEXT:0003
+TOP				  Near	 _TEXT:0042
+VBASE				  Word	 _TEXT:001D
+
+Groups & Segments		  Bit Size Align  Combine Class
+
+DGROUP				  Group
+  STACK				  16  0100 Para	  Stack	  STACK
+  _DATA				  16  0001 Word	  Public  DATA
+_TEXT				  16  008A Word	  Public  CODE
+

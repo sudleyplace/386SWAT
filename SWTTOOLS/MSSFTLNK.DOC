@@ -1,0 +1,17 @@
+Allow MAPSSF to read TLINK-generated MAP files
+
+Ideal mode assembly and linking with Borland's TASM and TLINK
+generates a MAP file with a slightly different format.	When
+reading the Publics by Name section, we check to see if there
+is a third token on the line.  If so, we take that one instead
+of the second.
+
+Files affected:
+LOADMAP.C	If token 3 is not empty, use it for symbol name.
+
+MAPSSF.C	Cleaned up file and reorganized options into
+		alphabetical order in help and in switch () {}.
+
+		If no extension specified when generating .SSF
+		file with -t option, add .SSF to name.
+

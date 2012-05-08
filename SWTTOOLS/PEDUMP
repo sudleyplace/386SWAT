@@ -1,0 +1,53 @@
+# $Header:   P:/pvcs/misc/swttools/pedump.__v   1.0   07 May 1996 02:41:44   HENRY  $
+#
+# PEDUMP - makefile for pedump.exe
+#
+# Copyright (C) 1996 Qualitas, Inc.  All rights reserved
+#
+
+WIN32=0
+
+!if $(WIN32)
+CC=$(MSVC32)bin\cl
+LD=$(MSVC32)bin\link
+LDOPTS=/debug:full /debugtype:coff
+MSVC=$(MSVC32)
+MOD=S
+O=ret32\	# Where it all goes
+!else
+CC=$(MSVC16)bin\cl
+LD=$(MSVC16)bin\link
+LDOPTS=/co /li /map:full /onerr:noexe /st:10240
+MSVC=$(MSVC16)
+MOD=L
+O=ret16\	# Where it all goes
+!endif
+
+INCLUDE=$(MSVC)include;$(MSVC)mfc\include
+LIB=$(MSVC)lib;$(MSVC)mfc\lib
+CFLAGS=/Zi
+AFLAGS=/D$(MOD)MOD /I$(MAXROOT)inc /Zd
+
+OBJLIST=$(O)pedump.obj $(O)swat_api.obj $(O)swatpres.obj
+
+.cpp{$(O)}.obj:
+	$(CC) /c $(CFLAGS) /Fo$*.obj /Fd$*.pdb $<
+
+.asm{$(O)}.obj:
+	 masm $(AFLAGS) $(@B), $*;
+
+
+ALL: DIR $(O)pedump.exe
+
+DIR:
+	vdir -c $(O)
+
+$(O)pedump.obj: pedump.cpp
+
+$(O)pedump.exe: $(OBJLIST) pedump
+!if $(WIN32)
+	$(LD) $(LDOPTS) /out:$@ /map:$*.map /pdb:$*.pdb $(OBJLIST)
+!else
+	$(LD) $(OBJLIST: =+),$@,$*.map $(LDOPTS);
+!endif
+

@@ -1,0 +1,33 @@
+
+ Start  Stop   Length Name                   Class
+ 00000H 04548H 04549H _TEXT                  CODE
+ 057D2H 057D2H 00000H XCFE                   DATA
+ 057D2H 05803H 00032H CONST                  CONST
+ 05804H 0580BH 00008H HDR                    MSG
+ 058E6H 0591FH 0003AH _BSS                   BSS
+ 05B20H 0631FH 00800H STACK                  STACK
+
+ Origin   Group
+ 0485:0   DGROUP
+
+  Address         Publics by Name
+
+ 0485:09F0       STKHQQ
+ 0000:000C  Abs  __AHSHIFT
+ 0000:1f4f0      Symbase
+ 0485:0220       _append
+ 0000:3DB6       _atoi
+ 0456:01CC       _buffer
+ 0000:3FF4       _calloc
+ 0000:02EA       _check_wsg
+ 0000:34EC       _close
+ 0485:021C       _debuglvl
+
+  Address         Publics by Value
+
+ 0000:0010       _err
+ 0000:0066       _add_ssf
+ 0000:014A       _flush_ssf
+ 0000:0250       _rstruct_init
+
+Program entry point at 0000:1B26

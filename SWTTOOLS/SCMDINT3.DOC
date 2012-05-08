@@ -1,0 +1,35 @@
+Allow SWATCMD with no arguments to generate an Int 3
+Process quoted values in SWATCMD argument list
+
+This is useful for bringing up SWAT at a point where DOS
+services are available via PL0 DPMI (if LOADSYM is present
+in the profile).
+
+To pass expressions like
+	e 70|4*e0 67
+SWATCMD needs to support double quotes, since
+	SWATCMD e 70|4*e0 67
+would have DOS trying to execute 4*e0 with SWATCMD's output
+piped in as standard input.
+	SWATCMD "e 70|4*e0 67"
+works as expected.
+
+To pass double quotes to SWAT, repeat them:
+	SWATCMD "s 0|0 9fff0 ""386"""
+searches for the string "386" (note that we need to enclose
+the command line in double quotes as well since it contains
+a stile).
+
+Files affected:
+
+SWATCMD.ASM	Remove Caps Lock code.
+
+		Bump version number.
+
+		Strip double quotes (") from command line so we can
+		pass stile (|) to SWAT.
+
+		Generate an Int 3 before bitching about missing
+		command line in case that's what was desired.
+
+

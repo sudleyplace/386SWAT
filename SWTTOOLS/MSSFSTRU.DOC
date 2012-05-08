@@ -1,0 +1,36 @@
+Change structure of SSF files produced by MAPSSF
+
+For the first time we are changing the format of the header
+in SSF files produced by MAPSSF with the -t option.  One of
+the fields in this header is the file version number, which
+is going from 0.10 to 0.11.
+
+One of the advantages of this new format is that is more
+easily extensible.  A long pointer to data gives us a value
+we can use to seek to the start of the actual symbol data.
+A word of processing flags gives us a mechanism to pass
+options to SWATRUN or 386SWAT.	Currently, the only flags
+supported are overwrite table and allow duplicates.
+
+A new MAPSSF option, -d, uses the SWAT raw symbol append
+VCPI call to pass symbols to SWAT.  This allows multiple
+instances of a single symbol name with different values.
+This is useful when a single name may appear in several
+different addresses.  When the name is used as a search
+token, the linear address of the last instance added to
+SWAT will be used.
+
+Files affected:
+
+MAPSSF.C	Bump version number.
+		Implement -d (allow duplicates) option.
+		Defined SSF file header as a structure.
+		Increased tolerance for time differences from 4 to 12 seconds.
+		Reorganized syntax help message.
+		Removed commented-out code.
+		Support -? and -h for syntax help.
+
+SWAT_API.ASM	Use raw symbol append call to add symbols to SWAT
+		when -d option is used.
+
+

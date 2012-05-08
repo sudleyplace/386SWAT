@@ -1,0 +1,19 @@
+Execute SWAT commands from CONFIG.SYS or AUTOEXEC.BAT
+
+SWATCMD may be loaded as a non-resident device driver,
+via INSTALL=, or from COMMAND.COM.  It passes its argument
+list in toto to 386SWAT via a VCPI command line interface.
+
+Files affected:
+
+MAKEFILE	Add dependencies for SWATCMD and SWATLOG.
+
+SWATCMD.ASM	(New) Source for SWATCMD.EXE.
+
+SWATCMD.C	Fix bug in C example source.  The SWATCMD built from
+		this source cannot be loaded from CONFIG.SYS.  This
+		is useful only as an example of using the API.
+
+SWATLOG.C	(New) Program to copy standard input or a text file
+		to the SWAT log.
+
