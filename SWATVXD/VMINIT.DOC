@@ -1,0 +1,30 @@
+Allow Traps On VM_Init Calls
+
+While debugging a Netware problem, I found I needed to trap on VM_Init
+calls.
+
+At the same time, the copyright notice is updated and made consistent
+in all places.
+
+MAKEFILE	Delete NEWDIR action for SWATSTUB.EXE as it's copied
+		  elsewhere.
+
+SWATSINI.INC	Define keyword for VM_Init calls.
+
+SWATVER.INC	Use consistent equate for copyright message.
+
+SWAT_DBG.INC	Define flag for VM_Init calls.
+
+SWATSTUB.ASM	Use consistent equate for copyright message.
+		Document SWATVMInit keyword.
+
+SWATVER.ASM	Bump version #.
+
+SWATVXD.ASM	Check for SWATVMInit keyword.
+		In VM_Init, test for SWATVMInit flag.
+
+SWAT_MSG.ASM	Use consistent equate for copyright message.
+
+SWAT_SVC.ASM	Use consistent equate for copyright message.
+
+

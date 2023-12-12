@@ -1,0 +1,646 @@
+Stack Allocation = 10240 bytes
+
+ Start  Stop   Length Name                   Class
+ 00000H 02AACH 02AADH _TEXT                  CODE 16-bit
+               at offset 00000H 0108BH bytes from ret16\pedump.obj (pedump.cpp)
+               at offset 0108CH 000FCH bytes from M:\lib\SLIBCE.lib (dos\crt0.asm)
+               at offset 01188H 0019BH bytes from M:\lib\SLIBCE.lib (dos\crt0dat.asm)
+               at offset 01324H 00020H bytes from M:\lib\SLIBCE.lib (dos\crt0msg.asm)
+               at offset 01344H 00006H bytes from M:\lib\SLIBCE.lib (crt0fp.asm)
+               at offset 0134AH 00017H bytes from M:\lib\SLIBCE.lib (chkstk.asm)
+               at offset 01362H 00022H bytes from M:\lib\SLIBCE.lib (chksum.asm)
+               at offset 01384H 0018AH bytes from M:\lib\SLIBCE.lib (dos\stdargv.asm)
+               at offset 0150EH 0007DH bytes from M:\lib\SLIBCE.lib (dos\stdenvp.asm)
+               at offset 0158CH 00060H bytes from M:\lib\SLIBCE.lib (dos\nmsghdr.asm)
+               at offset 015ECH 00023H bytes from M:\lib\SLIBCE.lib (dos\stdalloc.asm)
+               at offset 01610H 00055H bytes from M:\lib\SLIBCE.lib (dos\dosret.asm)
+               at offset 01666H 00001H bytes from M:\lib\SLIBCE.lib (farstub.asm)
+               at offset 01668H 000B6H bytes from M:\lib\SLIBCE.lib (fclose.c)
+               at offset 0171EH 00036H bytes from M:\lib\SLIBCE.lib (fprintf.c)
+               at offset 01754H 0003CH bytes from M:\lib\SLIBCE.lib (printf.c)
+               at offset 01790H 00012H bytes from M:\lib\SLIBCE.lib (_cflush.asm)
+               at offset 017A2H 000E0H bytes from M:\lib\SLIBCE.lib (_flsbuf.asm)
+               at offset 01882H 0002AH bytes from M:\lib\SLIBCE.lib (_freebuf.asm)
+               at offset 018ACH 00041H bytes from M:\lib\SLIBCE.lib (_getbuf.asm)
+               at offset 018EEH 000AFH bytes from M:\lib\SLIBCE.lib (_sftbuf.asm)
+               at offset 0199EH 00132H bytes from M:\lib\SLIBCE.lib (fflush.c)
+               at offset 01AD0H 004E5H bytes from M:\lib\SLIBCE.lib (output.asm)
+               at offset 01FB6H 00020H bytes from M:\lib\SLIBCE.lib (dos\close.asm)
+               at offset 01FD6H 00081H bytes from M:\lib\SLIBCE.lib (dos\lseek.asm)
+               at offset 02058H 001BCH bytes from M:\lib\SLIBCE.lib (dos\open.asm)
+               at offset 02214H 000E9H bytes from M:\lib\SLIBCE.lib (dos\read.asm)
+               at offset 022FEH 000FDH bytes from M:\lib\SLIBCE.lib (growseg.asm)
+               at offset 023FCH 0003FH bytes from M:\lib\SLIBCE.lib (strcat.asm)
+               at offset 0243CH 00032H bytes from M:\lib\SLIBCE.lib (strcpy.asm)
+               at offset 0246EH 0001BH bytes from M:\lib\SLIBCE.lib (strlen.asm)
+               at offset 0248AH 00028H bytes from M:\lib\SLIBCE.lib (strncpy.asm)
+               at offset 024B2H 0001BH bytes from M:\lib\SLIBCE.lib (itoa.asm)
+               at offset 024CEH 00024H bytes from M:\lib\SLIBCE.lib (closeall.c)
+               at offset 024F2H 00054H bytes from M:\lib\SLIBCE.lib (sprintf.c)
+               at offset 02546H 00058H bytes from M:\lib\SLIBCE.lib (commit.c)
+               at offset 0259EH 00029H bytes from M:\lib\SLIBCE.lib (strchr.asm)
+               at offset 025C8H 00042H bytes from M:\lib\SLIBCE.lib (stricmp.asm)
+               at offset 0260AH 00022H bytes from M:\lib\SLIBCE.lib (strdup.asm)
+               at offset 0262CH 00027H bytes from M:\lib\SLIBCE.lib (memcmp.asm)
+               at offset 02654H 0002CH bytes from M:\lib\SLIBCE.lib (memcpy.asm)
+               at offset 02680H 0005FH bytes from M:\lib\SLIBCE.lib (xtoa.asm)
+               at offset 026E0H 00148H bytes from M:\lib\SLIBCE.lib (splitpat.c)
+               at offset 02828H 0000DH bytes from M:\lib\SLIBCE.lib (dos\d_commit.asm)
+               at offset 02836H 00032H bytes from M:\lib\SLIBCE.lib (lmul.asm)
+               at offset 02868H 0013DH bytes from M:\lib\SLIBCE.lib (write.asm)
+               at offset 029A6H 00012H bytes from M:\lib\SLIBCE.lib (stackava.asm)
+               at offset 029B8H 0005BH bytes from M:\lib\SLIBCE.lib (nmalloc.asm)
+               at offset 02A14H 0007CH bytes from M:\lib\SLIBCE.lib (searchsg.asm)
+               at offset 02A90H 0000DH bytes from M:\lib\SLIBCE.lib (dos\unlink.asm)
+
+ 02AAEH 02AF1H 00044H SWAT_API_TEXT          CODE 16-bit
+               at offset 00000H 00044H bytes from ret16\swat_api.obj (swat_api.ASM)
+
+ 02B00H 02B01H 00002H EMULATOR_TEXT          CODE 16-bit
+               at offset 00000H 00002H bytes from M:\lib\SLIBCE.lib (dos\crt0dat.asm)
+
+ 02B02H 02B02H 00000H C_ETEXT                ENDCODE 16-bit
+ 02B02H 02B9CH 0009BH NCODE                  PROG 16-bit
+               at offset 00000H 0009BH bytes from ret16\swatpres.obj (swatpres.ASM)
+
+ 02BA0H 02BBFH 00020H NDATA                  PROG 16-bit
+               at offset 00000H 00020H bytes from ret16\swatpres.obj (swatpres.ASM)
+
+ 02BC0H 02BC0H 00000H EMULATOR_DATA          FAR_DATA 16-bit
+ 02BC0H 02C01H 00042H NULL                   BEGDATA 16-bit
+               at offset 00000H 00042H bytes from M:\lib\SLIBCE.lib (chksum.asm)
+
+ 02C02H 03407H 00806H _DATA                  DATA 16-bit
+               at offset 00000H 005A7H bytes from ret16\pedump.obj (pedump.cpp)
+               at offset 005A8H 00020H bytes from M:\lib\SLIBCE.lib (dos\crt0.asm)
+               at offset 005C8H 00056H bytes from M:\lib\SLIBCE.lib (dos\crt0dat.asm)
+               at offset 0061EH 00002H bytes from M:\lib\SLIBCE.lib (dos\crt0msg.asm)
+               at offset 00620H 00004H bytes from M:\lib\SLIBCE.lib (chkstk.asm)
+               at offset 00624H 00002H bytes from M:\lib\SLIBCE.lib (dos\stdargv.asm)
+               at offset 00626H 00014H bytes from M:\lib\SLIBCE.lib (dos\dosret.asm)
+               at offset 0063AH 00004H bytes from M:\lib\SLIBCE.lib (fclose.c)
+               at offset 0063EH 00002H bytes from M:\lib\SLIBCE.lib (_cflush.asm)
+               at offset 00640H 00142H bytes from M:\lib\SLIBCE.lib (_file.c)
+               at offset 00782H 00006H bytes from M:\lib\SLIBCE.lib (_sftbuf.asm)
+               at offset 00788H 00061H bytes from M:\lib\SLIBCE.lib (output.asm)
+               at offset 007EAH 00002H bytes from M:\lib\SLIBCE.lib (txtmode.asm)
+               at offset 007ECH 00002H bytes from M:\lib\SLIBCE.lib (seekfast.asm)
+               at offset 007EEH 00002H bytes from M:\lib\SLIBCE.lib (growseg.asm)
+               at offset 007F0H 00014H bytes from M:\lib\SLIBCE.lib (cmiscdat.asm)
+               at offset 00804H 00002H bytes from M:\lib\SLIBCE.lib (nmalloc.asm)
+
+ 03408H 03409H 00002H XIQC                   DATA 16-bit
+               at offset 00000H 00002H bytes from M:\lib\SLIBCE.lib (dos\crt0dat.asm)
+
+ 0340AH 03415H 0000CH DBDATA                 DATA 16-bit
+               at offset 00000H 0000CH bytes from M:\lib\SLIBCE.lib (dos\crt0.asm)
+
+ 03416H 03423H 0000EH CDATA                  DATA 16-bit
+               at offset 00000H 0000EH bytes from M:\lib\SLIBCE.lib (dos\crt0dat.asm)
+
+ 03424H 03424H 00000H XIFB                   DATA 16-bit
+ 03424H 03424H 00000H XIF                    DATA 16-bit
+ 03424H 03424H 00000H XIFE                   DATA 16-bit
+ 03424H 03424H 00000H XIB                    DATA 16-bit
+ 03424H 03424H 00000H XI                     DATA 16-bit
+ 03424H 03424H 00000H XIE                    DATA 16-bit
+ 03424H 03424H 00000H XPB                    DATA 16-bit
+ 03424H 03425H 00002H XP                     DATA 16-bit
+               at offset 00000H 00002H bytes from M:\lib\SLIBCE.lib (_cflush.asm)
+
+ 03426H 03426H 00000H XPE                    DATA 16-bit
+ 03426H 03426H 00000H XCB                    DATA 16-bit
+ 03426H 03426H 00000H XC                     DATA 16-bit
+ 03426H 03426H 00000H XCE                    DATA 16-bit
+ 03426H 03426H 00000H XCFB                   DATA 16-bit
+ 03426H 03426H 00000H XCFCRT                 DATA 16-bit
+ 03426H 03426H 00000H XCF                    DATA 16-bit
+ 03426H 03426H 00000H XCFE                   DATA 16-bit
+ 03426H 03426H 00000H XIFCB                  DATA 16-bit
+ 03426H 03426H 00000H XIFU                   DATA 16-bit
+ 03426H 03426H 00000H XIFL                   DATA 16-bit
+ 03426H 03426H 00000H XIFM                   DATA 16-bit
+ 03426H 03426H 00000H XIFCE                  DATA 16-bit
+ 03426H 03426H 00000H CONST                  CONST 16-bit
+ 03426H 0342DH 00008H HDR                    MSG 16-bit
+               at offset 00000H 00008H bytes from M:\lib\SLIBCE.lib (dos\nmsghdr.asm)
+
+ 0342EH 03503H 000D6H MSG                    MSG 16-bit
+               at offset 00000H 00082H bytes from M:\lib\SLIBCE.lib (dos\crt0msg.asm)
+               at offset 00082H 0002FH bytes from M:\lib\SLIBCE.lib (crt0fp.asm)
+               at offset 000B1H 00025H bytes from M:\lib\SLIBCE.lib (chksum.asm)
+
+ 03504H 03505H 00002H PAD                    MSG 16-bit
+               at offset 00000H 00002H bytes from M:\lib\SLIBCE.lib (dos\crt0msg.asm)
+               at offset 00000H 00002H bytes from M:\lib\SLIBCE.lib (crt0fp.asm)
+               at offset 00000H 00002H bytes from M:\lib\SLIBCE.lib (chksum.asm)
+               at offset 00000H 00002H bytes from M:\lib\SLIBCE.lib (dos\nmsghdr.asm)
+
+ 03506H 03506H 00001H EPAD                   MSG 16-bit
+               at offset 00000H 00001H bytes from M:\lib\SLIBCE.lib (dos\nmsghdr.asm)
+
+ 03508H 03AD3H 005CCH _BSS                   BSS 16-bit
+               at offset 00000H 005C4H bytes from ret16\pedump.obj (pedump.cpp)
+               at offset 005C4H 00008H bytes from M:\lib\SLIBCE.lib (sprintf.c)
+
+ 03AD4H 03AD4H 00000H XOB                    BSS 16-bit
+ 03AD4H 03AD4H 00000H XO                     BSS 16-bit
+ 03AD4H 03AD4H 00000H XOE                    BSS 16-bit
+ 03AD4H 03AD4H 00000H XOFB                   BSS 16-bit
+ 03AD4H 03AD4H 00000H XOF                    BSS 16-bit
+ 03AD4H 03AD4H 00000H XOFE                   BSS 16-bit
+ 03AE0H 062DFH 02800H STACK                  STACK 16-bit
+               at offset 00000H 00800H bytes from M:\lib\SLIBCE.lib (dos\crt0.asm)
+
+
+ Origin   Group
+ 02B0:0   PGROUP
+ 02BC:0   DGROUP
+
+  Address         Publics by Name
+
+ 0000:0186       ?AddSym@@YAXPEUSSF_struct@@@Z
+                    void __near __cdecl AddSym(struct SSF_struct __far*)
+
+ 0000:0132       ?BuildSSF@@YAPEUSSF_struct@@PAD0@Z
+                    struct SSF_struct __far* __near __cdecl BuildSSF(char __near*,char __near*)
+
+ 0000:054A       ?DumpFile@@YAHPAD@Z
+                    int __near __cdecl DumpFile(char __near*)
+
+ 0000:02DE       ?DumpLines@@YAXHAAUtagSectData@@GHPAD1@Z
+                    void __near __cdecl DumpLines(int,struct tagSectData __near&,unsigned short,int,char __near*,struct tagSectData __near&)
+
+ 02BC:0144       ?dwRVABase@@3KA
+                    unsigned long __near dwRVABase
+
+ 02BC:0148       ?dwStrings@@3KA
+                    unsigned long __near dwStrings
+
+ 02BC:014C       ?dwStringTabSize@@3KA
+                    unsigned long __near dwStringTabSize
+
+ 02BC:0150       ?dwTotalSymbols@@3KA
+                    unsigned long __near dwTotalSymbols
+
+ 0000:01D4       ?GetStringAt@@YAXHKPAD@Z
+                    void __near __cdecl GetStringAt(int,unsigned long,char __near*)
+
+ 0000:00E2       ?ShowAscii@@YAXPADH0@Z
+                    void __near __cdecl ShowAscii(char __near*,int,char __near*)
+
+ 0000:0010       ?ShowHex@@YAXPADPAXG@Z
+                    void __near __cdecl ShowHex(char __near*,void __near*,unsigned short)
+
+ 02BC:0142       ?SwatPresent@@3HA
+                    int __near SwatPresent
+
+ 02BC:0042       ?szInclude@@3QADA
+                    char __near* __near szInclude
+
+ 02BC:00C2       ?szLoad@@3QADA
+                    char __near* __near szLoad
+
+ 02B0:0003       CPUTYPE
+ 02B0:0002       LCL_INT67
+ 02B0:00A4       MAXNAME
+ 02B0:0018       OPEN_DEV
+ 02B0:00B2       SWATNAME
+ 02BC:0948       _edata
+ 02BC:0F20       _end
+ 02BC:0626       _errno
+ 0000:126A       _exit
+ 0000:1678       _fclose
+ 0000:19AE       _fflush
+ 0000:172E       _fprintf
+ 0000:0F0A       _main
+ 0000:263C       _memcmp
+ 0000:2664       _memcpy
+ 0000:1764       _printf
+ 0000:2AA0       _remove
+ 0000:2502       _sprintf
+ 02BC:0664       _STKHQQ
+ 0000:240C       _strcat
+ 0000:25AE       _strchr
+ 0000:244C       _strcpy
+ 0000:247E       _strlen
+ 0000:249A       _strncpy
+ 02AA:000E       _SWAT_ADDSYM
+ 02AA:0044       _SWAT_FLUSHTAB
+ 02B0:003E       _SWAT_PRESENT
+ 02BC:0662       __aaltstkovr
+ 02BC:060A       __acfinfo
+ 0000:9876  Abs  __acrtmsg
+ 0000:9876  Abs  __acrtused
+ 0000:D6D6  Abs  __aDBdoswp
+ 02BC:0660       __adbgmsg
+ 02BC:05EC       __aexit_rtn
+ 02BC:0618       __aintdiv
+ 02BC:0830       __amblksiz
+ 0000:116D       __amsg_exit
+ 0000:135A       __aNchkstk
+ 0000:2846       __aNlmul
+ 02BC:0042       __anullsize
+ 0000:2846       __aNulmul
+ 02BC:0604       __aseghi
+ 02BC:0606       __aseglo
+ 02BC:05EE       __asizds
+ 02BC:0844       __asizeC
+ 02BC:0845       __asizeD
+ 0000:109C       __astart
+ 02BC:05EA       __atopsp
+ 0000:1279       __cexit
+ 02BC:0832       __cfltcvt_tab
+ 02BC:0680       __cflush
+ 02BC:0657       __child
+ 0000:135A       __chkstk
+ 0000:1198       __cinit
+ 0000:115E       __cintDIV
+ 0000:1FC6       __close
+ 0000:2690       __cltoasub
+ 0000:2556       __commit
+ 02BC:0633       __cpumode
+ 0000:12F8       __ctermsub
+ 0000:2213       __cXENIXtoDOSmode
+ 0000:269C       __cxtoa
+ 0000:1283       __c_exit
+ 0000:1196       __dataseg
+ 02BC:0634       __doserrno
+ 0000:1620       __dosret0
+ 0000:1635       __dosretax
+ 0000:1628       __dosreturn
+ 0000:2838       __dos_commit
+ 02BC:0948       __edata
+ 02B0:0000       __EmDataSeg
+ 02BC:0F20       __end
+ 0000:17A0       __endstdio
+ 02BC:0650       __environ
+ 0000:1271       __exit
+ 02BC:065F       __exitflag
+ 02BC:061C       __fac
+ 0000:1676       __farstub
+ 0000:24DE       __fcloseall
+ 02BC:0608       __fDosExt
+ 0000:1334       __FF_MSGBANNER
+ 0000:23EB       __findlast
+ 0000:17B2       __flsbuf
+ 0000:19FC       __flush
+ 0000:1A72       __flushall
+ 02BC:082C       __fmode
+ 02BC:0858       __fpinit
+ 0000:1354       __fptrap
+ 0000:1892       __freebuf
+ 0000:196F       __ftbuf
+ 0000:18BC       __getbuf
+ 0000:230E       __growseg
+ 0000:239A       __incseg
+ 02BC:065A       __intno
+ 02BC:0682       __iob
+ 02BC:0722       __iob2
+ 02BC:082C       __iomode
+ 0000:24C2       __itoa
+ 02BC:07C2       __lastiob
+ 0000:1FE6       __lseek
+ 02BC:082E       __lseekchk
+ 0000:1642       __maperror
+ 0000:15FC       __myalloc
+ 02BC:0636       __nfile
+ 0000:29C8       __nfree
+ 02BC:05F0       __nheap_desc
+ 0000:29E9       __nmalloc
+ 0000:159C       __NMSG_TEXT
+ 0000:15C7       __NMSG_WRITE
+ 0000:1372       __nullcheck
+ 0000:2082       __open
+ 02BC:0634       __oserr
+ 02BC:0638       __osfile
+ 02BC:062F       __osmajor
+ 02BC:062E       __osminor
+ 02BC:0632       __osmode
+ 02BC:062E       __osver
+ 02BC:0630       __osversion
+ 0000:1AF0       __output
+ 02BC:0659       __ovlflag
+ 02BC:065B       __ovlvec
+ 02BC:0652       __pgmptr
+ 02BC:0846       __pnhNearHeap
+ 02BC:062C       __psp
+ 02BC:062A       __pspadr
+ 0000:2224       __read
+ 0000:2A24       __searchseg
+ 0000:1394       __setargv
+ 0000:151E       __setenvp
+ 02BC:0842       __sigintoff
+ 02BC:0840       __sigintseg
+ 0000:2068       __sopen
+ 0000:26F0       __splitpath
+ 0000:29B6       __stackavail
+ 0000:18FE       __stbuf
+ 0000:25D8       __strcmpi
+ 0000:261A       __strdup
+ 0000:25D8       __stricmp
+ 02BC:0628       __umaskval
+ 0000:2AA0       __unlink
+ 0000:2878       __write
+ 02BC:0850       ___aDBexit
+ 02BC:084E       ___aDBrterr
+ 02BC:084C       ___aDBswpchk
+ 02BC:084A       ___aDBswpflg
+ 02BC:064C       ___argc
+ 02BC:064E       ___argv
+ 02BC:0848       ___qczrinit
+
+  Address         Publics by Value
+
+ 0000:0010       ?ShowHex@@YAXPADPAXG@Z
+                    void __near __cdecl ShowHex(char __near*,void __near*,unsigned short)
+
+ 0000:00E2       ?ShowAscii@@YAXPADH0@Z
+                    void __near __cdecl ShowAscii(char __near*,int,char __near*)
+
+ 0000:0132       ?BuildSSF@@YAPEUSSF_struct@@PAD0@Z
+                    struct SSF_struct __far* __near __cdecl BuildSSF(char __near*,char __near*)
+
+ 0000:0186       ?AddSym@@YAXPEUSSF_struct@@@Z
+                    void __near __cdecl AddSym(struct SSF_struct __far*)
+
+ 0000:01D4       ?GetStringAt@@YAXHKPAD@Z
+                    void __near __cdecl GetStringAt(int,unsigned long,char __near*)
+
+ 0000:02DE       ?DumpLines@@YAXHAAUtagSectData@@GHPAD1@Z
+                    void __near __cdecl DumpLines(int,struct tagSectData __near&,unsigned short,int,char __near*,struct tagSectData __near&)
+
+ 0000:054A       ?DumpFile@@YAHPAD@Z
+                    int __near __cdecl DumpFile(char __near*)
+
+ 0000:0F0A       _main
+ 0000:109C       __astart
+ 0000:115E       __cintDIV
+ 0000:116D       __amsg_exit
+ 0000:1196       __dataseg
+ 0000:1198       __cinit
+ 0000:126A       _exit
+ 0000:1271       __exit
+ 0000:1279       __cexit
+ 0000:1283       __c_exit
+ 0000:12F8       __ctermsub
+ 0000:1334       __FF_MSGBANNER
+ 0000:1354       __fptrap
+ 0000:135A       __chkstk
+ 0000:135A       __aNchkstk
+ 0000:1372       __nullcheck
+ 0000:1394       __setargv
+ 0000:151E       __setenvp
+ 0000:159C       __NMSG_TEXT
+ 0000:15C7       __NMSG_WRITE
+ 0000:15FC       __myalloc
+ 0000:1620       __dosret0
+ 0000:1628       __dosreturn
+ 0000:1635       __dosretax
+ 0000:1642       __maperror
+ 0000:1676       __farstub
+ 0000:1678       _fclose
+ 0000:172E       _fprintf
+ 0000:1764       _printf
+ 0000:17A0       __endstdio
+ 0000:17B2       __flsbuf
+ 0000:1892       __freebuf
+ 0000:18BC       __getbuf
+ 0000:18FE       __stbuf
+ 0000:196F       __ftbuf
+ 0000:19AE       _fflush
+ 0000:19FC       __flush
+ 0000:1A72       __flushall
+ 0000:1AF0       __output
+ 0000:1FC6       __close
+ 0000:1FE6       __lseek
+ 0000:2068       __sopen
+ 0000:2082       __open
+ 0000:2213       __cXENIXtoDOSmode
+ 0000:2224       __read
+ 0000:230E       __growseg
+ 0000:239A       __incseg
+ 0000:23EB       __findlast
+ 0000:240C       _strcat
+ 0000:244C       _strcpy
+ 0000:247E       _strlen
+ 0000:249A       _strncpy
+ 0000:24C2       __itoa
+ 0000:24DE       __fcloseall
+ 0000:2502       _sprintf
+ 0000:2556       __commit
+ 0000:25AE       _strchr
+ 0000:25D8       __stricmp
+ 0000:25D8       __strcmpi
+ 0000:261A       __strdup
+ 0000:263C       _memcmp
+ 0000:2664       _memcpy
+ 0000:2690       __cltoasub
+ 0000:269C       __cxtoa
+ 0000:26F0       __splitpath
+ 0000:2838       __dos_commit
+ 0000:2846       __aNlmul
+ 0000:2846       __aNulmul
+ 0000:2878       __write
+ 0000:29B6       __stackavail
+ 0000:29C8       __nfree
+ 0000:29E9       __nmalloc
+ 0000:2A24       __searchseg
+ 0000:2AA0       __unlink
+ 0000:2AA0       _remove
+ 02AA:000E       _SWAT_ADDSYM
+ 02AA:0044       _SWAT_FLUSHTAB
+ 02B0:0000       __EmDataSeg
+ 02B0:0002       LCL_INT67
+ 02B0:0003       CPUTYPE
+ 02B0:0018       OPEN_DEV
+ 02B0:003E       _SWAT_PRESENT
+ 02B0:00A4       MAXNAME
+ 02B0:00B2       SWATNAME
+ 02BC:0042       ?szInclude@@3QADA
+                    char __near* __near szInclude
+
+ 02BC:0042       __anullsize
+ 02BC:00C2       ?szLoad@@3QADA
+                    char __near* __near szLoad
+
+ 02BC:0142       ?SwatPresent@@3HA
+                    int __near SwatPresent
+
+ 02BC:0144       ?dwRVABase@@3KA
+                    unsigned long __near dwRVABase
+
+ 02BC:0148       ?dwStrings@@3KA
+                    unsigned long __near dwStrings
+
+ 02BC:014C       ?dwStringTabSize@@3KA
+                    unsigned long __near dwStringTabSize
+
+ 02BC:0150       ?dwTotalSymbols@@3KA
+                    unsigned long __near dwTotalSymbols
+
+ 02BC:05EA       __atopsp
+ 02BC:05EC       __aexit_rtn
+ 02BC:05EE       __asizds
+ 02BC:05F0       __nheap_desc
+ 02BC:0604       __aseghi
+ 02BC:0606       __aseglo
+ 02BC:0608       __fDosExt
+ 02BC:060A       __acfinfo
+ 02BC:0618       __aintdiv
+ 02BC:061C       __fac
+ 02BC:0626       _errno
+ 02BC:0628       __umaskval
+ 02BC:062A       __pspadr
+ 02BC:062C       __psp
+ 02BC:062E       __osver
+ 02BC:062E       __osminor
+ 02BC:062F       __osmajor
+ 02BC:0630       __osversion
+ 02BC:0632       __osmode
+ 02BC:0633       __cpumode
+ 02BC:0634       __oserr
+ 02BC:0634       __doserrno
+ 02BC:0636       __nfile
+ 02BC:0638       __osfile
+ 02BC:064C       ___argc
+ 02BC:064E       ___argv
+ 02BC:0650       __environ
+ 02BC:0652       __pgmptr
+ 02BC:0657       __child
+ 02BC:0659       __ovlflag
+ 02BC:065A       __intno
+ 02BC:065B       __ovlvec
+ 02BC:065F       __exitflag
+ 02BC:0660       __adbgmsg
+ 02BC:0662       __aaltstkovr
+ 02BC:0664       _STKHQQ
+ 02BC:0680       __cflush
+ 02BC:0682       __iob
+ 02BC:0722       __iob2
+ 02BC:07C2       __lastiob
+ 02BC:082C       __fmode
+ 02BC:082C       __iomode
+ 02BC:082E       __lseekchk
+ 02BC:0830       __amblksiz
+ 02BC:0832       __cfltcvt_tab
+ 02BC:0840       __sigintseg
+ 02BC:0842       __sigintoff
+ 02BC:0844       __asizeC
+ 02BC:0845       __asizeD
+ 02BC:0846       __pnhNearHeap
+ 02BC:0848       ___qczrinit
+ 02BC:084A       ___aDBswpflg
+ 02BC:084C       ___aDBswpchk
+ 02BC:084E       ___aDBrterr
+ 02BC:0850       ___aDBexit
+ 02BC:0858       __fpinit
+ 02BC:0948       __edata
+ 02BC:0948       _edata
+ 02BC:0F20       __end
+ 02BC:0F20       _end
+ 0000:9876  Abs  __acrtmsg
+ 0000:9876  Abs  __acrtused
+ 0000:D6D6  Abs  __aDBdoswp
+
+Line numbers for ret16\pedump.obj(pedump.cpp) segment _TEXT
+
+   173 0000:0010   177 0000:001b   180 0000:0022   183 0000:002b
+   184 0000:0035   187 0000:003a   188 0000:0054   189 0000:0064
+   190 0000:0095   191 0000:00a9   192 0000:00b9   194 0000:00bc
+   195 0000:00c9   197 0000:00d8     0 0000:00e0   201 0000:00e2
+   206 0000:00ed   207 0000:00f8   210 0000:00fd   211 0000:010f
+   212 0000:011b   214 0000:0129     0 0000:0131   218 0000:0132
+   220 0000:013d   223 0000:0148   224 0000:015d   227 0000:016d
+   229 0000:0176   231 0000:017f     0 0000:0184   235 0000:0186
+   237 0000:0191   239 0000:019b   242 0000:01a0   245 0000:01c1
+   251 0000:01cb     0 0000:01d3   256 0000:01d4   259 0000:01df
+   261 0000:01fa   262 0000:0207   264 0000:0238   265 0000:023d
+   266 0000:025e   270 0000:026e   271 0000:029b   272 0000:02ae
+   273 0000:02b7   277 0000:02c2   279 0000:02d5     0 0000:02dd
+   286 0000:02de   288 0000:02e9   290 0000:02f3   291 0000:0309
+   294 0000:030e   295 0000:032e   298 0000:0333   299 0000:0345
+   304 0000:0348   305 0000:0359   307 0000:035d   308 0000:0375
+   312 0000:0378   313 0000:0389   315 0000:038c   316 0000:03a3
+   319 0000:03b2   324 0000:03cd   325 0000:0412   328 0000:0415
+   329 0000:042e   331 0000:0440   333 0000:0457   334 0000:0470
+   338 0000:0473   340 0000:047a   344 0000:0483   345 0000:0493
+   346 0000:049c   348 0000:04b3   351 0000:04bc   354 0000:04d3
+   355 0000:04ec   356 0000:04f6   359 0000:0500   364 0000:050e
+   365 0000:0511   368 0000:052a   371 0000:052d   373 0000:0540
+     0 0000:0548   377 0000:054a   379 0000:0555   385 0000:056a
+   386 0000:0574   389 0000:057a   390 0000:0595   391 0000:059f
+   394 0000:05a5   395 0000:05ac   396 0000:05e4   397 0000:05ee
+   400 0000:05f4   403 0000:0604   404 0000:063a   405 0000:0644
+   409 0000:064a   410 0000:065d   411 0000:0668   413 0000:0672
+   414 0000:0684   417 0000:068a   418 0000:0694   419 0000:069e
+   420 0000:06ac   423 0000:06b2   424 0000:06d5   426 0000:06df
+   427 0000:06ed   428 0000:06ff   429 0000:0719   432 0000:0727
+   437 0000:0740   438 0000:0762   439 0000:077e   440 0000:079a
+   441 0000:07c1   442 0000:07db   443 0000:07e5   449 0000:07f7
+   452 0000:080b   456 0000:0812   458 0000:0835   461 0000:0839
+   466 0000:0853   468 0000:0877   471 0000:087b   472 0000:0897
+   474 0000:08a6   475 0000:08bd   476 0000:08c7   477 0000:08e0
+   479 0000:08ea   484 0000:08f8   486 0000:091d   489 0000:0922
+   490 0000:092c   498 0000:0946   500 0000:094f   507 0000:0965
+   509 0000:096a   514 0000:0985   515 0000:09a0   518 0000:09a3
+   519 0000:09ad   520 0000:09bb   523 0000:09ce   524 0000:09e2
+   526 0000:09e7   531 0000:09f1   535 0000:0a2f   537 0000:0a38
+   538 0000:0a4a   540 0000:0a54   541 0000:0a6c   542 0000:0a7e
+   543 0000:0a8e   544 0000:0aaf   547 0000:0ab3   550 0000:0ab6
+   554 0000:0ade   555 0000:0ae4   556 0000:0aea   557 0000:0af0
+   558 0000:0af6   562 0000:0afc   564 0000:0b01   566 0000:0b39
+   567 0000:0b54   568 0000:0b6a   571 0000:0b6d   573 0000:0b77
+   576 0000:0b7c   579 0000:0b86   580 0000:0b99   583 0000:0b9e
+   585 0000:0ba8   589 0000:0bca   591 0000:0bde   594 0000:0c0e
+   595 0000:0c1b   600 0000:0c2e   604 0000:0c31   605 0000:0c37
+   606 0000:0c42   607 0000:0c48   610 0000:0c4e   611 0000:0c61
+   613 0000:0c66   614 0000:0c7a   617 0000:0c90   620 0000:0c96
+   625 0000:0ca4   626 0000:0cc7   627 0000:0cea   630 0000:0ced
+   631 0000:0d10   632 0000:0d1a   633 0000:0d20   635 0000:0d28
+   636 0000:0d2b   638 0000:0d4e   641 0000:0d51   642 0000:0d6a
+   645 0000:0d6d   646 0000:0d86   648 0000:0d89   650 0000:0db7
+   652 0000:0dc1   653 0000:0dd5   655 0000:0de8   656 0000:0deb
+   661 0000:0dfd   663 0000:0e27   664 0000:0e3b   667 0000:0e49
+   671 0000:0e5e   673 0000:0e74   674 0000:0e8b   675 0000:0e95
+   676 0000:0eb0   678 0000:0eba   682 0000:0ec8   684 0000:0ecb
+   685 0000:0ee5   690 0000:0ef3   692 0000:0efd   694 0000:0f03
+     0 0000:0f08   697 0000:0f0a   699 0000:0f15   702 0000:0f2b
+   703 0000:0f33   704 0000:0f3d   709 0000:0f4b   711 0000:0f53
+   713 0000:0f6a   716 0000:0f7d   717 0000:0f99   720 0000:0f9c
+   721 0000:0fb8   733 0000:0fbb   734 0000:0fc9   736 0000:0fcf
+   737 0000:0ff5   741 0000:0ff8   743 0000:100e   745 0000:1023
+   746 0000:102c   748 0000:103a   749 0000:1046   751 0000:1054
+   754 0000:105a   756 0000:1060   758 0000:106f   759 0000:1079
+   762 0000:108f   764 0000:1095     0 0000:109a
+
+Line numbers for ret16\swat_api.obj(swat_api.ASM) segment SWAT_API_TEXT
+
+    57 02aa:000e    80 02aa:000e    81 02aa:000f    83 02aa:0011
+    86 02aa:0017    91 02aa:001a    93 02aa:001e    95 02aa:0021
+   101 02aa:0024   102 02aa:0026   103 02aa:002a   105 02aa:002c
+   107 02aa:002e   109 02aa:0034   112 02aa:0037   117 02aa:003a
+   121 02aa:003c   123 02aa:0042   125 02aa:0043   130 02aa:0044
+   148 02aa:0044   150 02aa:0045   151 02aa:0047   153 02aa:004d
+   155 02aa:0050   157 02aa:0051
+
+Line numbers for ret16\swatpres.obj(swatpres.ASM) segment NCODE
+
+    71 02b0:0002    87 02b0:0003    88 02b0:0004    89 02b0:0005
+    90 02b0:0007    92 02b0:0009    94 02b0:000a    95 02b0:000d
+    96 02b0:000e    97 02b0:000f    99 02b0:0010   101 02b0:0011
+   102 02b0:0014   105 02b0:0016   108 02b0:0017   123 02b0:0018
+   125 02b0:001b   126 02b0:001d   127 02b0:0021   129 02b0:0023
+   130 02b0:0025   131 02b0:0027   132 02b0:002b   134 02b0:002d
+   135 02b0:0031   137 02b0:0033   139 02b0:0034   140 02b0:0035
+   141 02b0:0039   143 02b0:003a   145 02b0:003d   175 02b0:003e
+   177 02b0:0043   178 02b0:0046   181 02b0:0048   182 02b0:0049
+   185 02b0:004a   186 02b0:004c   189 02b0:0050   190 02b0:0054
+   192 02b0:0058   193 02b0:005c   194 02b0:005f   196 02b0:0061
+   197 02b0:0065   198 02b0:0068   200 02b0:006a   203 02b0:006c
+   204 02b0:006e   207 02b0:0076   209 02b0:007c   211 02b0:007e
+   214 02b0:0082   215 02b0:0084   217 02b0:0088   220 02b0:008a
+   221 02b0:008d   222 02b0:008f   226 02b0:0091   228 02b0:0093
+   231 02b0:0098   232 02b0:009b   234 02b0:009c
+
+Program entry point at 0000:109C

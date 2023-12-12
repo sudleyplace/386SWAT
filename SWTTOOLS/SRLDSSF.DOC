@@ -1,0 +1,52 @@
+Allow loading of SSF files in SWATRUN
+
+The original design of SWATRUN invoked %COMSPEC% /c mapssf -sxxxxv+ mapname
+to toss the burden of loading symbols for debugging onto MAPSSF's
+shoulders.
+
+To support faster loading (by eliminating the time required to parse
+the map file), SWATRUN now loads .SSF files produced by MAPSSF and
+provides the appropriate fixups for real mode symbols.
+
+Some other fixes and enhancements are included at no extra cost.
+
+Files affected:
+SWATRUN.ASM	Added /Ssymfilename to support explicit loading of
+		.SSF files.
+
+		Added extension search to look for .ssf then .map
+		file before deciding to call Load_ssf or invoke
+		MAPSSF.
+
+		Changed "Calling MAPPSF to load program" message
+		so that it displays the fully qualified pathname
+		of the program and the load address.
+
+		Increased stack by 50% because MAPSSF sometimes
+		dips into our messages.
+
+		Added text to /? help message explaining .ssf/.map
+		search procedure.
+
+		Added automatic binary extension search.  We look
+		first for .COM then .EXE only if no extension (or
+		".") is specified.
+
+		Added code and structures to load from SSF file,
+		fix up, and pass to SWAT symbol data.
+
+		Renamed /N(omap) option /N(osymbols).
+
+		Added message to end of "Loading progname at xxxx " line.
+		Different text displayed depending on whether it's a
+		mapssf, direct ssf, or no symbols were found.
+
+		Fix bug where we included CR in command tail length
+		byte.
+
+		Expand all filenames to fully qualified pathnames,
+		including drive letter.  This emulates COMMAND.COM's
+		behavior and makes argv[0] available as many of our
+		programs expect it.
+
+

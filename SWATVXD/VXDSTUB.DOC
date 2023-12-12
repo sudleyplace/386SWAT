@@ -1,0 +1,13 @@
+Miscellaneous Changes
+
+MAKEFILE	Remove /W2 from MASM switches as this signals many
+		  silly errors.
+		Omit call to MAPSYM32 as it is buggy and crashes on my
+		  system.
+
+SWATVXD.ASM	Use LC3_FLAG to test @LC3_xxx.
+
+SWATSTUB.ASM	Document additional SYSTEM.INI [386SWAT] section
+		  entries.
+
+

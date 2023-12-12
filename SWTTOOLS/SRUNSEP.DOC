@@ -1,0 +1,25 @@
+Allow SWATRUN to parse command line separators
+
+At the cost of not being able to parse command paths containing
+forward slash (/), SWATRUN will now properly handle lines like
+SWATRUN c:\386max\install/r/k.	This is a small price to pay, since
+COMMAND.COM won't parse c:/386max/install anyway without changing
+the default command separator list.
+
+Files affected:
+
+SWATRUN.ASM	Bump version.
+
+		Add list of command terminators, including CR, LF, and 0.
+
+		Moved code and data for symbol file search to non-resident
+		code/data segments.
+
+		In resident code where we load symbols or call MAPSSF,
+		check flags to see if we should display the "Symbol file
+		not found" message.
+
+		Define and use IZITSEP to check for the end of a filename
+		on the command line.
+
+

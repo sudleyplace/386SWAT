@@ -1,0 +1,60 @@
+Add default group option to MAPSSF
+Add LIBSYM tool
+
+Two new options are added to MAPSSF:
+
+1. The -e# option (-g is already taken) allows one to set the
+   default group number a la LIBSYM.  This is useful for application
+   with WINSWAT where you don't need a .WSG file.
+
+2. The -p option makes all segments not covered in a .WSG file
+   protected mode selectors.  This is also primarily for use
+   with WINSWAT.
+
+Files affected:
+
+LIBSYM.C	(New) Tool to read output from EXEHDR.	This was a lazy
+			way to avoid reading the new .EXE file format and getting
+			the export list.
+
+LOADMAP.C	Add modname#selNNN symbols to SWAT for each selector loaded.
+			We only do this for segment ordinals < 256 and > 0, which
+			is the case for segments in Windows PM executables.  If
+			this turns out to be too restrictive we could add an option
+			at a later date.
+
+			In case we've enabled duplicate symbols, don't try to add
+			the modname#selNNN symbol more than once.
+
+			Treat Imp (imports; seg:offset is always 0:0) symbols as
+			Abs.  We can get them via EXEHDR filename.exe | libsym.
+
+MAKEFILE	Remove log from SWAT tools makefile.
+
+			Use large model for MAPSSF.
+
+			Generate .SSF files for all tools.
+
+			Add new tool, LIBSYM.
+
+MAPSSF.C	Update copyright.
+
+			Rev version (skipping 1.13 since that's been out unofficially
+			for some time).
+
+			Add new options -p (default PM selector) and -e# (default
+			group number).
+
+			Fix an old bug (the fix has been in 1.13) in matching
+			.WSG addresses.
+
+			Set default mode and group for all symbols, including those
+			not addressed by the .WSG file (if one exists).
+
+			Fix another old bug in parsing arguments.
+
+MAPSSF.H	Modify to work with large model.
+SWAT_API.ASM
+SWAT_API.PRO
+
+

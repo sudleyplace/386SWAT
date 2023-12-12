@@ -1,0 +1,366 @@
+
+ Start  Stop   Length Name                   Class
+ 00000H 00139H 0013AH SWATLOG_TEXT           CODE
+ 0013AH 019D6H 0189DH _TEXT                  CODE
+ 019E0H 019E1H 00002H EMULATOR_TEXT          CODE
+ 019E2H 019E2H 00000H C_ETEXT                ENDCODE
+ 019E2H 01A7CH 0009BH NCODE                  PROG
+ 01A80H 01A9FH 00020H NDATA                  PROG
+ 01AA0H 01AA0H 00000H EMULATOR_DATA          FAR_DATA
+ 01AA0H 01AE1H 00042H NULL                   BEGDATA
+ 01AE2H 01E75H 00394H _DATA                  DATA
+ 01E76H 01E77H 00002H XIQC                   DATA
+ 01E78H 01E83H 0000CH DBDATA                 DATA
+ 01E84H 01E91H 0000EH CDATA                  DATA
+ 01E92H 01E92H 00000H XIFB                   DATA
+ 01E92H 01E92H 00000H XIF                    DATA
+ 01E92H 01E92H 00000H XIFE                   DATA
+ 01E92H 01E92H 00000H XIB                    DATA
+ 01E92H 01E92H 00000H XI                     DATA
+ 01E92H 01E92H 00000H XIE                    DATA
+ 01E92H 01E92H 00000H XPB                    DATA
+ 01E92H 01E95H 00004H XP                     DATA
+ 01E96H 01E96H 00000H XPE                    DATA
+ 01E96H 01E96H 00000H XCB                    DATA
+ 01E96H 01E96H 00000H XC                     DATA
+ 01E96H 01E96H 00000H XCE                    DATA
+ 01E96H 01E96H 00000H XCFB                   DATA
+ 01E96H 01E96H 00000H XCFCRT                 DATA
+ 01E96H 01E96H 00000H XCF                    DATA
+ 01E96H 01E96H 00000H XCFE                   DATA
+ 01E96H 01E96H 00000H XIFCB                  DATA
+ 01E96H 01E96H 00000H XIFU                   DATA
+ 01E96H 01E96H 00000H XIFL                   DATA
+ 01E96H 01E96H 00000H XIFM                   DATA
+ 01E96H 01E96H 00000H XIFCE                  DATA
+ 01E96H 01E96H 00000H CONST                  CONST
+ 01E96H 01E9DH 00008H HDR                    MSG
+ 01E9EH 01F73H 000D6H MSG                    MSG
+ 01F74H 01F75H 00002H PAD                    MSG
+ 01F76H 01F76H 00001H EPAD                   MSG
+ 01F78H 01F78H 00000H _BSS                   BSS
+ 01F78H 01F78H 00000H XOB                    BSS
+ 01F78H 01F78H 00000H XO                     BSS
+ 01F78H 01F78H 00000H XOE                    BSS
+ 01F78H 01F78H 00000H XOFB                   BSS
+ 01F78H 01F78H 00000H XOF                    BSS
+ 01F78H 01F78H 00000H XOFE                   BSS
+ 01F80H 02367H 003E8H c_common               BSS
+ 02370H 02B6FH 00800H STACK                  STACK
+
+ Origin   Group
+ 019E:0   PGROUP
+ 01AA:0   DGROUP
+
+  Address         Publics by Name
+
+ 019E:0003       CPUTYPE
+ 019E:0002       LCL_INT67
+ 019E:00A4       MAXNAME
+ 019E:0018       OPEN_DEV
+ 019E:00B2       SWATNAME
+ 01AA:04E0       _buff
+ 01AA:0042       _buffp
+ 01AA:04D8       _edata
+ 01AA:08D0       _end
+ 01AA:00E6       _errno
+ 0013:01F5       _exit
+ 0013:0640       _fclose
+ 0013:0A3C       _fflush
+ 0013:141E       _gets
+ 0000:0000       _main
+ 0013:070E       _printf
+ 0013:1898       _remove
+ 01AA:012C       _STKHQQ
+ 0013:1322       _strcat
+ 0013:13B2       _strcmp
+ 0013:1376       _strcpy
+ 019E:003E       _SWAT_PRESENT
+ 01AA:0128       __aaltstkovr
+ 01AA:00CA       __acfinfo
+ 0000:9876  Abs  __acrtmsg
+ 0000:9876  Abs  __acrtused
+ 0000:D6D6  Abs  __aDBdoswp
+ 01AA:0124       __adbgmsg
+ 01AA:00AC       __aexit_rtn
+ 0013:02D0       __aFchkstk
+ 01AA:00D8       __aintdiv
+ 01AA:03A0       __amblksiz
+ 0013:00FE       __amsg_exit
+ 01AA:0042       __anullsize
+ 01AA:00C4       __aseghi
+ 01AA:00C6       __aseglo
+ 01AA:00AE       __asizds
+ 01AA:03C2       __asizeC
+ 01AA:03C3       __asizeD
+ 0013:001A       __astart
+ 01AA:00AA       __atopsp
+ 0013:0204       __cexit
+ 01AA:03A2       __cfltcvt_tab
+ 01AA:014A       __cflush
+ 01AA:011B       __child
+ 0013:02D0       __chkstk
+ 0013:012C       __cinit
+ 0013:00EF       __cintDIV
+ 0013:1082       __close
+ 0013:14DC       __cltoasub
+ 0013:1482       __commit
+ 01AA:00F3       __cpumode
+ 0013:027C       __ctermsub
+ 0013:14E9       __cxtoa
+ 0013:020E       __c_exit
+ 0013:012A       __dataseg
+ 01AA:00F4       __doserrno
+ 0013:05E8       __dosret0
+ 0013:05FD       __dosretax
+ 0013:05F0       __dosreturn
+ 0013:1540       __dos_commit
+ 01AA:04D8       __edata
+ 019E:0000       __EmDataSeg
+ 01AA:08D0       __end
+ 0013:0752       __endstdio
+ 01AA:0112       __environ
+ 0013:01FC       __exit
+ 01AA:0123       __exitflag
+ 01AA:00DC       __fac
+ 0013:063E       __farstub
+ 0013:13F8       __fcloseall
+ 01AA:00C8       __fDosExt
+ 0013:16C2       __ffree
+ 0013:02A8       __FF_MSGBANNER
+ 01AA:03C8       __fheap
+ 0013:0768       __filbuf
+ 0013:1302       __findlast
+ 0013:0804       __flsbuf
+ 0013:0A94       __flush
+ 0013:0B14       __flushall
+ 0013:16D5       __fmalloc
+ 01AA:03E6       __fpinit
+ 0013:02CA       __fptrap
+ 0013:08F0       __freebuf
+ 0013:09F5       __ftbuf
+ 0013:0928       __getbuf
+ 0013:1222       __growseg
+ 0013:12B1       __incseg
+ 0013:176E       __initseg
+ 01AA:011E       __intno
+ 01AA:014C       __iob
+ 01AA:023C       __iob2
+ 0013:13DC       __itoa
+ 01AA:032C       __lastiob
+ 0013:17A2       __linkseg
+ 0013:10A2       __lseek
+ 01AA:039E       __lseekchk
+ 0013:060A       __maperror
+ 0013:05C2       __myalloc
+ 0013:1854       __newseg
+ 01AA:00F6       __nfile
+ 01AA:00B0       __nheap_desc
+ 0013:0560       __NMSG_TEXT
+ 0013:058B       __NMSG_WRITE
+ 0013:02F4       __nullcheck
+ 01AA:00F4       __oserr
+ 01AA:00F8       __osfile
+ 01AA:00EF       __osmajor
+ 01AA:00EE       __osminor
+ 01AA:00F2       __osmode
+ 01AA:00EE       __osver
+ 01AA:00F0       __osversion
+ 0013:0B98       __output
+ 01AA:011D       __ovlflag
+ 01AA:011F       __ovlvec
+ 01AA:0116       __pgmptr
+ 01AA:03C4       __pnhFarHeap
+ 01AA:00EC       __psp
+ 01AA:00EA       __pspadr
+ 0013:1124       __read
+ 0013:17D8       __searchseg
+ 0013:0318       __setargv
+ 0013:04C0       __setenvp
+ 01AA:03C0       __sigintoff
+ 01AA:03BE       __sigintseg
+ 0013:16AE       __stackavail
+ 0013:0974       __stbuf
+ 01AA:00E8       __umaskval
+ 0013:1898       __unlink
+ 0013:154E       __write
+ 01AA:03DE       ___aDBexit
+ 01AA:03DC       ___aDBrterr
+ 01AA:03DA       ___aDBswpchk
+ 01AA:03D8       ___aDBswpflg
+ 01AA:010C       ___argc
+ 01AA:010E       ___argv
+ 01AA:03D6       ___qczrinit
+
+  Address         Publics by Value
+
+ 0000:0000       _main
+ 0013:001A       __astart
+ 0013:00EF       __cintDIV
+ 0013:00FE       __amsg_exit
+ 0013:012A       __dataseg
+ 0013:012C       __cinit
+ 0013:01F5       _exit
+ 0013:01FC       __exit
+ 0013:0204       __cexit
+ 0013:020E       __c_exit
+ 0013:027C       __ctermsub
+ 0013:02A8       __FF_MSGBANNER
+ 0013:02CA       __fptrap
+ 0013:02D0       __aFchkstk
+ 0013:02D0       __chkstk
+ 0013:02F4       __nullcheck
+ 0013:0318       __setargv
+ 0013:04C0       __setenvp
+ 0013:0560       __NMSG_TEXT
+ 0013:058B       __NMSG_WRITE
+ 0013:05C2       __myalloc
+ 0013:05E8       __dosret0
+ 0013:05F0       __dosreturn
+ 0013:05FD       __dosretax
+ 0013:060A       __maperror
+ 0013:063E       __farstub
+ 0013:0640       _fclose
+ 0013:070E       _printf
+ 0013:0752       __endstdio
+ 0013:0768       __filbuf
+ 0013:0804       __flsbuf
+ 0013:08F0       __freebuf
+ 0013:0928       __getbuf
+ 0013:0974       __stbuf
+ 0013:09F5       __ftbuf
+ 0013:0A3C       _fflush
+ 0013:0A94       __flush
+ 0013:0B14       __flushall
+ 0013:0B98       __output
+ 0013:1082       __close
+ 0013:10A2       __lseek
+ 0013:1124       __read
+ 0013:1222       __growseg
+ 0013:12B1       __incseg
+ 0013:1302       __findlast
+ 0013:1322       _strcat
+ 0013:1376       _strcpy
+ 0013:13B2       _strcmp
+ 0013:13DC       __itoa
+ 0013:13F8       __fcloseall
+ 0013:141E       _gets
+ 0013:1482       __commit
+ 0013:14DC       __cltoasub
+ 0013:14E9       __cxtoa
+ 0013:1540       __dos_commit
+ 0013:154E       __write
+ 0013:16AE       __stackavail
+ 0013:16C2       __ffree
+ 0013:16D5       __fmalloc
+ 0013:176E       __initseg
+ 0013:17A2       __linkseg
+ 0013:17D8       __searchseg
+ 0013:1854       __newseg
+ 0013:1898       _remove
+ 0013:1898       __unlink
+ 019E:0000       __EmDataSeg
+ 019E:0002       LCL_INT67
+ 019E:0003       CPUTYPE
+ 019E:0018       OPEN_DEV
+ 019E:003E       _SWAT_PRESENT
+ 019E:00A4       MAXNAME
+ 019E:00B2       SWATNAME
+ 01AA:0042       __anullsize
+ 01AA:0042       _buffp
+ 01AA:00AA       __atopsp
+ 01AA:00AC       __aexit_rtn
+ 01AA:00AE       __asizds
+ 01AA:00B0       __nheap_desc
+ 01AA:00C4       __aseghi
+ 01AA:00C6       __aseglo
+ 01AA:00C8       __fDosExt
+ 01AA:00CA       __acfinfo
+ 01AA:00D8       __aintdiv
+ 01AA:00DC       __fac
+ 01AA:00E6       _errno
+ 01AA:00E8       __umaskval
+ 01AA:00EA       __pspadr
+ 01AA:00EC       __psp
+ 01AA:00EE       __osver
+ 01AA:00EE       __osminor
+ 01AA:00EF       __osmajor
+ 01AA:00F0       __osversion
+ 01AA:00F2       __osmode
+ 01AA:00F3       __cpumode
+ 01AA:00F4       __oserr
+ 01AA:00F4       __doserrno
+ 01AA:00F6       __nfile
+ 01AA:00F8       __osfile
+ 01AA:010C       ___argc
+ 01AA:010E       ___argv
+ 01AA:0112       __environ
+ 01AA:0116       __pgmptr
+ 01AA:011B       __child
+ 01AA:011D       __ovlflag
+ 01AA:011E       __intno
+ 01AA:011F       __ovlvec
+ 01AA:0123       __exitflag
+ 01AA:0124       __adbgmsg
+ 01AA:0128       __aaltstkovr
+ 01AA:012C       _STKHQQ
+ 01AA:014A       __cflush
+ 01AA:014C       __iob
+ 01AA:023C       __iob2
+ 01AA:032C       __lastiob
+ 01AA:039E       __lseekchk
+ 01AA:03A0       __amblksiz
+ 01AA:03A2       __cfltcvt_tab
+ 01AA:03BE       __sigintseg
+ 01AA:03C0       __sigintoff
+ 01AA:03C2       __asizeC
+ 01AA:03C3       __asizeD
+ 01AA:03C4       __pnhFarHeap
+ 01AA:03C8       __fheap
+ 01AA:03D6       ___qczrinit
+ 01AA:03D8       ___aDBswpflg
+ 01AA:03DA       ___aDBswpchk
+ 01AA:03DC       ___aDBrterr
+ 01AA:03DE       ___aDBexit
+ 01AA:03E6       __fpinit
+ 01AA:04D8       _edata
+ 01AA:04D8       __edata
+ 01AA:04E0       _buff
+ 01AA:08D0       __end
+ 01AA:08D0       _end
+ 0000:9876  Abs  __acrtmsg
+ 0000:9876  Abs  __acrtused
+ 0000:D6D6  Abs  __aDBdoswp
+
+Line numbers for ret\swatlog.obj(swatlog.c) segment SWATLOG_TEXT
+
+    25 0000:0000    26 0000:000d    27 0000:0012    29 0000:0017
+    30 0000:0024    31 0000:0033    33 0000:003f    34 0000:0042
+    37 0000:0051    38 0000:0056    39 0000:005f    40 0000:0064
+    41 0000:0073    42 0000:0092    43 0000:0097    44 0000:009b
+    45 0000:00bc    46 0000:00c1    48 0000:00c4    49 0000:00dd
+    55 0000:00e0    58 0000:00f6    60 0000:00f7    61 0000:00f8
+    62 0000:00fa    63 0000:00fe    64 0000:0101    65 0000:0103
+    67 0000:0105    71 0000:0106    73 0000:012e    75 0000:0134
+     0 0000:0139
+
+Line numbers for ret\swatpres.obj(swatpres.ASM) segment NCODE
+
+    71 019e:0002    87 019e:0003    88 019e:0004    89 019e:0005
+    90 019e:0007    92 019e:0009    94 019e:000a    95 019e:000d
+    96 019e:000e    97 019e:000f    99 019e:0010   101 019e:0011
+   102 019e:0014   105 019e:0016   108 019e:0017   123 019e:0018
+   125 019e:001b   126 019e:001d   127 019e:0021   129 019e:0023
+   130 019e:0025   131 019e:0027   132 019e:002b   134 019e:002d
+   135 019e:0031   137 019e:0033   139 019e:0034   140 019e:0035
+   141 019e:0039   143 019e:003a   145 019e:003d   175 019e:003e
+   177 019e:0043   178 019e:0046   181 019e:0048   182 019e:0049
+   185 019e:004a   186 019e:004c   189 019e:0050   190 019e:0054
+   192 019e:0058   193 019e:005c   194 019e:005f   196 019e:0061
+   197 019e:0065   198 019e:0068   200 019e:006a   203 019e:006c
+   204 019e:006e   207 019e:0076   209 019e:007c   211 019e:007e
+   214 019e:0082   215 019e:0084   217 019e:0088   220 019e:008a
+   221 019e:008d   222 019e:008f   226 019e:0091   228 019e:0093
+   231 019e:0098   232 019e:009b   234 019e:009c
+
+Program entry point at 0013:001A

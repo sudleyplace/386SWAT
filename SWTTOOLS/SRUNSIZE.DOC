@@ -1,0 +1,12 @@
+Reduce size of SWATRUN.COM
+
+When the code to load SSF files directly was added to SWATRUN,
+the static buffer for disk reads added 16K to SWATRUN.COM.  We
+now allocate this buffer dynamically using DOS GETMEM.
+
+Files affected:
+SWATRUN.ASM	Moved Load_SSF data into resident data segment.
+		Instead of static buffer, use a pointer for reads.
+		Ensure that we always display separator after
+		loading symbols.
+

@@ -1,0 +1,11 @@
+Implement NEWDIR.BAT For SWAT VxD
+
+As with other similar projects, the NEWDIR directory creation feature
+has been extended to SWAT VxD.
+
+MAKEFILE	Define actions for NEWDIR=Y option.
+
+NEWDIR.BAT	Define batch file to create directory and call NMAKE
+		  with NEWDIR=Y option.
+
+

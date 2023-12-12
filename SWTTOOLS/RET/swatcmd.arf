@@ -1,0 +1,4 @@
+	ret\swatcmd.obj+
+ret\swatpres.obj
+	ret\swatcmd
+	ret\swatcmd  /farcall /noi /map /line ;

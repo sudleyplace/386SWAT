@@ -1,0 +1,35 @@
+Fix bug in SWATRUN
+
+When changes were made to SWATRUN to reduce the resident size,
+the case where the client environment is larger than that of
+SWATRUN's parent was missing a screw.
+
+SWATRUN would check to see if the PSP storage calculated for the
+program being loaded was contiguous with SWATRUN's PSP storage.
+If so, SWATRUN's secondary resident storage would be subtracted
+from the resulting address calculation.  This first case will
+hold true when the size of the environment needed for the client
+program is less than or equal to SWATRUN's initial environment;
+after SWATRUN frees its environment, the next reallocation that
+fits will re-use it.  It will also hold true if the client's
+environment size is larger, but an already existing hole in the
+MAC fills the bill.
+
+Note that variations in environment size are caused by the
+length of the complete program path, which is saved in the
+STRINGS section of the environment when the program is loaded.
+
+The case we address in this TWT is where the client's environment
+is contiguous with SWATRUN's PSP storage, and the client's PSP
+storage is in turn contiguous with its environment.  There should
+be no case where neither of these conditions hold true, but we
+check anyway and crap out if we detect a discrepancy.
+
+Files affected:
+
+SWATRUN.ASM	Bump version.
+
+		Handle case where client's environment is allocated
+		contiguous to SWATRUN's PSP, and is immediately
+		followed by client's PSP.
+
