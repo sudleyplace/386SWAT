@@ -1,0 +1,64 @@
+Handle programs requiring SETVER information
+
+SWATRUN now calls the undocumented DOS 5 Enter EXEC State function
+before executing client programs.  Numerous other fixes are included.
+
+SWATRUN has also been reorganized somewhat to handle the new SSF file
+structure (file version 0.11).	Some definitions have been moved into
+SWAT_SSF.INC, which SWATRUN now shares.
+
+A copy of SWAT_SSF.INC is included with this TWT for clarification,
+although it is being reviewed as part of the swat\symload.hg TWT.
+
+Files affected:
+
+MAKEFILE	Define SWAT include directory.
+		Generate .SSF file.
+		Add new dependency.
+
+SWATRUN.ASM	Add DOS 5 Enter EXEC State call.
+
+		Use @MAX_PATH equate for maximum path length.  This is
+		currently 128 to accomodate networks.
+
+		Moved structure and flag definitions into SWAT_SSF.INC.
+
+		Eliminated other definitions which could be taken from
+		SWAT_SYM.INC.
+
+		Added support for SSF file version 0.11 with embedded
+		flags (currently, only the overwrite and allow duplicates
+		flags are supported).
+
+		Increased stack size to avoid stepping on separator message.
+
+		Display path name as part of 'EXEC load failed' message.
+		Note that this path name may not be the same as the one
+		the user intended; QualifyPath expands the filename into
+		a full d:\dir\fname.exe path.
+
+		If Load_SSF fails (invalid filename or not an SSF file)
+		we display a generic error message to let the user know
+		the symbol load failed.
+
+		Added DOS version check (won't run if DOS version < 3.0).
+
+		Added check for Caps Lock.  This allows a breakpoint to
+		be triggered in SWATRUN before the command line options
+		are processed.
+
+		Fixed bug where we may not properly handle SWATRUN /o vs.
+		SWATRUN -o.
+
+		Previously, we added a \r\0 in GET_ALTMAP, assuming we
+		are processing a command tail.	This invalidates any
+		ASCIIZ filename, as we may have when processing an
+		explicit /sfilename.ext.  GET_ALTMAP now takes a
+		terminator in BX.
+
+		In QualifyPath, we must now read the EXE header to create
+		the block needed for the EES call.
+
+		Fixed bug in QualifyPath where we did not properly handle
+		files in the root directory.
+

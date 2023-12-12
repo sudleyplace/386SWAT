@@ -1,0 +1,57 @@
+Reduce resident size of SWATRUN
+
+When SWATRUN is used to load programs, the loading will now occur
+at a lower address.  Only the minimum of code and data for keeping
+a separate stack and for cleanup purposes is needed.  After the
+non-resident initialization is complete, SWATRUN frees the non-
+resident code and data.  We calculate the client program's load
+address by freeing our environment (if the parent's PSP has an
+environment), adding the environment length to the client's
+putative STRINGS section length, allocating the specified paragraphs,
+and allocating the maximum possible paragraphs.  This gives us
+the high water mark load address DOS should use for the client
+program.
+
+If the high water mark load address is contiguous with the end of
+SWATRUN's storage, the number of paragraphs to be released when
+SWATRUN frees the resident code and data in CODE2 and DATA2 is
+subtracted from the high water mark load address.
+
+Previously, SWATRUN called Int 21h 4B01 twice, once to get the load
+address, and the second time to do the actual load.  While reliable,
+this was a very weak scheme.
+
+SWATRUN will also report the number of symbols not loaded into SWAT.
+
+SWATRUN checks for 386MAX and for a VCPI debugger before continuing.
+
+If a program name is immediately followed by TAB (as opposed to SPACE)
+SWATRUN used to choke on it.
+
+Files affected:
+
+MAKEFILE	Add new includes for MAX info structure read.
+
+SWATRUN.ASM	Add new segments for resident code and data which
+		will not be needed after the client program loads
+		(CODE2/DATA2/DATZ2).
+
+		Move code and data from CODE and DATA to CODE2 and
+		DATA2.
+
+		Report symbols to be loaded and number successfully
+		loaded if not all symbols in SSF file were loaded.
+
+		Bump version number.
+
+		Check for presence of 386MAX$$.
+
+		Check for presence of VCPI debugger interface.
+
+		Calculate load address using 386LOAD method for
+		determining high water mark and adding potential
+		savings from unneeded resident code and data.
+
+		Handle filenames terminated by tab.
+
+

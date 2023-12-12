@@ -1,0 +1,8 @@
+	ret\mapssf.obj+
+ret\loadsym.obj+
+ret\loadmap.obj+
+ret\getopt.obj+
+ret\swat_api.obj+
+ret\swatpres.obj
+	ret\mapssf
+	ret\mapssf  /farcall /noi /map /line ;

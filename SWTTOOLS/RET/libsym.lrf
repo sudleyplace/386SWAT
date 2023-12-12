@@ -1,0 +1,5 @@
+	ret\libsym.obj+
+ret\swat_api.obj+
+ret\swatpres.obj
+	ret\libsym
+	ret\libsym  /farcall /noi /map /line ;

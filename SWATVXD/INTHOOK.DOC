@@ -1,0 +1,32 @@
+Workaround RAM Doubler VxD Peculiarity
+
+The RAM Doubler VxD, in its Sys_Critical_Init section, does something
+odd:  it checks the selector of IRQs 0-7, and if it is not that of
+Windows (28h), it fails.  Because SWAT may hook one of those IRQs, we
+need to do something special.  In particular, in our Sys_Critical_Init
+section, we now check for the same scenario that Ram Doubler does, and
+if found, we rehook the IRQ and point it to a local routine (which by
+definition, uses the Windows selector).
+
+Because this oddity might occur in other VxDs, I also implemented a
+new keyword (HookIRQ) which forces the above rehooking even if RAM
+Doubler is not present.
+
+
+SWATSINI.INC	Define new keyword.
+
+SWAT_DBG.INC	Define flag for new keyword.
+
+SWATSTUB.ASM	Document new keyword.
+
+SWATVER.ASM	Bump version #.
+
+SWATVXD.ASM	Define array of pointers to local IRQ handlers.
+		Define array of save areas for old IRQ handlers.
+		Define local IRQ handlers.
+		Define routine to hook IRQ handlers.
+		Trundle through the device list looking for RAM
+		  Doubler VxD.
+		Check for new keyword in SYSTEM.INI.
+
+

@@ -1,0 +1,164 @@
+#' $Header:   P:/pvcs/misc/swttools/makefile.__v   1.8   06 Jan 1995 18:03:06   HENRY  $
+#
+# Makefile for SWAT tools
+#
+
+CV=
+TD=
+BC=0			# Use MSC 6.0A
+MAKEDIR=.		# I'm sick of seeing MAKEDIR=@#$!%###$%(*&
+GODIR=$(VCSDIR) 	# location of getopt.c and getopt.h
+OEM=ret 		# OEM flavor
+O=$(OEM)\		# Location of .OBJ, .MAP, and .EXE files
+S=$(SWTDIR)		# Location of SWAT-specific include files
+
+!IF "$(MOD)" == ""      # set default for MOD only if not already defined
+MOD=L
+#Previously, C
+!ENDIF
+
+# Generate CodeView & line data, use model $MOD, search $GODIR for headers,
+# and defaults to UNSIGNED characters.
+CFLAGS=/Zi /A$(MOD) /I$(OEM) /I$(GODIR) /J
+AFLAGS=/D$(MOD)MOD /I$(OEM) /I$(INCDIR) /I$(MAXDIR) /I$(SWTDIR) /Zi
+LINK=link
+!if "$(LNKCMD)" == ""
+LNKCMD=$(LINK)
+!endif
+LOPTS=$(CV) /farcall /noi /map /line
+LCOPTS=/noi /map /line
+
+.c{$(O)}.obj:
+	$(CC) /c $(CFLAGS) /Fo$(O)$(@B).obj $<
+
+.c{$(O)}.exe:
+	$(CC) /c $(CFLAGS) /Fo$(O)$(@B).obj $<
+	$(LINK) $(LOPTS) $*;
+!IF "$(TD)" != ""
+	$(TD) $*
+!ENDIF
+
+.c{$(O)}.pro:
+	$(CC) /Zg /DPROTO $(CFLAGS) $< > $(O)temp.pro
+	xc /m/r $(O)temp.pro $*.pro
+
+!IF "$(LST)" != ""
+LSTMAC=,$(LST)\$(@B)
+!ELSE
+LSTMAC=
+!ENDIF
+
+.asm{$(O)}.obj:
+	 masm $(AFLAGS) $(@B), $* $(LSTMAC);
+
+# Make sure all the .pro files get built first, because although they
+# don't affect the build and are therefore not listed as dependents,
+# they must exist.
+ALL::	$(O)loadsym.pro 	$(O)loadmap.pro 	$(O)mapssf.pro
+
+ALL::	$(O)mapssf.exe		$(O)swatrun.com 	$(O)swatcmd.exe       \
+	$(O)swatlog.exe 	$(O)libsym.exe
+
+ALL::	$(BINDIR)mapssf.exe	$(BINDIR)swatrun.com	$(BINDIR)swatcmd.exe  \
+	$(BINDIR)swatlog.exe $(BINDIR)libsym.exe
+
+$(BINDIR)mapssf.exe: $(O)mapssf.exe
+	xc /r $(O)$(@B).exe	 $(BINDIR)
+	xc /r $(O)$(@B).map	 $(BINDIR)
+	xc /r $(O)$(@B).ssf	 $(BINDIR)
+
+$(BINDIR)swatrun.com: $(O)swatrun.com
+	xc /r $(O)$(@B).COM	 $(BINDIR)
+	xc /r $(O)$(@B).map	 $(BINDIR)
+	xc /r $(O)$(@B).ssf	 $(BINDIR)
+
+$(BINDIR)swatcmd.exe: $(O)swatcmd.exe
+	xc /r $(O)$(@B).exe	 $(BINDIR)
+	xc /r $(O)$(@B).map	 $(BINDIR)
+	xc /r $(O)$(@B).ssf	 $(BINDIR)
+
+$(BINDIR)swatlog.exe: $(O)swatlog.exe
+	xc /r $(O)$(@B).exe	 $(BINDIR)
+	xc /r $(O)$(@B).map	 $(BINDIR)
+	xc /r $(O)$(@B).ssf	 $(BINDIR)
+
+$(BINDIR)libsym.exe: $(O)libsym.exe
+	xc /r $(O)$(@B).exe	 $(BINDIR)
+	xc /r $(O)$(@B).ssf	 $(BINDIR)
+
+SSFDUMP:	$(O)ssfdump.exe $(BINDIR)ssfdump.exe
+
+$(BINDIR)ssfdump.exe: $(O)ssfdump.exe
+	xc /r $(O)$(@B).exe	 $(BINDIR)
+	xc /r $(O)$(@B).ssf	 $(BINDIR)
+
+$(O)ssfdump.exe: $(O)ssfdump.obj
+	$(LINK) $**,$*,$* $(LOPTS);
+	$(O)mapssf -t$* $*.map
+
+$(O)ssfdump.obj: ssfdump.c
+
+$(O)libsym.exe: $(O)libsym.obj $(O)swat_api.obj $(O)swatpres.obj
+	$(LINK) @<<$(O)libsym.lrf
+	$(**: =+^
+)
+	$*
+	$* $(LOPTS) ;
+<<KEEP
+	mapssf -t$* $*.map
+
+$(O)libsym.obj: libsym.c swat_api.pro mapssf.h
+
+$(O)mapssf.exe: $(O)mapssf.obj	$(O)loadsym.obj $(O)loadmap.obj \
+		$(O)getopt.obj	$(O)swat_api.obj $(O)swatpres.obj
+	$(LINK) @<<$(O)mapssf.arf
+	$(**: =+^
+)
+	$*
+	$* $(LOPTS) ;
+<<KEEP
+	$(O)mapssf -t$* $*.map
+
+$(O)mapssf.obj: mapssf.c	mapssf.h	$(GODIR)getopt.h	\
+	swat_api.pro
+
+$(O)loadsym.obj: loadsym.c	mapssf.h
+
+$(O)loadmap.obj: loadmap.c	mapssf.h
+
+$(O)getopt.obj: $(GODIR)getopt.c
+	$(CC) /c $(CFLAGS) /Fo$* $(GODIR)$(@B).c
+
+$(O)swat_api.obj: swat_api.asm
+
+$(O)swatpres.obj: swatpres.asm
+
+$(O)swatrun.com: $(O)swatrun.obj $(O)swatpres.obj
+	 $(LNKCMD) $**,$*,$* $(LCOPTS)/tiny;
+	 mapssf -t$* $*.map
+
+$(O)swatrun.obj: swatrun.asm $(S)swat_ssf.inc	$(S)swat_sym.inc
+
+$(O)swatcmd.exe: $(O)swatcmd.obj $(O)swatpres.obj
+	$(LINK) @<<$(O)swatcmd.arf
+	$(**: =+^
+)
+	$*
+	$* $(LOPTS) ;
+<<KEEP
+	mapssf -t$* $*.map
+
+$(O)swatcmd.obj: swatcmd.asm
+
+$(O)swatlog.exe: $(O)swatlog.obj $(O)swatpres.obj
+	$(LINK) @<<$(O)swatlog.arf
+	$(**: =+^
+)
+	$*
+	$* $(LOPTS) ;
+<<KEEP
+	mapssf -t$* $*.map
+
+$(O)swatlog.obj: swatlog.c
+
+

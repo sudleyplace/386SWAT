@@ -1,0 +1,443 @@
+
+ Start  Stop   Length Name                   Class
+ 00000H 005FDH 005FEH LIBSYM_TEXT            CODE
+ 005FEH 00641H 00044H SWAT_API_TEXT          CODE
+ 00642H 02B9CH 0255BH _TEXT                  CODE
+ 02BA0H 02BA1H 00002H EMULATOR_TEXT          CODE
+ 02BA2H 02BA2H 00000H C_ETEXT                ENDCODE
+ 02BA2H 02C3CH 0009BH NCODE                  PROG
+ 02C40H 02C5FH 00020H NDATA                  PROG
+ 02C60H 02C60H 00000H EMULATOR_DATA          FAR_DATA
+ 02C60H 02CA1H 00042H NULL                   BEGDATA
+ 02CA2H 032E3H 00642H _DATA                  DATA
+ 032E4H 032E5H 00002H XIQC                   DATA
+ 032E6H 032F1H 0000CH DBDATA                 DATA
+ 032F2H 032FFH 0000EH CDATA                  DATA
+ 03300H 03300H 00000H XIFB                   DATA
+ 03300H 03300H 00000H XIF                    DATA
+ 03300H 03300H 00000H XIFE                   DATA
+ 03300H 03300H 00000H XIB                    DATA
+ 03300H 03300H 00000H XI                     DATA
+ 03300H 03300H 00000H XIE                    DATA
+ 03300H 03300H 00000H XPB                    DATA
+ 03300H 03303H 00004H XP                     DATA
+ 03304H 03304H 00000H XPE                    DATA
+ 03304H 03304H 00000H XCB                    DATA
+ 03304H 03304H 00000H XC                     DATA
+ 03304H 03304H 00000H XCE                    DATA
+ 03304H 03304H 00000H XCFB                   DATA
+ 03304H 03304H 00000H XCFCRT                 DATA
+ 03304H 03304H 00000H XCF                    DATA
+ 03304H 03304H 00000H XCFE                   DATA
+ 03304H 03304H 00000H XIFCB                  DATA
+ 03304H 03304H 00000H XIFU                   DATA
+ 03304H 03304H 00000H XIFL                   DATA
+ 03304H 03304H 00000H XIFM                   DATA
+ 03304H 03304H 00000H XIFCE                  DATA
+ 03304H 03304H 00000H CONST                  CONST
+ 03304H 0330BH 00008H HDR                    MSG
+ 0330CH 033E1H 000D6H MSG                    MSG
+ 033E2H 033E3H 00002H PAD                    MSG
+ 033E4H 033E4H 00001H EPAD                   MSG
+ 033E6H 033FDH 00018H _BSS                   BSS
+ 033FEH 033FEH 00000H XOB                    BSS
+ 033FEH 033FEH 00000H XO                     BSS
+ 033FEH 033FEH 00000H XOE                    BSS
+ 033FEH 033FEH 00000H XOFB                   BSS
+ 033FEH 033FEH 00000H XOF                    BSS
+ 033FEH 033FEH 00000H XOFE                   BSS
+ 03400H 037FFH 00400H c_common               BSS
+ 03800H 03FFFH 00800H STACK                  STACK
+
+ Origin   Group
+ 02BA:0   PGROUP
+ 02C6:0   DGROUP
+
+  Address         Publics by Name
+
+ 02BA:0003       CPUTYPE
+ 02BA:0002       LCL_INT67
+ 02BA:00A4       MAXNAME
+ 02BA:0018       OPEN_DEV
+ 02BA:00B2       SWATNAME
+ 0064:1DA0       _atoi
+ 02C6:004E       _cSep
+ 02C6:0786       _edata
+ 02C6:0BA0       _end
+ 02C6:0286       _errno
+ 0064:01ED       _exit
+ 0064:0638       _fclose
+ 0064:0A30       _fflush
+ 02C6:004A       _Flush
+ 0064:0706       _fprintf
+ 0064:1E3C       _gets
+ 0000:0036       _main
+ 0064:20F6       _memset
+ 0064:254E       _remove
+ 0064:1EA0       _sprintf
+ 0064:1F0A       _sscanf
+ 02C6:02CC       _STKHQQ
+ 0064:1CF6       _strcat
+ 0064:1D4A       _strcpy
+ 0064:1D86       _strlen
+ 0064:204E       _strtok
+ 005F:000E       _SWAT_ADDSYM
+ 005F:0044       _SWAT_FLUSHTAB
+ 02BA:003E       _SWAT_PRESENT
+ 0000:0000       _SyntErr
+ 02C6:07A0       _szBuff
+ 02C6:0042       _szSeps
+ 0064:19E6       _ungetc
+ 02C6:0048       _Verbose
+ 02C6:004C       _wgrp
+ 02C6:02C8       __aaltstkovr
+ 02C6:026A       __acfinfo
+ 0000:9876  Abs  __acrtmsg
+ 0000:9876  Abs  __acrtused
+ 0000:D6D6  Abs  __aDBdoswp
+ 02C6:02C4       __adbgmsg
+ 02C6:024C       __aexit_rtn
+ 0064:02C8       __aFchkstk
+ 0064:21B0       __aFFalmul
+ 0064:21B0       __aFFaulmul
+ 0064:21D2       __aFlmul
+ 0064:21D2       __aFulmul
+ 0000:1000  Abs  __AHINCR
+ 0000:000C  Abs  __AHSHIFT
+ 02C6:0278       __aintdiv
+ 02C6:0548       __amblksiz
+ 0064:00F6       __amsg_exit
+ 02C6:0042       __anullsize
+ 02C6:0264       __aseghi
+ 02C6:0266       __aseglo
+ 02C6:024E       __asizds
+ 02C6:056A       __asizeC
+ 02C6:056B       __asizeD
+ 0064:0012       __astart
+ 02C6:024A       __atopsp
+ 0064:1DA4       __catox
+ 0064:01FC       __cexit
+ 02C6:054A       __cfltcvt_tab
+ 02C6:02EA       __cflush
+ 02C6:02BB       __child
+ 0064:02C8       __chkstk
+ 0064:0124       __cinit
+ 0064:00E7       __cintDIV
+ 0064:1A56       __close
+ 0064:213E       __cltoasub
+ 0064:1F56       __commit
+ 02C6:0293       __cpumode
+ 0064:0274       __ctermsub
+ 02C6:056C       __ctype
+ 02C6:056C       __ctype_
+ 0064:214B       __cxtoa
+ 0064:0206       __c_exit
+ 0064:0122       __dataseg
+ 02C6:0294       __doserrno
+ 0064:05E0       __dosret0
+ 0064:05F5       __dosretax
+ 0064:05E8       __dosreturn
+ 0064:21A2       __dos_commit
+ 02C6:0786       __edata
+ 02BA:0000       __EmDataSeg
+ 02C6:0BA0       __end
+ 0064:0746       __endstdio
+ 02C6:02B2       __environ
+ 0064:01F4       __exit
+ 02C6:02C3       __exitflag
+ 02C6:027C       __fac
+ 0064:0636       __farstub
+ 0064:1E16       __fcloseall
+ 02C6:0268       __fDosExt
+ 0064:2378       __ffree
+ 0064:02A0       __FF_MSGBANNER
+ 02C6:0676       __fheap
+ 0064:075C       __filbuf
+ 0064:1CD6       __findlast
+ 0064:07F8       __flsbuf
+ 0064:0A88       __flush
+ 0064:0B08       __flushall
+ 0064:238B       __fmalloc
+ 02C6:0694       __fpinit
+ 0064:02C2       __fptrap
+ 0064:08E4       __freebuf
+ 0064:09E9       __ftbuf
+ 0064:091C       __getbuf
+ 0064:1BF6       __growseg
+ 0064:1C85       __incseg
+ 0064:2424       __initseg
+ 0064:0B7C       __input
+ 02C6:02BE       __intno
+ 02C6:02EC       __iob
+ 02C6:03DC       __iob2
+ 0064:1DFA       __itoa
+ 02C6:04CC       __lastiob
+ 0064:2458       __linkseg
+ 0064:1A76       __lseek
+ 02C6:0546       __lseekchk
+ 0064:0602       __maperror
+ 0064:05BA       __myalloc
+ 0064:250A       __newseg
+ 02C6:0296       __nfile
+ 02C6:0250       __nheap_desc
+ 0064:0558       __NMSG_TEXT
+ 0064:0583       __NMSG_WRITE
+ 0064:02EC       __nullcheck
+ 02C6:0294       __oserr
+ 02C6:0298       __osfile
+ 02C6:028F       __osmajor
+ 02C6:028E       __osminor
+ 02C6:0292       __osmode
+ 02C6:028E       __osver
+ 02C6:0290       __osversion
+ 0064:14FC       __output
+ 02C6:02BD       __ovlflag
+ 02C6:02BF       __ovlvec
+ 02C6:02B6       __pgmptr
+ 02C6:0672       __pnhFarHeap
+ 02C6:028C       __psp
+ 02C6:028A       __pspadr
+ 0064:1AF8       __read
+ 0064:248E       __searchseg
+ 0064:0310       __setargv
+ 0064:04B8       __setenvp
+ 02C6:0568       __sigintoff
+ 02C6:0566       __sigintseg
+ 0064:2364       __stackavail
+ 0064:0968       __stbuf
+ 0064:1FB0       __strcmpi
+ 0064:1FB0       __stricmp
+ 0064:1FF6       __strnicmp
+ 02C6:0288       __umaskval
+ 0064:254E       __unlink
+ 0064:2204       __write
+ 02C6:068C       ___aDBexit
+ 02C6:068A       ___aDBrterr
+ 02C6:0688       ___aDBswpchk
+ 02C6:0686       ___aDBswpflg
+ 02C6:02AC       ___argc
+ 02C6:02AE       ___argv
+ 02C6:0684       ___qczrinit
+
+  Address         Publics by Value
+
+ 0000:0000       _SyntErr
+ 0000:000C  Abs  __AHSHIFT
+ 0000:0036       _main
+ 005F:000E       _SWAT_ADDSYM
+ 005F:0044       _SWAT_FLUSHTAB
+ 0064:0012       __astart
+ 0064:00E7       __cintDIV
+ 0064:00F6       __amsg_exit
+ 0064:0122       __dataseg
+ 0064:0124       __cinit
+ 0064:01ED       _exit
+ 0064:01F4       __exit
+ 0064:01FC       __cexit
+ 0064:0206       __c_exit
+ 0064:0274       __ctermsub
+ 0064:02A0       __FF_MSGBANNER
+ 0064:02C2       __fptrap
+ 0064:02C8       __aFchkstk
+ 0064:02C8       __chkstk
+ 0064:02EC       __nullcheck
+ 0064:0310       __setargv
+ 0064:04B8       __setenvp
+ 0064:0558       __NMSG_TEXT
+ 0064:0583       __NMSG_WRITE
+ 0064:05BA       __myalloc
+ 0064:05E0       __dosret0
+ 0064:05E8       __dosreturn
+ 0064:05F5       __dosretax
+ 0064:0602       __maperror
+ 0064:0636       __farstub
+ 0064:0638       _fclose
+ 0064:0706       _fprintf
+ 0064:0746       __endstdio
+ 0064:075C       __filbuf
+ 0064:07F8       __flsbuf
+ 0064:08E4       __freebuf
+ 0064:091C       __getbuf
+ 0064:0968       __stbuf
+ 0000:1000  Abs  __AHINCR
+ 0064:09E9       __ftbuf
+ 0064:0A30       _fflush
+ 0064:0A88       __flush
+ 0064:0B08       __flushall
+ 0064:0B7C       __input
+ 0064:14FC       __output
+ 0064:19E6       _ungetc
+ 0064:1A56       __close
+ 0064:1A76       __lseek
+ 0064:1AF8       __read
+ 0064:1BF6       __growseg
+ 0064:1C85       __incseg
+ 0064:1CD6       __findlast
+ 0064:1CF6       _strcat
+ 0064:1D4A       _strcpy
+ 0064:1D86       _strlen
+ 0064:1DA0       _atoi
+ 0064:1DA4       __catox
+ 0064:1DFA       __itoa
+ 0064:1E16       __fcloseall
+ 0064:1E3C       _gets
+ 0064:1EA0       _sprintf
+ 0064:1F0A       _sscanf
+ 0064:1F56       __commit
+ 0064:1FB0       __stricmp
+ 0064:1FB0       __strcmpi
+ 0064:1FF6       __strnicmp
+ 0064:204E       _strtok
+ 0064:20F6       _memset
+ 0064:213E       __cltoasub
+ 0064:214B       __cxtoa
+ 0064:21A2       __dos_commit
+ 0064:21B0       __aFFalmul
+ 0064:21B0       __aFFaulmul
+ 0064:21D2       __aFulmul
+ 0064:21D2       __aFlmul
+ 0064:2204       __write
+ 0064:2364       __stackavail
+ 0064:2378       __ffree
+ 0064:238B       __fmalloc
+ 0064:2424       __initseg
+ 0064:2458       __linkseg
+ 0064:248E       __searchseg
+ 0064:250A       __newseg
+ 0064:254E       _remove
+ 0064:254E       __unlink
+ 02BA:0000       __EmDataSeg
+ 02BA:0002       LCL_INT67
+ 02BA:0003       CPUTYPE
+ 02BA:0018       OPEN_DEV
+ 02BA:003E       _SWAT_PRESENT
+ 02BA:00A4       MAXNAME
+ 02BA:00B2       SWATNAME
+ 02C6:0042       __anullsize
+ 02C6:0042       _szSeps
+ 02C6:0048       _Verbose
+ 02C6:004A       _Flush
+ 02C6:004C       _wgrp
+ 02C6:004E       _cSep
+ 02C6:024A       __atopsp
+ 02C6:024C       __aexit_rtn
+ 02C6:024E       __asizds
+ 02C6:0250       __nheap_desc
+ 02C6:0264       __aseghi
+ 02C6:0266       __aseglo
+ 02C6:0268       __fDosExt
+ 02C6:026A       __acfinfo
+ 02C6:0278       __aintdiv
+ 02C6:027C       __fac
+ 02C6:0286       _errno
+ 02C6:0288       __umaskval
+ 02C6:028A       __pspadr
+ 02C6:028C       __psp
+ 02C6:028E       __osver
+ 02C6:028E       __osminor
+ 02C6:028F       __osmajor
+ 02C6:0290       __osversion
+ 02C6:0292       __osmode
+ 02C6:0293       __cpumode
+ 02C6:0294       __doserrno
+ 02C6:0294       __oserr
+ 02C6:0296       __nfile
+ 02C6:0298       __osfile
+ 02C6:02AC       ___argc
+ 02C6:02AE       ___argv
+ 02C6:02B2       __environ
+ 02C6:02B6       __pgmptr
+ 02C6:02BB       __child
+ 02C6:02BD       __ovlflag
+ 02C6:02BE       __intno
+ 02C6:02BF       __ovlvec
+ 02C6:02C3       __exitflag
+ 02C6:02C4       __adbgmsg
+ 02C6:02C8       __aaltstkovr
+ 02C6:02CC       _STKHQQ
+ 02C6:02EA       __cflush
+ 02C6:02EC       __iob
+ 02C6:03DC       __iob2
+ 02C6:04CC       __lastiob
+ 02C6:0546       __lseekchk
+ 02C6:0548       __amblksiz
+ 02C6:054A       __cfltcvt_tab
+ 02C6:0566       __sigintseg
+ 02C6:0568       __sigintoff
+ 02C6:056A       __asizeC
+ 02C6:056B       __asizeD
+ 02C6:056C       __ctype
+ 02C6:056C       __ctype_
+ 02C6:0672       __pnhFarHeap
+ 02C6:0676       __fheap
+ 02C6:0684       ___qczrinit
+ 02C6:0686       ___aDBswpflg
+ 02C6:0688       ___aDBswpchk
+ 02C6:068A       ___aDBrterr
+ 02C6:068C       ___aDBexit
+ 02C6:0694       __fpinit
+ 02C6:0786       _edata
+ 02C6:0786       __edata
+ 02C6:07A0       _szBuff
+ 02C6:0BA0       _end
+ 02C6:0BA0       __end
+ 0000:9876  Abs  __acrtused
+ 0000:9876  Abs  __acrtmsg
+ 0000:D6D6  Abs  __aDBdoswp
+
+Line numbers for ret\libsym.obj(libsym.c) segment LIBSYM_TEXT
+
+    29 0000:0000    37 0000:000d    38 0000:0023    40 0000:002f
+     0 0000:0034    44 0000:0036    50 0000:0043    56 0000:0048
+    60 0000:0054    63 0000:006a    65 0000:0079    67 0000:007d
+    68 0000:009e    70 0000:00a4    71 0000:00c8    73 0000:00ce
+    75 0000:00f6    77 0000:010d    78 0000:011d    79 0000:0121
+    80 0000:0125    81 0000:012e    83 0000:0133    84 0000:0145
+    85 0000:0159    89 0000:015e    90 0000:0171    91 0000:017b
+    95 0000:0180    97 0000:0188    99 0000:018b   100 0000:019d
+   101 0000:01af   102 0000:01c5   105 0000:01cb   106 0000:01d8
+   107 0000:01ee   110 0000:01f4   111 0000:01fe   114 0000:0203
+   116 0000:0222   117 0000:023e   118 0000:025d   119 0000:027a
+   121 0000:0297   123 0000:02a0   127 0000:02b5   128 0000:0303
+   129 0000:0308   130 0000:0320   131 0000:0325   135 0000:0347
+   137 0000:0353   139 0000:0368   140 0000:0385   144 0000:038a
+   146 0000:0396   147 0000:03a8   148 0000:03ad   151 0000:03b0
+   152 0000:03e8   153 0000:03fe   156 0000:0404   157 0000:0440
+   164 0000:0443   165 0000:0473   168 0000:0476   169 0000:04a0
+   170 0000:04b7   171 0000:04d2   172 0000:04db   173 0000:04e5
+   174 0000:04fc   176 0000:0519   182 0000:0523   185 0000:055d
+   186 0000:0562   188 0000:057b   189 0000:0584   190 0000:059a
+   193 0000:05a0   196 0000:05aa   197 0000:05ad   198 0000:05c3
+   201 0000:05c9   203 0000:05cc   205 0000:05da   207 0000:05f8
+     0 0000:05fd
+
+Line numbers for ret\swat_api.obj(swat_api.ASM) segment SWAT_API_TEXT
+
+    57 005f:000e    80 005f:000e    81 005f:000f    83 005f:0011
+    86 005f:0017    91 005f:001a    93 005f:001e    95 005f:0021
+   101 005f:0024   102 005f:0026   103 005f:002a   105 005f:002c
+   107 005f:002e   109 005f:0034   112 005f:0037   117 005f:003a
+   121 005f:003c   123 005f:0042   125 005f:0043   130 005f:0044
+   148 005f:0044   150 005f:0045   151 005f:0047   153 005f:004d
+   155 005f:0050   157 005f:0051
+
+Line numbers for ret\swatpres.obj(swatpres.ASM) segment NCODE
+
+    71 02ba:0002    87 02ba:0003    88 02ba:0004    89 02ba:0005
+    90 02ba:0007    92 02ba:0009    94 02ba:000a    95 02ba:000d
+    96 02ba:000e    97 02ba:000f    99 02ba:0010   101 02ba:0011
+   102 02ba:0014   105 02ba:0016   108 02ba:0017   123 02ba:0018
+   125 02ba:001b   126 02ba:001d   127 02ba:0021   129 02ba:0023
+   130 02ba:0025   131 02ba:0027   132 02ba:002b   134 02ba:002d
+   135 02ba:0031   137 02ba:0033   139 02ba:0034   140 02ba:0035
+   141 02ba:0039   143 02ba:003a   145 02ba:003d   175 02ba:003e
+   177 02ba:0043   178 02ba:0046   181 02ba:0048   182 02ba:0049
+   185 02ba:004a   186 02ba:004c   189 02ba:0050   190 02ba:0054
+   192 02ba:0058   193 02ba:005c   194 02ba:005f   196 02ba:0061
+   197 02ba:0065   198 02ba:0068   200 02ba:006a   203 02ba:006c
+   204 02ba:006e   207 02ba:0076   209 02ba:007c   211 02ba:007e
+   214 02ba:0082   215 02ba:0084   217 02ba:0088   220 02ba:008a
+   221 02ba:008d   222 02ba:008f   226 02ba:0091   228 02ba:0093
+   231 02ba:0098   232 02ba:009b   234 02ba:009c
+
+Program entry point at 0064:0012

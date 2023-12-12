@@ -1,0 +1,4 @@
+	ret\swatlog.obj+
+ret\swatpres.obj
+	ret\swatlog
+	ret\swatlog  /farcall /noi /map /line ;

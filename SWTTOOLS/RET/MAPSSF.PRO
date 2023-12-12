@@ -1,0 +1,15 @@
+extern	void err(char *msg,int showsynt);
+extern	void add_ssf(unsigned long offset,unsigned int segsel,unsigned int flags,unsigned int group,char *symname);
+extern	long rec2bytes(unsigned int rcount,struct SSF_struct __far *ssflcl);
+extern	void reset_ssf(void);
+extern	void rstruct_init(struct rstruct_str *rbp);
+extern	int rstruct_alloc(struct rstruct_str *rbp);
+extern	void rstruct_free(struct rstruct_str *rbp);
+extern	int check_wsg(struct SSF_struct __far *data);
+extern	void resolve_wsg(int group,char *segname,unsigned long segbegin,unsigned long segend);
+extern	void clear_wsg(void );
+extern	void sort_wsg(void );
+extern	int get_wsg(char *fname);
+extern	char *time_str(long ltime);
+extern	void expand_fspec(char *fname);
+extern	int main(int argc,char **argv );
